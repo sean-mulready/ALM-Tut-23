@@ -1,0 +1,67 @@
+---
+fontsize: 8pt
+bibliography: ../Referenzen.bib
+citation_package: natbib
+output:
+  beamer_presentation:
+    keep_tex: true
+    includes:
+      in_header: ../Header.tex
+  classoption: t
+---
+
+
+```{r, include = FALSE}
+source("../R_common.R")
+abb_dir = file.path(dirname(getwd()), "Abbildungen")
+```
+
+# {.plain}
+\center
+```{r, echo = FALSE, out.width="20%"}
+knitr::include_graphics(file.path(abb_dir,"wtfi_otto.png"))
+```
+
+\vspace{2mm}
+
+\huge
+Tutorium
+
+\Large
+Allgemeines Lineares Modell
+\vspace{4mm}
+
+\normalsize
+BSc Psychologie SoSe 2023
+
+\vspace{12mm}
+\normalsize
+Sean Mulready
+
+\vspace{3mm}
+\scriptsize
+Inhalte basieren auf Kursmaterialien für [ALM Adresse noch ändern](https://www.ipsy.ovgu.de/Institut/Abteilungen+des+Institutes/Methodenlehre+I+_+Experimentelle+und+Neurowissenschaftliche+Psychologie/Lehre/Sommersemester+2022/Allgemeines+Lineares+Modell.html) von [Dirk Ostwald](https://www.ipsy.ovgu.de/Institut/Abteilungen+des+Institutes/Methodenlehre+I+_+Experimentelle+und+Neurowissenschaftliche+Psychologie/Team/Dirk+Ostwald.html), lizenziert unter [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/deed.de)
+
+
+
+# {.plain}
+\vfill
+\center
+\huge
+\text{(0) Einführung, Follow Up, Recap}
+\vfill
+
+
+
+# Übersicht
+
+\setstretch{1}
+1. Hier kommt der erste Wiederholungspunkt
+2. Same same
+3. Test
+4. blah blablablaaaaa
+
+
+
+
+

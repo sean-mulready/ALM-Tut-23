@@ -1,0 +1,139 @@
+---
+fontsize: 8pt
+bibliography: ../Referenzen.bib
+citation_package: natbib
+output:
+  beamer_presentation:
+    keep_tex: true
+    includes:
+      in_header: ../Header.tex
+  classoption: t
+---
+
+
+```{r, include = FALSE}
+source("../R_common.R")
+abb_dir = file.path(dirname(getwd()), "Abbildungen")
+```
+
+# {.plain}
+\center
+```{r, echo = FALSE, out.width="20%"}
+knitr::include_graphics(file.path(abb_dir,"wtfi_otto.png"))
+```
+
+\vspace{2mm}
+
+\huge
+Tutorium
+
+\Large
+Allgemeines Lineares Modell
+\vspace{4mm}
+
+\normalsize
+BSc Psychologie SoSe 2023
+
+\vspace{12mm}
+\normalsize
+Sean Mulready
+
+\vspace{3mm}
+\scriptsize
+Inhalte basieren auf Kursmaterialien für [\textcolor{darkblue}{ALM Adresse noch ändern}](https://www.ipsy.ovgu.de/Institut/Abteilungen+des+Institutes/Methodenlehre+I+_+Experimentelle+und+Neurowissenschaftliche+Psychologie/Lehre/Sommersemester+2022/Allgemeines+Lineares+Modell.html) von [Dirk Ostwald](https://www.ipsy.ovgu.de/Institut/Abteilungen+des+Institutes/Methodenlehre+I+_+Experimentelle+und+Neurowissenschaftliche+Psychologie/Team/Dirk+Ostwald.html), lizenziert unter [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/deed.de)
+
+# {.plain}
+
+\huge
+\center
+\vfill
+Hallo! :)
+\vfill
+
+# {.plain}
+
+\huge
+\center
+\vfill
+(0.1) Materialien, Links, Organisatorisches
+\vfill
+
+#
+[\textcolor{darkblue}{Homepage}](https://www.ipsy.ovgu.de/methodenlehre_I-path-980,1404.html)
+\vspace{3mm}
+```{r, echo = FALSE, out.width = "75%"}
+knitr::include_graphics(file.path(abb_dir,"Lehrstuhlseite.png"))
+```
+
+
+
+# Organisatorisches
+\vspace{3mm}
+\setstretch{1}
+
+Termine:
+
+* jeden Mittwoch
+  * Gruppe 1: 09.15 Uhr - 10.45 Uhr [G22A R120]
+  * Gruppe 2: 13.15 Uhr - 14.45 Uhr [G22A R120]
+  * evtl. Abklärung zwecks 24.05. (Termin nach Christi Himmelfahrt)
+
+
+
+
+# Materialien etc.
+\setstretch{2}
+* Folien & Videos (Vorlesung & Tutorium) gibt es auf der [\textcolor{darkblue}{Kurswebsite}](https://www.ipsy.ovgu.de/Institut/Abteilungen+des+Institutes/Methodenlehre+I+_+Experimentelle+und+Neurowissenschaftliche+Psychologie/Lehre/Sommersemester+2023/Allgemeines+Lineares+Modell.html)
+* Q&A (per dm oder im Forum) via [\textcolor{darkblue}{Mattermost}](https://mm.cs.ovgu.de/bsc-psy-2022/channels/b2-alm)
+  * Einmalige Registrierung zum Team "bsc-psy-2022" über diesen [\textcolor{darkblue}{Link}](https://mm.cs.ovgu.de/signup_user_complete/?id=6zhrsn3oab8pdynz16gmqpm9ka)
+* Code auf [\textcolor{darkblue}{Github}](Link zu Github)
+* Ankündigungen über [\textcolor{darkblue}{Moodle}](https://elearning.ovgu.de/course/view.php?id=14470)
+* Die vorherige Iteration des Kurses gibt es [\textcolor{darkblue}{hier}](https://www.ipsy.ovgu.de/Institut/Abteilungen+des+Institutes/Methodenlehre+I+_+Experimentelle+und+Neurowissenschaftliche+Psychologie/Lehre/Sommersemester+2022/Allgemeines+Lineares+Modell.html)
+
+
+# Ziele des Tutoriums
+
+\setstretch{2}
+
+* Wiederholung der Kerninhalte der Vorlesung
+* Beantwortung der Selbstkontrollfragen
+* Klärung aller offenen Fragen
+
+# Tipps
+
+\setstretch{2}
+
+* Auswendig lernen ist  ein guter Anfang für das Verstehen
+* Versuchen, zu verstehen - je mehr ich verstehe desto weniger muss ich auswendig behalten
+* Formeln von Hand abschreiben oder in einem Satz formulieren kann auch helfen
+* Manches wird erst im Nachhinein so richtig klar
+
+# {.plain}
+
+\huge
+\center
+\vfill
+Noch Fragen?
+\vfill
+
+# Motivation
+
+
+```{r, echo = FALSE, out.width = "45%"}
+knitr::include_graphics(file.path(abb_dir, "mot_2.jpg"))
+knitr::include_graphics(file.path(abb_dir, "mot_1.jpg"))
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,427 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[
+  8pt,
+  ignorenonframetext,
+]{beamer}
+\usepackage{pgfpages}
+\setbeamertemplate{caption}[numbered]
+\setbeamertemplate{caption label separator}{: }
+\setbeamercolor{caption name}{fg=normal text.fg}
+\beamertemplatenavigationsymbolsempty
+% Prevent slide breaks in the middle of a paragraph
+\widowpenalties 1 10000
+\raggedbottom
+\setbeamertemplate{part page}{
+  \centering
+  \begin{beamercolorbox}[sep=16pt,center]{part title}
+    \usebeamerfont{part title}\insertpart\par
+  \end{beamercolorbox}
+}
+\setbeamertemplate{section page}{
+  \centering
+  \begin{beamercolorbox}[sep=12pt,center]{part title}
+    \usebeamerfont{section title}\insertsection\par
+  \end{beamercolorbox}
+}
+\setbeamertemplate{subsection page}{
+  \centering
+  \begin{beamercolorbox}[sep=8pt,center]{part title}
+    \usebeamerfont{subsection title}\insertsubsection\par
+  \end{beamercolorbox}
+}
+\AtBeginPart{
+  \frame{\partpage}
+}
+\AtBeginSection{
+  \ifbibliography
+  \else
+    \frame{\sectionpage}
+  \fi
+}
+\AtBeginSubsection{
+  \frame{\subsectionpage}
+}
+\usepackage{amsmath,amssymb}
+\usepackage{lmodern}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math}
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\newif\ifbibliography
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+% type setting
+% ------------------------------------------------------------------------------
+\usepackage[german]{babel}     
+
+% fonts
+% ------------------------------------------------------------------------------
+\usefonttheme{professionalfonts}
+
+% slide title and horizontal line
+% ------------------------------------------------------------------------------
+\setbeamertemplate{frametitle}{%
+    \vskip-30pt \color{black}\large%
+    \begin{minipage}[b][23pt]{120mm}%
+    \flushleft\insertframetitle%
+    \end{minipage}%
+}
+
+\setbeamertemplate{headline}										
+{
+\vskip10pt\hfill\hspace{3.5mm} 										 
+\vskip15pt\color{black}\rule{\textwidth}{0.4pt} 					 
+}
+
+% slide number
+% ---------------------------------------------------------------
+\setbeamertemplate{navigation symbols}{}
+\setbeamertemplate{footline}
+{
+\vskip5pt
+\vskip2pt
+\makebox[123mm]{\hspace{7.5mm}
+\hfill Allgemeines Lineares Modell - Tutorium $\vert$ 
+Sean Mulready $\vert$
+Folie \insertframenumber}
+\vskip4pt
+}
+
+% block color scheme
+% ------------------------------------------------------------------------------
+% colors
+\definecolor{white}{RGB}{255,255,255}
+\definecolor{grey}{RGB}{205,205,205}
+\definecolor{lightgrey}{RGB}{245,245,245}
+\definecolor{LightBlue}{RGB}{220,220,255}
+\definecolor{darkblue}{RGB}{51, 51, 153}
+\definecolor{darkcyan}{RGB}{0,102,102}
+\definecolor{middlecyan}{RGB}{0,153,153}
+\definecolor{darkgreen}{RGB}{0,102,51}
+\definecolor{plum}{RGB}{128,0,128}
+\definecolor{orange}{RGB}{255,141,42}
+
+% definitions and theorems
+\setbeamercolor{block title}{fg = black, bg = grey}
+\setbeamercolor{block body}{fg = black, bg = lightgrey}
+
+% general line spacing 
+% ------------------------------------------------------------------------------
+\linespread{1.3}
+
+% local line spacing
+% ------------------------------------------------------------------------------
+\usepackage{setspace}
+
+% colors
+% -----------------------------------------------------------------------------
+\usepackage{color}
+
+% justified text
+% ------------------------------------------------------------------------------
+\usepackage{ragged2e}
+\usepackage{etoolbox}
+\apptocmd{\frame}{}{\justifying}{}
+
+% bullet point lists
+% -----------------------------------------------------------------------------
+\setbeamertemplate{itemize item}[circle]
+\setbeamertemplate{itemize subitem}[circle]
+\setbeamertemplate{itemize subsubitem}[circle]
+\setbeamercolor{itemize item}{fg = black}
+\setbeamercolor{itemize subitem}{fg = black}
+\setbeamercolor{itemize subsubitem}{fg = black}
+\setbeamercolor{enumerate item}{fg = black}
+\setbeamercolor{enumerate subitem}{fg = black}
+\setbeamercolor{enumerate subsubitem}{fg = black}
+\setbeamerfont{itemize/enumerate body}{}
+\setbeamerfont{itemize/enumerate subbody}{size = \normalsize}
+\setbeamerfont{itemize/enumerate subsubbody}{size = \normalsize}
+
+% color links
+% ------------------------------------------------------------------------------
+\usepackage{hyperref}
+\definecolor{urls}{RGB}{204,0,0}
+\hypersetup{colorlinks, citecolor = darkblue, urlcolor = urls}
+
+
+% additional math commands
+% ------------------------------------------------------------------------------
+\usepackage{bm}
+\usepackage{mathtools}
+\usepackage{graphics}
+\usepackage{amsmath, amssymb}                                         
+\newcommand{\niton}{\not\owns}
+\DeclareMathOperator*{\intinf}{\int_{-\infty}^{\infty}}
+\DeclareSymbolFont{extraitalic}      {U}{zavm}{m}{it}
+\DeclareMathSymbol{\Qoppa}{\mathord}{extraitalic}{161}
+\DeclareMathSymbol{\qoppa}{\mathord}{extraitalic}{162}
+
+
+
+% text highlighting
+% ------------------------------------------------------------------------------
+\usepackage{soul}
+\makeatletter
+\let\HL\hl
+\renewcommand\hl{%
+  \let\set@color\beamerorig@set@color
+  \let\reset@color\beamerorig@reset@color
+  \HL}
+\makeatother
+
+% equation highlighting
+% -----------------------------------------------------------------------------
+\newcommand{\highlight}[2][yellow]{\mathchoice%
+  {\colorbox{#1}{$\displaystyle#2$}}%
+  {\colorbox{#1}{$\textstyle#2$}}%
+  {\colorbox{#1}{$\scriptstyle#2$}}%
+  {\colorbox{#1}{$\scriptscriptstyle#2$}}}%
+
+% additional mathematical operators
+% ------------------------------------------------------------------------------
+\DeclareMathOperator*{\argmax}{arg\,max}
+\DeclareMathOperator*{\argmin}{arg\,min}
+\usepackage{xfrac}
+\usepackage{units}
+
+
+\ifLuaTeX
+  \usepackage{selnolig}  % disable illegal ligatures
+\fi
+\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same} % disable monospaced font for URLs
+\hypersetup{
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+
+\author{}
+\date{\vspace{-2.5em}}
+
+\begin{document}
+
+\begin{frame}[plain]{}
+\protect\hypertarget{section}{}
+\center
+
+\begin{center}\includegraphics[width=0.2\linewidth]{../Abbildungen/wtfi_otto} \end{center}
+
+\vspace{2mm}
+
+\huge
+
+Tutorium
+
+\Large
+
+Allgemeines Lineares Modell \vspace{4mm}
+
+\normalsize
+
+BSc Psychologie SoSe 2023
+
+\vspace{12mm}
+\normalsize
+
+Sean Mulready
+
+\vspace{3mm}
+\scriptsize
+
+Inhalte basieren auf Kursmaterialien für
+\href{https://www.ipsy.ovgu.de/Institut/Abteilungen+des+Institutes/Methodenlehre+I+_+Experimentelle+und+Neurowissenschaftliche+Psychologie/Lehre/Sommersemester+2022/Allgemeines+Lineares+Modell.html}{ALM
+Adresse noch ändern} von
+\href{https://www.ipsy.ovgu.de/Institut/Abteilungen+des+Institutes/Methodenlehre+I+_+Experimentelle+und+Neurowissenschaftliche+Psychologie/Team/Dirk+Ostwald.html}{Dirk
+Ostwald}, lizenziert unter
+\href{https://creativecommons.org/licenses/by-sa/4.0/deed.de}{CC
+BY-NC-SA 4.0}
+\end{frame}
+
+\begin{frame}[plain]{}
+\protect\hypertarget{section-1}{}
+\huge
+\center
+\vfill
+
+Hallo! :) \vfill
+\end{frame}
+
+\begin{frame}[plain]{}
+\protect\hypertarget{section-2}{}
+\huge
+\center
+\vfill
+
+(0.1) Materialien, Links, Organisatorisches \vfill
+\end{frame}
+
+\begin{frame}{}
+\protect\hypertarget{section-3}{}
+\href{https://www.ipsy.ovgu.de/methodenlehre_I-path-980,1404.html}{\textcolor{darkblue}{Homepage}}
+\vspace{3mm}
+
+\begin{center}\includegraphics[width=0.75\linewidth]{../Abbildungen/Lehrstuhlseite} \end{center}
+\end{frame}
+
+\begin{frame}{Organisatorisches}
+\protect\hypertarget{organisatorisches}{}
+\vspace{3mm}
+\setstretch{1}
+
+Termine:
+
+\begin{itemize}
+\tightlist
+\item
+  jeden Mittwoch
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Gruppe 1: 09.15 Uhr - 10.45 Uhr {[}G22A R120{]}
+  \item
+    Gruppe 2: 13.15 Uhr - 14.45 Uhr {[}G22A R120{]}
+  \item
+    evtl. Abklärung zwecks 24.05. (Termin nach Christi Himmelfahrt)
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Übersicht}
+\protect\hypertarget{uxfcbersicht}{}
+\vspace{1mm}
+
+\textcolor{red}{* Angaben ohne Gewähr, Änderungen nicht ausgeschlossen}
+
+\footnotesize
+\center
+\footnotesize
+\renewcommand{\arraystretch}{1.1}
+\begin{tabular}{llll}
+\textbf{Mittwochs} & \textbf{Tutorium}                    & Donnerstags & Vorlesung
+\\\hline
+
+12.04.23 & (0.1) Orga + (0.2) Vektoren                                & 13.04.23 & (1)  Regression \\
+19.04.23 & (1) Regression                                             & 20.04.23 & (2)  Korrelation \\
+26.04.23 & (2) Korrelation                                            & 27.04.23 & (3)  Matrizen  \\
+03.05.23 & (3) Matrizen                                               & 04.05.23 & (4)  Normalverteilungen \\
+10.05.23 & (4) Normalverteilungen                                     & 11.05.23 & (5)  Modellformulierungen \\
+17.05.23 & (5) Modellformulierungen                                   & \textcolor{grey}{18.05.23} & \textcolor{grey}{Christi Himmelfahrt} \\
+\textcolor{grey}{24.05.23} & \textcolor{grey}{Wiederholung/Nachholen} & 25.05.23 & (6) Modellevaluation \\
+31.05.23 & (6) Modellevaluation                                       & 01.06.23 & (7)  Studiendesign \\
+07.06.23 & (7) Studiendesign                                          & 08.06.23 & (8)  T-Tests \\
+14.06.23 & (8) T-Tests                                                & 15.06.23 & (9)  Einfaktorielle Varianzanalyse \\
+21.06.23 & (9) Einfaktorielle Varianzanalyse                          & 22.06.23 & (10) Zweifaktorielle Varianzanalyse \\
+28.06.23 & (10) Zweifaktorielle Varianzanalyse                        & 29.06.23 & (11) Multiple Regression \\
+05.07.23 & (11) Multiple Regression                                   & 06.07.23 & (12) Kovarianzanalyse \\
+12.07.23 & (12) Kovarianzanalyse \\\hline
+\textcolor{grey}{Juli '23} & \textcolor{grey}{Klausurvorbereitung} 
+\end{tabular}
+\end{frame}
+
+\begin{frame}{Materialien etc.}
+\protect\hypertarget{materialien-etc.}{}
+\setstretch{2}
+
+\begin{itemize}
+\tightlist
+\item
+  Folien \& Videos (Vorlesung \& Tutorium) gibt es auf der
+  \href{Link\%20einfügen}{\textcolor{darkblue}{Kurswebsite}}
+\item
+  Q\&A (per dm oder im Forum) via
+  \href{Link\%20zu\%20Mattermost}{\textcolor{darkblue}{Mattermost}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    falls noch nicht regristriert einmalig über diesen
+    \href{Link\%20einfügen}{\textcolor{darkblue}{Link}}
+  \end{itemize}
+\item
+  Code auf \href{Link\%20zu\%20Github}{\textcolor{darkblue}{Github}}
+\item
+  Ankündigungen über
+  \href{Link\%20zu\%20Moodle}{\textcolor{darkblue}{Moodle}}
+\item
+  Die vorherige Iteration des Kurses gibt es
+  \href{https://www.ipsy.ovgu.de/Institut/Abteilungen+des+Institutes/Methodenlehre+I+_+Experimentelle+und+Neurowissenschaftliche+Psychologie/Lehre/Sommersemester+2022/Allgemeines+Lineares+Modell.html}{\textcolor{darkblue}{hier}}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Ziele des Tutoriums}
+\protect\hypertarget{ziele-des-tutoriums}{}
+\setstretch{2}
+
+\begin{itemize}
+\tightlist
+\item
+  Wiederholung der Kerninhalte der Vorlesung
+\item
+  Beantwortung der Selbstkontrollfragen
+\item
+  Klärung aller offenen Fragen
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Tipps}
+\protect\hypertarget{tipps}{}
+\setstretch{2}
+
+\begin{itemize}
+\tightlist
+\item
+  Versuchen, zu verstehen - je mehr ich verstehe desto weniger muss ich
+  auswendig lernen
+\item
+  Manchmal hilft es auch, etwas erstmal stumpf auswendig zu lernen um es
+  dann zu verstehen (Tipp: spätestens 4 Wochen vor der Klausur anfangen)
+\item
+  Manches wird erst im Nachhinein so richtig klar
+\end{itemize}
+\end{frame}
+
+\begin{frame}[plain]{}
+\protect\hypertarget{section-4}{}
+\huge
+\center
+\vfill
+
+Noch Fragen? \vfill
+\end{frame}
+
+\begin{frame}{Motivation}
+\protect\hypertarget{motivation}{}
+\begin{center}\includegraphics[width=0.45\linewidth]{../Abbildungen/mot_2} \includegraphics[width=0.45\linewidth]{../Abbildungen/mot_1} \end{center}
+\end{frame}
+
+\end{document}
