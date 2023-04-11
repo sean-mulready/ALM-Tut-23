@@ -40,7 +40,7 @@ Sean Mulready
 
 \vspace{3mm}
 \scriptsize
-Inhalte basieren auf Kursmaterialien für [\textcolor{darkblue}{ALM Adresse noch ändern}](https://www.ipsy.ovgu.de/Institut/Abteilungen+des+Institutes/Methodenlehre+I+_+Experimentelle+und+Neurowissenschaftliche+Psychologie/Lehre/Sommersemester+2022/Allgemeines+Lineares+Modell.html) von [Dirk Ostwald](https://www.ipsy.ovgu.de/Institut/Abteilungen+des+Institutes/Methodenlehre+I+_+Experimentelle+und+Neurowissenschaftliche+Psychologie/Team/Dirk+Ostwald.html), lizenziert unter [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/deed.de)
+Inhalte basieren auf Kursmaterialien für [\textcolor{darkblue}{ALM}](https://www.ipsy.ovgu.de/Institut/Abteilungen+des+Institutes/Methodenlehre+I+_+Experimentelle+und+Neurowissenschaftliche+Psychologie/Lehre/Sommersemester+2023/Allgemeines+Lineares+Modell.html) von [Dirk Ostwald](https://www.ipsy.ovgu.de/Institut/Abteilungen+des+Institutes/Methodenlehre+I+_+Experimentelle+und+Neurowissenschaftliche+Psychologie/Team/Dirk+Ostwald.html), lizenziert unter [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/deed.de)
 
 # {.plain}
 
@@ -86,7 +86,7 @@ Termine:
 * Folien & Videos (Vorlesung & Tutorium) gibt es auf der [\textcolor{darkblue}{Kurswebsite}](https://www.ipsy.ovgu.de/Institut/Abteilungen+des+Institutes/Methodenlehre+I+_+Experimentelle+und+Neurowissenschaftliche+Psychologie/Lehre/Sommersemester+2023/Allgemeines+Lineares+Modell.html)
 * Q&A (per dm oder im Forum) via [\textcolor{darkblue}{Mattermost}](https://mm.cs.ovgu.de/bsc-psy-2022/channels/b2-alm)
   * Einmalige Registrierung zum Team "bsc-psy-2022" über diesen [\textcolor{darkblue}{Link}](https://mm.cs.ovgu.de/signup_user_complete/?id=6zhrsn3oab8pdynz16gmqpm9ka)
-* Code auf [\textcolor{darkblue}{Github}](Link zu Github)
+* Code auf [\textcolor{darkblue}{Github}](https://github.com/sean-mulready/ALM-Tut-23)
 * Ankündigungen über [\textcolor{darkblue}{Moodle}](https://elearning.ovgu.de/course/view.php?id=14470)
 * Die vorherige Iteration des Kurses gibt es [\textcolor{darkblue}{hier}](https://www.ipsy.ovgu.de/Institut/Abteilungen+des+Institutes/Methodenlehre+I+_+Experimentelle+und+Neurowissenschaftliche+Psychologie/Lehre/Sommersemester+2022/Allgemeines+Lineares+Modell.html)
 
@@ -99,14 +99,6 @@ Termine:
 * Beantwortung der Selbstkontrollfragen
 * Klärung aller offenen Fragen
 
-# Tipps
-
-\setstretch{2}
-
-* Auswendig lernen ist  ein guter Anfang für das Verstehen
-* Versuchen, zu verstehen - je mehr ich verstehe desto weniger muss ich auswendig behalten
-* Formeln von Hand abschreiben oder in einem Satz formulieren kann auch helfen
-* Manches wird erst im Nachhinein so richtig klar
 
 # {.plain}
 

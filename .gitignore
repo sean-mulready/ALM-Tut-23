@@ -1,0 +1,16 @@
+# R / R-Studio
+*.Rproj.user
+*.Rhistory
+*.RData
+*.Ruserdata
+*.Rproj
+
+# Knit temp output files
+*_cache
+*.log
+*.tex
+*.aux
+*.vrb
+*.nav
+*.snm
+*.toc

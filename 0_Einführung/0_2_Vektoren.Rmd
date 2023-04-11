@@ -140,8 +140,8 @@ Elemente $v,w,u \in V$ und $a,b, c \in S$ folgende Bedingungen gelten:
 
 Bemerkungen
 
-* Es gibt viele sehr verschiedene Vektorräume. 
-* Beipiele für Mengen, auf denen eine Vektorraumstruktur definiert werden kann, sind
+* Es gibt sehr viele verschiedene Vektorräume. 
+* Beispiele für Mengen, auf denen eine Vektorraumstruktur definiert werden kann, sind
   * \small Die Menge der reellen $m$-Tupel
   * Die Menge der Matrizen
   * Die Menge der Polynome
