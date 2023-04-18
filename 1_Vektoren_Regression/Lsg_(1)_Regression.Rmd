@@ -1,0 +1,839 @@
+---
+fontsize: 8pt
+bibliography: ../Referenzen.bib
+citation_package: natbib
+output:
+  beamer_presentation:
+    keep_tex: true
+    includes:
+      in_header: ../Header.tex
+classoption: t
+---
+
+
+```{r, include = FALSE}
+source("../R_common.R")
+abb_dir = file.path(dirname(getwd()), "Abbildungen")
+data_dir = file.path(dirname(getwd()), "Daten")
+```
+
+# {.plain}
+\center
+```{r, echo = FALSE, out.width="20%"}
+knitr::include_graphics(file.path(abb_dir,"wtfi_otto.png"))
+```
+
+\vspace{2mm}
+
+\huge
+Tutorium
+
+\Large
+Allgemeines Lineares Modell
+\vspace{2mm}
+
+\normalsize
+BSc Psychologie SoSe 2023
+
+\vspace{2mm}
+\text{2. Termin: (1) Regression}    
+
+\vspace{15mm}
+\normalsize
+Sean Mulready
+
+\vspace{2mm}
+\scriptsize
+Inhalte basieren auf Kursmaterialien für [\textcolor{darkblue}{ALM}](https://www.ipsy.ovgu.de/Institut/Abteilungen+des+Institutes/Methodenlehre+I+_+Experimentelle+und+Neurowissenschaftliche+Psychologie/Lehre/Sommersemester+2023/Allgemeines+Lineares+Modell.html) von [Dirk Ostwald](https://www.ipsy.ovgu.de/Institut/Abteilungen+des+Institutes/Methodenlehre+I+_+Experimentelle+und+Neurowissenschaftliche+Psychologie/Team/Dirk+Ostwald.html), lizenziert unter [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/deed.de)
+
+# Selbstkontrollfragen - Regression
+\small
+\setstretch{1.5}
+1. Geben Sie die funktionale Form eine linear-affinen Funktion an.
+2. Erläutern Sie die Bedeutung der Parameter einer linear-affinen Funktion.
+3. Definieren Sie den Begriff der Ausgleichsgerade.
+4. Erläutern Sie die intuitive Bedeutung der Funktion der quadrierten vertikalen Abweichungen.
+5. Geben Sie das Theorem zur Ausgleichsgerade wieder.
+6. Skizzieren Sie den Beweis des Theorems zur Ausgleichsgeraden.
+7. Definieren Sie den Begriff des Ausgleichspolynoms.
+8. Erläutern Sie die Motivation des einfachen linearen Regressionsmodells in Bezug auf die Ausgleichsgerade.
+9. Definieren Sie das Modell der einfachen linearen Regression.
+10. Geben Sie das Theorem zur Datenverteilung der einfachen linearen Regression wieder.
+11. Skizzieren das Modell der einfachen linearen Regression per Hand.
+12. Skizzieren Sie eine Realisierung des Modells der einfachen linearen Regression per Hand.
+13. Geben Sie das Theorem zur ML-Schätzung der Parameter der einfachen linearen Regression an.
+14. Skizzieren Sie den Beweis des Theorems zur ML-Schätzung der Parameter der einfachen linearen Regression.
+
+
+# Methode der kleinsten Quadrate - Selbstkontrollfragen
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 1. Geben Sie die funktionale Form eine linear-affinen Funktion an.
+\vspace{3mm}
+
+\color{black}
+\small
+\justifying
+Für $\beta := (\beta_0,\beta_1)^T \in \mathbb{R}^2$ hat die linear-affine Funktion
+$f_\beta : \mathbb{R} \to \mathbb{R}, x \mapsto f_\beta(x)$
+die funktionale Form
+$f_\beta(x) := \beta_0 + \beta_1 x.$
+
+\vspace{8mm}
+\footnotesize
+\textcolor{grey}{linear-*affin*, da die Funktion nicht unbedingt durch den Nullpunkt der $y$-Achse geht}
+
+# Methode der kleinsten Quadrate - Selbstkontrollfragen
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 2. Erläutern Sie die Bedeutung der Parameter einer linear-affinen Funktion.
+\vspace{3mm}
+
+\color{black}
+\small
+Für linear-affine Funktionen $f_\beta(x) := \beta_0 + \beta_1 x$ ist
+
+\small
+* $\beta_0$ der Schnittpunkt von Gerade und $y$-Achse ("Offset Parameter") und
+* $\beta_1$ die $y$-Differenz pro $x$-Einheitsdifferenz ("Steigungsparameter").
+
+\vspace{1cm}
+Beispiele: 
+
+```{r, echo = F, eval = F}
+library(MASS)                                         # Normalverteilungen
+library(matlib)                                       # Normalverteilungen
+library(tinytex)
+library(latex2exp)
+set.seed(0)                                           # Ergebnisreproduzierbarkeit
+n           = 20                                      # Anzahl Datenpunkte
+p           = 3                                       # Anzahl Regressionskoeffizienten
+x           = seq(1,n,len = n)                        # Kontrollvariable
+X           = matrix(c(rep(1,n), x, x^2), ncol = 3)   # Designmatrix
+beta        = matrix(c(.5,.2,.06), ncol = 1)          # Wahre, unbekannte, Regressionskoeffizientenwerte
+mu          = X %*% beta                              # Erwartungswertparameter
+sigsqr      = 10                                      # Varianzparameter
+Sigma       = sigsqr*diag(n)                          # Kovarianzmatrixparameter
+y           = as.matrix(mvrnorm(1,mu,Sigma))          # Datengeneration
+D           = data.frame(y_i = y, x_i = x)            # Dataframe
+
+
+# Ausgleichs- und weitere Geraden
+X           = matrix(c(rep(1,n), x), ncol = 2)              # Designmatrix
+beta_hat    = inv(t(X) %*% X) %*% t(X) %*% y                # OLS Schätzer
+beta_set    = matrix(c(5,.5, -20,3,beta_hat), nrow = 2)     # Weitere Geraden
+
+
+# Visualisierung
+lab         = c(TeX("$\\beta_0 =   5.0, \\beta_1 = 0.5$"),  # Labels
+                TeX("$\\beta_0 = -20.0, \\beta_1 = 3.0$"),
+                TeX("$\\beta_0 =  -6.2, \\beta_1 = 1.7$"))
+graphics.off()
+dev.new()
+par(
+family      = "sans",
+mfcol       = c(1,3),
+pty         = "s",
+bty         = "l",
+lwd         = 1,
+las         = 1,
+mgp         = c(2,1,0),
+xaxs        = "i",
+yaxs        = "i",
+font.main   = 1,
+cex         = 1,
+cex.main    = 1.2)
+for(i in 1:3){
+  plot(
+  x,
+  y,
+  pch         = 16,
+  xlab        = "Anzahl Therapiestunden (x)",
+  ylab        = "Symptomreduktion (y)",
+  xlim        = c(0,21),
+  ylim        = c(-10, 40),
+  main        = lab[i])
+  abline(coef = beta_set[,i], lty = 1, col = "black")
+}
+fdir        = abb_dir   
+dev.copy2pdf(
+file        = file.path(fdir, "alm_1_ausgleichsgerade_1.pdf"),
+width       = 12,
+height      = 4)
+```
+
+```{r, echo = FALSE, out.width = "100%"}
+knitr::include_graphics(file.path(abb_dir,"alm_1_ausgleichsgerade_1.pdf"))
+```
+
+
+# Methode der kleinsten Quadrate - Selbstkontrollfragen
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 3. Definieren Sie den Begriff der Ausgleichsgerade.
+\vspace{3mm}
+
+\color{black}
+\footnotesize
+\begin{definition}[Ausgleichsgerade]
+\justifying
+Für $\beta := (\beta_0,\beta_1)^T \in \mathbb{R}^2$ heißt die linear-affine Funktion
+\begin{equation}
+f_\beta : \mathbb{R} \to \mathbb{R}, x \mapsto f_\beta(x) := \beta_0 + \beta_1 x,
+\end{equation}
+für die für eine Wertemenge  $\{(x_1,y_1),...,(x_n,y_n)\} \subset \mathbb{R}^2$ die Funktion
+\begin{equation}
+q : \mathbb{R}^2 \to \mathbb{R}_{\ge 0}, \beta \mapsto q(\beta)
+:= \sum_{i=1}^n (y_i-f_\beta(x_i))^2
+ = \sum_{i=1}^n (y_i- (\beta_0 + \beta_1x_i))^2
+\end{equation}
+der quadrierten vertikalen Abweichungen der $y_i$ von den Funktionswerten $f_{\beta}(x_i)$
+ihr Minimum annimt, die \textit{Ausgleichsgerade} für die Wertemenge $\{(x_1,y_1),...,(x_n,y_n)\}$.
+\end{definition}
+
+# Methode der kleinsten Quadrate - Selbstkontrollfragen
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 4. Erläutern Sie die intuitive Bedeutung der Funktion der quadrierten vertikalen Abweichungen.
+\vspace{3mm}
+
+\color{black}
+\small
+Die Funktion der quadrierten vertikalen Abweichungen $q(\beta)$ quantifiziert die Abweichungen der Funktionswerte $f_\beta(x_i)$ der Ausgleichsgeraden $f_\beta$ von den (beobachteten) Werten $y_i$.
+
+Die Abweichungen werden *quadriert*, damit sich positive und negative Abweichungen nicht zu null ausgleichen.
+
+Intuitiv misst die Funktion $q(\beta)$ "wie gut" eine Ausgleichsgerade mit bestimmten Werten für $\beta_0$ und $\beta_1$ in das Streudiagramm der Datenpunkte "rein passt". 
+
+Je größer ein Funktionswert $q(\beta)$, desto größer ist die aufsummierte Abweichung und desto "schlechter" passt die Ausgleichsgerade $f_\beta$ in das Streudiagramm der Datenpunkte.
+
+Je geringer ein Funktionswert $q(\beta)$, desto geringer ist die aufsummierte Abweichung und desto "besser" passt die Ausgleichsgerade $f_\beta$ in das Streudiagramm der Datenpunkte. 
+
+
+
+# Methode der kleinsten Quadrate - Selbstkontrollfragen
+\vspace{3mm}
+\setstretch{1}
+
+\textcolor{darkcyan}{Zur Veranschaulichung}
+
+\small
+Funktion der quadrierten vertikalen Abweichungen
+\begin{align*}
+q(\beta) := \sum_{i=1}^n (y_i - (\beta_0 + \beta_1x_i))^2
+\end{align*}
+
+```{r, echo = F, eval = F}
+
+n           = 20                                      # Anzahl Datenpunkte
+p           = 3                                       # Anzahl Regressionskoeffizienten
+x           = seq(1,n,len = n)                        # Kontrollvariable
+X           = matrix(c(rep(1,n), x, x^2), ncol = 3)   # Designmatrix
+beta        = matrix(c(.5,.2,.06), ncol = 1)          # Wahre, unbekannte, Regressionskoeffizientenwerte
+mu          = X %*% beta                              # Erwartungswertparameter
+sigsqr      = 10                                      # Varianzparameter
+Sigma       = sigsqr*diag(n)                          # Kovarianzmatrixparameter
+y           = as.matrix(mvrnorm(1,mu,Sigma))          # Datengeneration
+D           = data.frame(y_i = y, x_i = x)            # Dataframe
+
+
+# Ausgleichs- und weitere Geraden
+X           = matrix(c(rep(1,n), x), ncol = 2)              # Designmatrix
+beta_hat    = inv(t(X) %*% X) %*% t(X) %*% y                # OLS Schätzer
+beta_set    = matrix(c(5,.5, -20,3,beta_hat), nrow = 2)     # Weitere Geraden
+
+
+# q Funktionswerte
+q1          = t(y - X %*% beta_set[,1]) %*% (y - X %*% beta_set[,1])
+q2          = t(y - X %*% beta_set[,2]) %*% (y - X %*% beta_set[,2])
+q3          = t(y - X %*% beta_set[,3]) %*% (y - X %*% beta_set[,3])
+
+# Visualisierung
+graphics.off()
+dev.new()
+par(
+family      = "sans",
+mfcol       = c(1,3),
+pty         = "s",
+bty         = "l",
+lwd         = 1,
+las         = 1,
+mgp         = c(2,1,0),
+xaxs        = "i",
+yaxs        = "i",
+font.main   = 1,
+cex         = 1,
+cex.main    = 1.2)
+lab         = c(TeX("$q(\\beta) = 1159$"),
+                TeX("$q(\\beta) = 1451$"),
+                TeX("$q(\\beta) = 250$"))
+
+for(i in 1:3){
+  plot(
+  x,
+  y,
+  pch         = 16,
+  xlab        = "Anzahl Therapiestunden (x)",
+  ylab        = "Symptomreduktion (y)",
+  xlim        = c(0,21),
+  ylim        = c(-10, 40),
+  main        = lab[i])
+  abline(coef = beta_set[,i], lty = 1, col = "black")
+  arrows(
+  x0        = x,
+  y0        = y,
+  x1        = x,
+  y1        = X %*% beta_set[,i],
+  length    = 0,
+  col       = "orange")
+}
+fdir        = abb_dir  
+dev.copy2pdf(
+file        = file.path(fdir, "alm_1_ausgleichsgerade_2.pdf"),
+width       = 12,
+height      = 4)
+```
+
+```{r, echo = FALSE, out.width = "100%"}
+knitr::include_graphics(file.path(abb_dir,"alm_1_ausgleichsgerade_2.pdf"))
+```
+\center
+\textcolor{orange}{\textbf{------}} $y_i - (\beta_0 + \beta_1x_i)$ für $i = 1,...,n$
+
+# Methode der kleinsten Quadrate - Selbstkontrollfragen
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 5. Geben Sie das Theorem zur Ausgleichsgerade wieder.
+\vspace{3mm}
+
+\color{black}
+\footnotesize
+\begin{theorem}[Ausgleichsgerade]
+\justifying
+\normalfont
+Für eine Wertemenge $\{(x_1,y_1),...,(x_n,y_n)\}\subset\mathbb{R}^2$ hat die Ausgleichsgerade die Form
+\begin{equation}
+f_\beta : \mathbb{R} \to \mathbb{R}, x \mapsto f_\beta(x) := \hat{\beta}_0 + \hat{\beta}_1 x,
+\end{equation}
+wobei mit der Stichprobenkovarianz $c_{xy}$ der $(x_i,y_i)$-Werte, der
+Stichprobenvarianz $s_x^2$ der $x_i$-Werte und den Stichprobenmitteln $\bar{x}$
+und $\bar{y}$ der $x_i$- und $y_i$-Werte, respektive, gilt, dass
+\begin{equation}
+\hat{\beta}_1 = \frac{c_{xy}}{s_x^2} \mbox{ und } \hat{\beta}_0 = \bar{y} - \hat{\beta}_1\bar{x}
+\end{equation}
+\end{theorem}
+
+# Methode der kleinsten Quadrate - Selbstkontrollfragen
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 6. Skizzieren Sie den Beweis des Theorems zur Ausgleichsgeraden.
+\vspace{3mm}
+
+\color{black}
+\small
+Wir wollen zeigen, dass die Summe der quadrierten Abweichungen $q(\beta_0,\beta_1)$ für die Werte $\hat{\beta}_0 = \bar{y} - \hat{\beta}_1\bar{x}$ und $\hat{\beta}_1 = \frac{c_{xy}}{s_x^2}$ ihr Minimum annimmt, wobei $\bar{x}$ und $\bar{y}$ die Stichprobenmittel der $x_i$- und $y_i$-Werte, repektive, sind, $c_{xy}$ die Stichprobenkovarianz der $(x_i,y_i)$-Werte und $s^2_x$ die Stichprobenvarianz der $x_i$-Werte entspricht. 
+
+Dafür bestimmen wir zunächst das Minimum der Funktion $q(\beta_0,\beta_1)$, indem wir die partiellen Ableitungen hinsichtlich $\beta_0$ und $\beta_1$ berechnen und diese gleich $0$ setzen. Formal,
+
+\begin{align*}
+\frac{\partial}{\partial \beta_0} q(\beta_0,\beta_1)  = 0       & \mbox{ und }
+\frac{\partial}{\partial \beta_1} q(\beta_0,\beta_1)  = 0
+\end{align*}
+
+Durch die partielle Ableitungen und das anschließende Umstellen von Termen ergibt sich ein Gleichungssystem, das das \textit{System der Normalengleichungen} genannt wird und die notwendige Bedingung für ein Minimum von $q$ beschreibt. Auflösen dieses Gleichungssystems nach $\beta_0$ und $\beta_1$ liefert dann die Werte $\hat{\beta}_0 = \bar{y} - \hat{\beta}_1\bar{x}$ und $\hat{\beta}_1 = \frac{c_{xy}}{s_x^2}$
+des Theorems. 
+
+# Methode der kleinsten Quadrate - Selbstkontrollfragen
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 7. Definieren Sie den Begriff des Ausgleichspolynoms.
+\vspace{3mm}
+
+\color{black}
+\footnotesize
+\begin{definition}[Ausgleichspolynom]
+\justifying
+Für $\beta := (\beta_0,...,\beta_k)^T \in \mathbb{R}^{k+1}$ heißt die Polynomfunktion $k$ten Grades
+\begin{equation}
+f_\beta : \mathbb{R} \to \mathbb{R}, x \mapsto f_\beta(x) := \sum_{i=0}^k \beta_i x^i,
+\end{equation}
+für die für eine Wertemenge  $\{(x_1,y_1),...,(x_n,y_n)\} \subset \mathbb{R}^2$ die Funktion
+\begin{equation}
+q : \mathbb{R}^{k+1} \to \mathbb{R}_{\ge 0}, \beta \mapsto q(\beta)
+:= \sum_{i=1}^n \left(y_i-f_\beta(x_i)\right)^2
+ = \sum_{i=1}^n \left(y_i- \sum_{i=0}^k \beta_i x^i\right)^2
+\end{equation}
+der quadrierten vertikalen Abweichungen der $y_i$ von den Funktionswerten
+$f_{\beta}(x_i)$ ihr Minimum annimt, das \textit{Ausgleichspolynom $k$ten Grades}
+für die Wertemenge $\{(x_1,y_1),...,(x_n,y_n)\}$.
+\end{definition}
+
+
+
+
+# Methode der kleinsten Quadrate - Selbstkontrollfragen
+\vspace{2mm}
+\setstretch{1}
+\small
+\textcolor{darkcyan}{Zur Veranschaulichung}
+
+\small
+Beispieldatensatz Ausgleichspolynome 1ten bis 4ten Grades
+
+\footnotesize
+```{r, echo = F, eval = F}
+# Daten und Modellparameter
+library(matlib)                                                                  # Matrizentools
+library(pracma)                                                                  # Polynomtools
+fname       = file.path(data_dir, "1_Regression.csv")                  # Datendatei
+D           = read.table(fname, sep = ",", header = TRUE)                        # Dataframe
+y           = D$y_i                                                              # y_i Werte
+x           = D$x_i                                                              # x_i Werte
+n           = length(y)                                                          # n
+k_max       = 4                                                                  # maximaler Polynomgrad
+beta_hat    = list()                                                             # Parameterschätzerlisteninitialisierung
+q           = rep(NaN,k_max)                                                     # q-Funktionswertinitialisierung
+
+# Iteration über Ausgleichspolynome
+for(k in 1:k_max){
+  X = matrix(rep(1,n), nrow = n)                                                 # Design Matrix Initialisierung
+  for(i in 1:k){
+    X = cbind(X,x^i)                                                             # Polynomterme
+  }
+  beta_hat[[k]] = inv(t(X) %*% X) %*% t(X) %*% y                                 # Parameterschätzer
+  q[k]          = t(y - X %*% beta_hat[[k]]) %*% (y - X %*% beta_hat[[k]])       # q Funktionswert
+}
+
+
+# Visualisierung
+graphics.off()
+dev.new()
+par(
+family      = "sans",
+mfcol       = c(2,2),
+pty         = "s",
+bty         = "l",
+lwd         = 1,
+las         = 1,
+mgp         = c(2,1,0),
+xaxs        = "i",
+yaxs        = "i",
+font.main   = 1,
+cex         = 1,
+cex.main    = 1)
+
+# Iterationen über Subplots
+for(k in 1:k_max){
+
+  # Datenwerte
+  plot(
+  D$x_i,
+  D$y_i,
+  pch         = 16,
+  xlab        = "x",
+  ylab        = "y",
+  xlim        = c(0,21),
+  ylim        = c(-10, 40),
+  main        = sprintf("k = %1.0f, q = %3.1f", k, q[k]))
+
+  # Ausgleichspolynom
+  pol         = polyval(rev(as.vector(beta_hat[[k]])), D$x_i)
+  print(pol)
+  lines(
+  D$x_i,
+  pol)
+
+  # Speichern
+  dev.copy2pdf(
+  file        = file.path(abb_dir, "alm_1_ausgleichspolynom.pdf"),
+  width       = 7,
+  height      = 7)
+
+}
+```
+
+```{r, echo = FALSE, out.width = "60%"}
+knitr::include_graphics(file.path(abb_dir, "alm_1_ausgleichspolynom.pdf"))
+```
+\vspace{-4mm}
+\footnotesize
+\center
+
+$\bullet (x_i, y_i)$ \hspace{2mm} \textbf{---} $f_{\hat{\beta}}(x) = \sum_{i=0}^k \hat{\beta}_i x^{i}$
+
+# Regression - Selbstkontrollfragen
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 8. Erläutern Sie die Motivation des einfachen linearen Regressionsmodells in Bezug auf die Ausgleichsgerade.
+
+\vspace{9mm}
+\color{black}
+\small
+
+Eine Ausgleichsgerade erlaubt Aussagen über unbeobachtete y Werte für x Werte. Der Wert von $q(\hat{\beta})$ quantifiziert die Güte der Ausgleichsgeradenpassung. Eine Ausgleichsgerade erlaubt allerdings nur implizite Aussagen über die mit der Anpassung verbundene Unsicherheit.
+
+In der einfachen linearen Regression wird die Idee einer Ausgleichsgerade um eine probabilistische Komponente (normalverteilte Fehlervariable) erweitert, um quantitative Aussagen über die mit einer Ausgleichsgeradenanpassung verbundene Unsicherheit machen zu können. 
+
+Weiterhin erlaubt die einfache lineare Regression, einen Hypothesentest-basierten Zugang zur Einschätzung der angepassten
+Parameterwerte $\hat{\beta}_0$ und $\hat{\beta}_1$ sowie das Bestimmen von Konfidenzintervallen, die eine quantitative Aussage über die mit dem Schätzwert assoziierte Unsicherheit ermöglichen. 
+
+
+
+# Regression - Selbstkontrollfragen
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 9. Definieren Sie das Modell der einfachen linearen Regression.
+
+\vspace{6mm}
+
+\color{black}
+\small
+
+\begin{definition}[Modell der einfachen linearen Regression]
+Für $i = 1,...,n$ sei
+\begin{equation}\label{eq:modell_generativ}
+\upsilon_{i} = \beta_0 + \beta_1x_i + \varepsilon_{i}
+\end{equation}
+wobei
+\begin{itemize}
+\item $x_i \in \mathbb{R}$ fest vorgegebene sogenannte \textit{Prädiktorwerte} oder \textit{Regressorwerte} sind,
+\item $\beta_0,\beta_1 \in \mathbb{R}$ wahre, aber unbekannte, Parameterwerte sind und
+\item $\varepsilon_{i} \sim N(0,\sigma^2)$ unabhängige und identisch normalverteilte nicht-beobachtbare Zufallsvariablen mit wahrem, aber unbekanntem, Parameter $\sigma^2 > 0$ sind.
+\end{itemize}
+Dann heißt \eqref{eq:modell_generativ} \textit{Modell der einfachen linearen Regression}.
+\end{definition}
+
+# Regression - Selbstkontrollfragen
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 10. Geben Sie das Theorem zur Datenverteilung der einfachen linearen Regression wieder.
+\vspace{6mm}
+
+\color{black}
+\footnotesize
+\begin{theorem}[Datenverteilung der einfachen linearen Regression]
+\normalfont
+\justifying
+Das Modell der einfachen linearen Regression
+\begin{equation}\label{eq:modell}
+\upsilon_{i} = \beta_0 + \beta_1x_i + \varepsilon_{i} \mbox{ mit } \varepsilon_i \sim N(0,\sigma^2) \mbox{ u.i.v. für } i = 1,...,n
+\end{equation}
+lässt sich äquivalent in der Form
+\begin{equation}\label{eq:modell_normal}
+\upsilon_{i} \sim N\left(\beta_0 + \beta_1x_i, \sigma^2\right) \mbox{ u.v. für } i = 1,...,n
+\end{equation}
+schreiben.
+\end{theorem}
+
+
+
+# Regression - Selbstkontrollfragen
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 11. Skizzieren das Modell der einfachen linearen Regression per Hand.
+
+\color{black}
+\normalsize
+\vspace{3mm}
+Modell der einfachen linearen Regression
+
+\setstretch{1.2}
+
+```{r, echo = F, eval = F}
+# Deterministischer Modellteil
+n           = 10                              # Anzahl Regressor/Datenwerte
+x           = 1:n                             # Regressorwerte
+beta_0      = 0                               # Offsetparameter
+beta_1      = 1                               # Slopeparameter
+sigsqr      = 1                               # Varianzparameter
+mu          = beta_0 + beta_1*x               # Normalverteilungserwartungswertparameter
+
+# Visualisierung
+graphics.off()
+dev.new()
+par(
+family      = "sans",
+mfcol       = c(1,1),
+pty         = "m",
+bty         = "l",
+lwd         = 1,
+las         = 1,
+mgp         = c(2,1,0),
+xaxs        = "i",
+yaxs        = "i",
+xpd         = TRUE,
+font.main   = 1,
+cex         = 1,
+cex.main    = 1.2)
+
+# Deterministischer Modellteil
+xlimits     = c(0,11)
+ylimits     = c(-3,13)
+plot(
+x,
+mu,
+type        = "b",
+lty         = 2,
+pch         = 16,
+xlab        = "x",
+ylab        = "y",
+xlim        = xlimits,
+ylim        = ylimits)
+
+# Probabilistischer Modellteil
+w           = 3                          # WDF Support Width
+res         = 1e3                        # WDF resolution
+for(i in 1:length(x)){
+  y    = seq(mu[i]-w,mu[i]+w, len = res)
+  pdfy = -dnorm(y, mu[i], sigsqr)
+  lines(-pdfy+mu[i],y      , col = "gray80")
+  lines(-rep(0,res)+mu[i],y, col = "gray40")
+}
+
+# Regressorwerte
+points(
+x,
+rep(ylimits[1], n),
+col = "blue",
+pch = 16)
+
+
+# Speichern
+dev.copy2pdf(
+file        = file.path(abb_dir , "alm_1_elr_1.pdf"),
+width       = 6,
+height      = 4)
+
+```
+
+
+```{r, echo = FALSE, out.width = "80%"}
+knitr::include_graphics(file.path(abb_dir,"alm_1_elr_1.pdf"))
+```
+\vspace{-4mm}
+\footnotesize
+\center
+
+\textcolor{blue}{$\bullet$} $x_i$
+\hspace{2mm}
+$\bullet$ $\beta_0 + \beta_1x_i$ \mbox{ für } $\beta_0 := 0$, $\beta_1 := 1$
+\hspace{2mm}
+\textcolor{gray}{\textbf{---}} $N(y_i; \beta_0 + \beta_1x_i, \sigma^2)$ \mbox{ für } $\sigma^2 := 1$.
+
+
+
+
+
+
+# Regression - Selbstkontrollfragen
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 12. Skizzieren Sie eine Realisierung des Modells der einfachen linearen Regression per Hand.
+
+\color{black}
+\normalsize
+\vspace{3mm}
+Realisierung des Modells der einfachen linearen Regression
+
+\setstretch{1.2}
+
+```{r, echo = F, eval = F}
+# Deterministischer Modellteil
+n           = 10                              # Anzahl Regressor/Datenwerte
+x           = 1:n                             # Regressorwerte
+beta_0      = 0                               # Offsetparameter
+beta_1      = 1                               # Slopeparameter
+sigsqr      = 1                               # Varianzparameter
+mu          = beta_0 + beta_1*x               # Normalverteilungserwartungswertparameter
+
+# Datenrealisierung
+y           = rep(NaN,n)  # Datenarrayinitialisierung
+for(i in 1:n){
+  y[i] = rnorm(1,mu[i],sigsqr)  # Y_i \sim N(\beta_0 + \beta_1x_i, \sigma^2)
+}
+
+
+# Visualisierung
+graphics.off()
+dev.new()
+par(
+family      = "sans",
+mfcol       = c(1,1),
+pty         = "m",
+bty         = "l",
+lwd         = 1,
+las         = 1,
+mgp         = c(2,1,0),
+xaxs        = "i",
+yaxs        = "i",
+xpd         = TRUE,
+font.main   = 1,
+cex         = 1,
+cex.main    = 1.2)
+
+# Deterministischer Modellteil
+xlimits     = c(0,11)
+ylimits     = c(-3,13)
+plot(
+x,
+mu,
+type        = "b",
+lty         = 2,
+pch         = 16,
+xlab        = "x",
+ylab        = "y",
+xlim        = xlimits,
+ylim        = ylimits)
+
+# Probabilistischer Modellteil
+w           = 3                          # WDF Support Width
+res         = 1e3                        # WDF resolution
+for(i in 1:length(x)){
+  yp   = seq(mu[i]-w,mu[i]+w, len = res)
+  pdfy = -dnorm(yp, mu[i], sigsqr)
+  lines(-pdfy+mu[i],yp      , col = "gray80")
+  lines(-rep(0,res)+mu[i],yp, col = "gray40")
+}
+
+# Regressorwerte
+points(
+x,
+rep(ylimits[1], n),
+col = "blue",
+pch = 16)
+
+# Datenwerte
+points(
+x,
+y,
+col = "red",
+pch = 16)
+
+
+# Speichern
+dev.copy2pdf(
+file        = file.path(abb_dir, "alm_1_elr_2.pdf"),
+width       = 6,
+height      = 4)
+
+```
+
+
+```{r, echo = FALSE, out.width = "80%"}
+knitr::include_graphics(file.path(abb_dir,"alm_1_elr_2.pdf"))
+```
+\vspace{-4mm}
+\footnotesize
+\center
+
+\textcolor{blue}{$\bullet$} $x_i$
+\hspace{2mm}
+$\bullet$ $\beta_0 + \beta_1x_i$ \mbox{ für } $\beta_0 := 0$, $\beta_1 := 1$
+\hspace{2mm}
+\textcolor{gray}{\textbf{---}} $N(y_i; \beta_0 + \beta_1x_i, \sigma^2)$ \mbox{ für } $\sigma^2 := 1$
+\hspace{2mm}
+\textcolor{red}{$\bullet$} $(x_i,y_i)$
+
+
+
+
+
+# Regression - Selbstkontrollfragen
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 13. Geben Sie das Theorem zur ML-Schätzung der Parameter der einfachen linearen Regression an.
+\vspace{3mm}
+
+\color{black}
+\footnotesize
+
+\begin{theorem}[Maximum Likelihood Schätzung]
+\justifying
+\normalfont
+Es sei
+\begin{equation}\label{eq:modell}
+\upsilon_{i} = \beta_0 + \beta_1x_i + \varepsilon_{i} \mbox{ mit } \varepsilon_i \sim N(0,\sigma^2) \mbox{ u.i.v. für } i = 1,...,n
+\end{equation}
+das Modell der einfachen linearen Regression. Dann sind Maximum Likelihood
+Schätzer der Modellparameter $\beta_0,\beta_1$ und $\sigma^2$ gegeben durch
+\begin{equation}
+\hat{\beta}_1  := \frac{c_{xy}}{s_x^2}, \,\,\,
+\hat{\beta}_0  := \bar{y} - \hat{\beta}_1\bar{x} \,\,\,
+\mbox{ und }
+\hat{\sigma}^2 := \frac{1}{n}\sum_{i=1}^n \left(y_i - \left(\hat{\beta}_0 + \hat{\beta}_1 x_i\right)\right)^2.
+\end{equation}
+\end{theorem}
+
+
+
+
+# Regression - Selbstkontrollfragen
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 14. Skizzieren Sie den Beweis des Theorems zur ML-Schätzung der Parameter der einfachen linearen Regression.
+
+\vspace{3mm}
+
+\color{black}
+
+\small
+Teil 1/2: $\hat{\beta}_0$ und $\hat{\beta}_1$
+\footnotesize
+
+Wir wollen zunächst zeigen, dass die Ausgleichsgeradenparameter $\hat{\beta}_0$ und
+$\hat{\beta}_1$ den entsprechenden ML Schätzern gleichen. 
+
+Um die ML Schätzer zu bestimmen, formulieren wir zunächst die Likelihood-Funktion des Modells der einfachen linearen Regression in Abhängigkeit von $\beta_0$ und $\beta_1$. 
+
+Die Likelihood-Funktion ist definiert als der Wert der gemeinsamen Verteilung der $\upsilon_1, ...,\upsilon_n$ in Abhängigkeit von den Parametern $\beta_0$ und $\beta_1$. 
+
+Aufgrund der Unabhängigkeit der $\upsilon_1, ...,\upsilon_n$ können wir die gemeinsame Verteilung als Produkt der einzelnen Wahrscheinlichkeitsdichtefunktionen, also als Produkt von Dichtefunktionen der univariaten Normalverteilung aufschreiben. 
+
+Die funktionale Form der Dichtefunktionen der univariaten Normalverteilung enthält eine Exponentialfunktion. Mit den Eigenschaften einer Exponentialfunktion können wir dieses Produkt umschreiben zu einer Exponentialfunktion von einem Term, der im Wesentlichen aus der negativen Summe der quadrierten Abweichungen (i.e. der Funktion $q$) besteht.
+
+Weil für eine Exponentialfunktion gilt, dass für $a < b \le 0$ gilt, dass $\exp(a)<\exp(b)$,
+wird der Exponentialterm der Likelihood-Funktion maximal, wenn $q$ minimal und entsprechend $-q$ maximal wird. 
+
+Wie im Beweis der Ausgleichsgeradenform gezeigt, wissen wir, dass $q$ für $\hat{\beta}_0$ und $\hat{\beta}_1$, wie sie auch im Theorem zur ML-Schätzung der Parameter der einfachen linearen Regression angegeben sind, minimal wird, und damit $\hat{\beta}_1$ und $\hat{\beta}_0$ die Likelihood-Funktion
+maximieren.
+
+
+
+
+# Regression - Selbstkontrollfragen
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 14. Skizzieren Sie den Beweis des Theorems zur ML-Schätzung der Parameter der einfachen linearen Regression.
+
+\vspace{3mm}
+
+\color{black}
+\small
+Teil 2/2: $\hat{\sigma^2}$
+
+\footnotesize
+Als nächstes wollen wir zeigen, dass $\hat{\sigma}^2$ dem ML-Schätzer entspricht. 
+
+Dazu betrachten wir analog zu oben die Likelihood-Funktion des Modells der einfachen linearen Regression, jedoch als Funktion von $\sigma^2$ und formulieren die entsprechende log-Likelihood-Funktion. 
+
+Wir wollen das $\hat{\sigma}^2$ bestimmen, für das die (log-)Likelihood-Funktion maximal wird. 
+
+Um die log-Likelihood-Funktion zu maximieren, bilden wir die 1. Ableitung, setzen diese gleich $0$ und lösen nach $\sigma^2$ auf. Durch umstellen erhalten wir dann die Formel zur Schätzung von $\sigma^2$, also $\hat{\sigma}^2$, wie sie im Theorem angeben ist. 
+
+\vspace{12mm}
+
