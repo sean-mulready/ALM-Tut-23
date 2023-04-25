@@ -1,0 +1,457 @@
+---
+fontsize: 8pt
+bibliography: ../Referenzen.bib
+citation_package: natbib
+output:
+  beamer_presentation:
+    keep_tex: true
+    includes:
+      in_header: ../Header.tex
+classoption: t
+---
+
+
+```{r, include = FALSE}
+source("../R_common.R")
+abb_dir = file.path(dirname(getwd()), "Abbildungen")
+data_dir = file.path(dirname(getwd()), "Daten")
+```
+
+# {.plain}
+\center
+```{r, echo = FALSE, out.width="20%"}
+knitr::include_graphics(file.path(abb_dir,"wtfi_otto.png"))
+```
+
+\vspace{2mm}
+
+\huge
+Tutorium
+
+\Large
+Allgemeines Lineares Modell
+\vspace{2mm}
+
+\normalsize
+BSc Psychologie SoSe 2023
+
+\vspace{2mm}
+\text{3. Termin: (1) Regression (Teil 2)}    
+
+\vspace{15mm}
+\normalsize
+Sean Mulready
+
+\vspace{2mm}
+\scriptsize
+Inhalte basieren auf Kursmaterialien für [\textcolor{darkblue}{ALM}](https://www.ipsy.ovgu.de/Institut/Abteilungen+des+Institutes/Methodenlehre+I+_+Experimentelle+und+Neurowissenschaftliche+Psychologie/Lehre/Sommersemester+2023/Allgemeines+Lineares+Modell.html) von [Dirk Ostwald](https://www.ipsy.ovgu.de/Institut/Abteilungen+des+Institutes/Methodenlehre+I+_+Experimentelle+und+Neurowissenschaftliche+Psychologie/Team/Dirk+Ostwald.html), lizenziert unter [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/deed.de)
+
+# \textcolor{grey}{Follow Up}
+
+\center
+\vspace{18mm}
+\Large
+Gibt es eine Methode, das 'optimale' k für den Grad eines Ausgleichspolynoms zu bestimmen?
+
+
+# \textcolor{grey}{optimaler Grad k}
+\vspace{3mm}
+
+* es gibt theoretisch viele Möglichkeiten, ein "optimales" k zu finden
+* eine Möglichtkeit: bei $n$ Datenpunkten kann ich Grad $k = (n-1)$ wählen 
+  * dann geht die Funktion exakt durch alle Punkte
+* "optimal" im Sinne einer Abwägung: Güte vs. Vorhersagekraft
+  * allgemein kann man sagen, dass das Ausgleichspolynom ab $k>4$ immer "überangepasster" wird und an Vorhersagekraft verliert
+
+weitere Anmerkungen von Prof. Ostwald:
+
+* generell ist das Finden eines optimalen Grades ein Aspekt des offenen Forschungsthemas $Modellselektion$
+  * mehr dazu [\textcolor{blue}{hier}](https://en.wikipedia.org/wiki/Model_selection)
+* Literaturempfehlung: Burnham, K.P. & Anderson, D.R. (2003).\textit{Model Selection and Multimodel Inference: A Practical Information-Theoretic Approach.} Springer Science & Business Media.
+
+
+
+
+
+
+
+# Selbstkontrollfragen - Regression
+
+\small
+\setstretch{1.5}
+8. Erläutern Sie die Motivation des einfachen linearen Regressionsmodells in Bezug auf die Ausgleichsgerade.
+9. Definieren Sie das Modell der einfachen linearen Regression.
+10. Geben Sie das Theorem zur Datenverteilung der einfachen linearen Regression wieder.
+11. Skizzieren das Modell der einfachen linearen Regression per Hand.
+12. Skizzieren Sie eine Realisierung des Modells der einfachen linearen Regression per Hand.
+13. Geben Sie das Theorem zur ML-Schätzung der Parameter der einfachen linearen Regression an.
+14. Skizzieren Sie den Beweis des Theorems zur ML-Schätzung der Parameter der einfachen linearen Regression.
+
+
+
+# Regression - Selbstkontrollfragen
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 8. Erläutern Sie die Motivation des einfachen linearen Regressionsmodells in Bezug auf die Ausgleichsgerade.
+
+\vspace{9mm}
+\color{black}
+\small
+
+Eine Ausgleichsgerade erlaubt Aussagen über unbeobachtete y Werte für x Werte. Der Wert von $q(\hat{\beta})$ quantifiziert die Güte der Ausgleichsgeradenpassung. Eine Ausgleichsgerade erlaubt allerdings nur implizite Aussagen über die mit der Anpassung verbundene Unsicherheit.
+
+In der einfachen linearen Regression wird die Idee einer Ausgleichsgerade um eine probabilistische Komponente (normalverteilte Fehlervariable) erweitert, um quantitative Aussagen über die mit einer Ausgleichsgeradenanpassung verbundene Unsicherheit machen zu können. 
+
+Weiterhin erlaubt die einfache lineare Regression, einen Hypothesentest-basierten Zugang zur Einschätzung der angepassten
+Parameterwerte $\hat{\beta}_0$ und $\hat{\beta}_1$ sowie das Bestimmen von Konfidenzintervallen, die eine quantitative Aussage über die mit dem Schätzwert assoziierte Unsicherheit ermöglichen. 
+
+
+
+# Regression - Selbstkontrollfragen
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 9. Definieren Sie das Modell der einfachen linearen Regression.
+
+\vspace{6mm}
+
+\color{black}
+\small
+
+\begin{definition}[Modell der einfachen linearen Regression]
+Für $i = 1,...,n$ sei
+\begin{equation}\label{eq:modell_generativ}
+\upsilon_{i} = \beta_0 + \beta_1x_i + \varepsilon_{i}
+\end{equation}
+wobei
+\begin{itemize}
+\item $x_i \in \mathbb{R}$ fest vorgegebene sogenannte \textit{Prädiktorwerte} oder \textit{Regressorwerte} sind,
+\item $\beta_0,\beta_1 \in \mathbb{R}$ wahre, aber unbekannte, Parameterwerte sind und
+\item $\varepsilon_{i} \sim N(0,\sigma^2)$ unabhängige und identisch normalverteilte nicht-beobachtbare Zufallsvariablen mit wahrem, aber unbekanntem, Parameter $\sigma^2 > 0$ sind.
+\end{itemize}
+Dann heißt \eqref{eq:modell_generativ} \textit{Modell der einfachen linearen Regression}.
+\end{definition}
+
+# Regression - Selbstkontrollfragen
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 10. Geben Sie das Theorem zur Datenverteilung der einfachen linearen Regression wieder.
+\vspace{6mm}
+
+\color{black}
+\footnotesize
+\begin{theorem}[Datenverteilung der einfachen linearen Regression]
+\normalfont
+\justifying
+Das Modell der einfachen linearen Regression
+\begin{equation}\label{eq:modell}
+\upsilon_{i} = \beta_0 + \beta_1x_i + \varepsilon_{i} \mbox{ mit } \varepsilon_i \sim N(0,\sigma^2) \mbox{ u.i.v. für } i = 1,...,n
+\end{equation}
+lässt sich äquivalent in der Form
+\begin{equation}\label{eq:modell_normal}
+\upsilon_{i} \sim N\left(\beta_0 + \beta_1x_i, \sigma^2\right) \mbox{ u.v. für } i = 1,...,n
+\end{equation}
+schreiben.
+\end{theorem}
+
+
+
+# Regression - Selbstkontrollfragen
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 11. Skizzieren das Modell der einfachen linearen Regression per Hand.
+
+\color{black}
+\normalsize
+\vspace{3mm}
+Modell der einfachen linearen Regression
+
+\setstretch{1.2}
+
+```{r, echo = F, eval = F}
+# Deterministischer Modellteil
+n           = 10                              # Anzahl Regressor/Datenwerte
+x           = 1:n                             # Regressorwerte
+beta_0      = 0                               # Offsetparameter
+beta_1      = 1                               # Slopeparameter
+sigsqr      = 1                               # Varianzparameter
+mu          = beta_0 + beta_1*x               # Normalverteilungserwartungswertparameter
+
+# Visualisierung
+graphics.off()
+dev.new()
+par(
+family      = "sans",
+mfcol       = c(1,1),
+pty         = "m",
+bty         = "l",
+lwd         = 1,
+las         = 1,
+mgp         = c(2,1,0),
+xaxs        = "i",
+yaxs        = "i",
+xpd         = TRUE,
+font.main   = 1,
+cex         = 1,
+cex.main    = 1.2)
+
+# Deterministischer Modellteil
+xlimits     = c(0,11)
+ylimits     = c(-3,13)
+plot(
+x,
+mu,
+type        = "b",
+lty         = 2,
+pch         = 16,
+xlab        = "x",
+ylab        = "y",
+xlim        = xlimits,
+ylim        = ylimits)
+
+# Probabilistischer Modellteil
+w           = 3                          # WDF Support Width
+res         = 1e3                        # WDF resolution
+for(i in 1:length(x)){
+  y    = seq(mu[i]-w,mu[i]+w, len = res)
+  pdfy = -dnorm(y, mu[i], sigsqr)
+  lines(-pdfy+mu[i],y      , col = "gray80")
+  lines(-rep(0,res)+mu[i],y, col = "gray40")
+}
+
+# Regressorwerte
+points(
+x,
+rep(ylimits[1], n),
+col = "blue",
+pch = 16)
+
+
+# Speichern
+dev.copy2pdf(
+file        = file.path(abb_dir , "alm_1_elr_1.pdf"),
+width       = 6,
+height      = 4)
+
+```
+
+```{r, echo = FALSE, out.width = "80%"}
+knitr::include_graphics(file.path(abb_dir,"alm_1_elr_1.pdf"))
+```
+\vspace{-4mm}
+\footnotesize
+\center
+
+\textcolor{blue}{$\bullet$} $x_i$
+\hspace{2mm}
+$\bullet$ $\beta_0 + \beta_1x_i$ \mbox{ für } $\beta_0 := 0$, $\beta_1 := 1$
+\hspace{2mm}
+\textcolor{gray}{\textbf{---}} $N(y_i; \beta_0 + \beta_1x_i, \sigma^2)$ \mbox{ für } $\sigma^2 := 1$.
+
+
+
+
+
+
+# Regression - Selbstkontrollfragen
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 12. Skizzieren Sie eine Realisierung des Modells der einfachen linearen Regression per Hand.
+
+\color{black}
+\normalsize
+\vspace{3mm}
+Realisierung des Modells der einfachen linearen Regression
+
+\setstretch{1.2}
+
+```{r, echo = F, eval = F}
+# Deterministischer Modellteil
+n           = 10                              # Anzahl Regressor/Datenwerte
+x           = 1:n                             # Regressorwerte
+beta_0      = 0                               # Offsetparameter
+beta_1      = 1                               # Slopeparameter
+sigsqr      = 1                               # Varianzparameter
+mu          = beta_0 + beta_1*x               # Normalverteilungserwartungswertparameter
+
+# Datenrealisierung
+y           = rep(NaN,n)  # Datenarrayinitialisierung
+for(i in 1:n){
+  y[i] = rnorm(1,mu[i],sigsqr)  # Y_i \sim N(\beta_0 + \beta_1x_i, \sigma^2)
+}
+
+
+# Visualisierung
+graphics.off()
+dev.new()
+par(
+family      = "sans",
+mfcol       = c(1,1),
+pty         = "m",
+bty         = "l",
+lwd         = 1,
+las         = 1,
+mgp         = c(2,1,0),
+xaxs        = "i",
+yaxs        = "i",
+xpd         = TRUE,
+font.main   = 1,
+cex         = 1,
+cex.main    = 1.2)
+
+# Deterministischer Modellteil
+xlimits     = c(0,11)
+ylimits     = c(-3,13)
+plot(
+x,
+mu,
+type        = "b",
+lty         = 2,
+pch         = 16,
+xlab        = "x",
+ylab        = "y",
+xlim        = xlimits,
+ylim        = ylimits)
+
+# Probabilistischer Modellteil
+w           = 3                          # WDF Support Width
+res         = 1e3                        # WDF resolution
+for(i in 1:length(x)){
+  yp   = seq(mu[i]-w,mu[i]+w, len = res)
+  pdfy = -dnorm(yp, mu[i], sigsqr)
+  lines(-pdfy+mu[i],yp      , col = "gray80")
+  lines(-rep(0,res)+mu[i],yp, col = "gray40")
+}
+
+# Regressorwerte
+points(
+x,
+rep(ylimits[1], n),
+col = "blue",
+pch = 16)
+
+# Datenwerte
+points(
+x,
+y,
+col = "red",
+pch = 16)
+
+
+# Speichern
+dev.copy2pdf(
+file        = file.path(abb_dir, "alm_1_elr_2.pdf"),
+width       = 6,
+height      = 4)
+
+```
+
+```{r, echo = FALSE, out.width = "80%"}
+knitr::include_graphics(file.path(abb_dir,"alm_1_elr_2.pdf"))
+```
+\vspace{-4mm}
+\footnotesize
+\center
+
+\textcolor{blue}{$\bullet$} $x_i$
+\hspace{2mm}
+$\bullet$ $\beta_0 + \beta_1x_i$ \mbox{ für } $\beta_0 := 0$, $\beta_1 := 1$
+\hspace{2mm}
+\textcolor{gray}{\textbf{---}} $N(y_i; \beta_0 + \beta_1x_i, \sigma^2)$ \mbox{ für } $\sigma^2 := 1$
+\hspace{2mm}
+\textcolor{red}{$\bullet$} $(x_i,y_i)$
+
+
+
+
+
+# Regression - Selbstkontrollfragen
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 13. Geben Sie das Theorem zur ML-Schätzung der Parameter der einfachen linearen Regression an.
+\vspace{3mm}
+
+\color{black}
+\footnotesize
+
+\begin{theorem}[Maximum Likelihood Schätzung]
+\justifying
+\normalfont
+Es sei
+\begin{equation}\label{eq:modell}
+\upsilon_{i} = \beta_0 + \beta_1x_i + \varepsilon_{i} \mbox{ mit } \varepsilon_i \sim N(0,\sigma^2) \mbox{ u.i.v. für } i = 1,...,n
+\end{equation}
+das Modell der einfachen linearen Regression. Dann sind Maximum Likelihood
+Schätzer der Modellparameter $\beta_0,\beta_1$ und $\sigma^2$ gegeben durch
+\begin{equation}
+\hat{\beta}_1  := \frac{c_{xy}}{s_x^2}, \,\,\,
+\hat{\beta}_0  := \bar{y} - \hat{\beta}_1\bar{x} \,\,\,
+\mbox{ und }
+\hat{\sigma}^2 := \frac{1}{n}\sum_{i=1}^n \left(y_i - \left(\hat{\beta}_0 + \hat{\beta}_1 x_i\right)\right)^2.
+\end{equation}
+\end{theorem}
+
+
+
+
+# Regression - Selbstkontrollfragen
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 14. Skizzieren Sie den Beweis des Theorems zur ML-Schätzung der Parameter der einfachen linearen Regression.
+
+\vspace{3mm}
+
+\color{black}
+
+\small
+Teil 1/2: $\hat{\beta}_0$ und $\hat{\beta}_1$
+\footnotesize
+
+Wir wollen zunächst zeigen, dass die Ausgleichsgeradenparameter $\hat{\beta}_0$ und
+$\hat{\beta}_1$ den entsprechenden ML Schätzern gleichen. 
+
+Um die ML Schätzer zu bestimmen, formulieren wir zunächst die Likelihood-Funktion des Modells der einfachen linearen Regression in Abhängigkeit von $\beta_0$ und $\beta_1$. 
+
+Die Likelihood-Funktion ist definiert als der Wert der gemeinsamen Verteilung der $\upsilon_1, ...,\upsilon_n$ in Abhängigkeit von den Parametern $\beta_0$ und $\beta_1$. 
+
+Aufgrund der Unabhängigkeit der $\upsilon_1, ...,\upsilon_n$ können wir die gemeinsame Verteilung als Produkt der einzelnen Wahrscheinlichkeitsdichtefunktionen, also als Produkt von Dichtefunktionen der univariaten Normalverteilung aufschreiben. 
+
+Die funktionale Form der Dichtefunktionen der univariaten Normalverteilung enthält eine Exponentialfunktion. Mit den Eigenschaften einer Exponentialfunktion können wir dieses Produkt umschreiben zu einer Exponentialfunktion von einem Term, der im Wesentlichen aus der negativen Summe der quadrierten Abweichungen (i.e. der Funktion $q$) besteht.
+
+Weil für eine Exponentialfunktion gilt, dass für $a < b \le 0$ gilt, dass $\exp(a)<\exp(b)$,
+wird der Exponentialterm der Likelihood-Funktion maximal, wenn $q$ minimal und entsprechend $-q$ maximal wird. 
+
+Wie im Beweis der Ausgleichsgeradenform gezeigt, wissen wir, dass $q$ für $\hat{\beta}_0$ und $\hat{\beta}_1$, wie sie auch im Theorem zur ML-Schätzung der Parameter der einfachen linearen Regression angegeben sind, minimal wird, und damit $\hat{\beta}_1$ und $\hat{\beta}_0$ die Likelihood-Funktion
+maximieren.
+
+
+
+
+# Regression - Selbstkontrollfragen
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 14. Skizzieren Sie den Beweis des Theorems zur ML-Schätzung der Parameter der einfachen linearen Regression.
+
+\vspace{3mm}
+
+\color{black}
+\small
+Teil 2/2: $\hat{\sigma^2}$
+
+\footnotesize
+Als nächstes wollen wir zeigen, dass $\hat{\sigma}^2$ dem ML-Schätzer entspricht. 
+
+Dazu betrachten wir analog zu oben die Likelihood-Funktion des Modells der einfachen linearen Regression, jedoch als Funktion von $\sigma^2$ und formulieren die entsprechende log-Likelihood-Funktion. 
+
+Wir wollen das $\hat{\sigma}^2$ bestimmen, für das die (log-)Likelihood-Funktion maximal wird. 
+
+Um die log-Likelihood-Funktion zu maximieren, bilden wir die 1. Ableitung, setzen diese gleich $0$ und lösen nach $\sigma^2$ auf. Durch umstellen erhalten wir dann die Formel zur Schätzung von $\sigma^2$, also $\hat{\sigma}^2$, wie sie im Theorem angeben ist. 
+
+\vspace{12mm}
