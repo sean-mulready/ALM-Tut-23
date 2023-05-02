@@ -1,0 +1,629 @@
+---
+fontsize: 8pt
+bibliography: ../Referenzen.bib
+citation_package: natbib
+output:
+  beamer_presentation:
+    keep_tex: true
+    includes:
+      in_header: ../Header.tex
+classoption: t
+---
+
+
+```{r, include = FALSE}
+source("../R_common.R")
+abb_dir = file.path(dirname(getwd()), "Abbildungen")
+data_dir = file.path(dirname(getwd()), "Daten")
+```
+
+# {.plain}
+\center
+```{r, echo = FALSE, out.width="20%"}
+knitr::include_graphics(file.path(abb_dir,"wtfi_otto.png"))
+```
+
+\vspace{2mm}
+
+\huge
+Tutorium
+
+\Large
+Allgemeines Lineares Modell
+\vspace{2mm}
+
+\normalsize
+BSc Psychologie SoSe 2023
+
+\vspace{2mm}
+\text{4. Termin: (2) Korrelation}    
+
+\vspace{15mm}
+\normalsize
+Sean Mulready
+
+\vspace{2mm}
+\scriptsize
+Inhalte basieren auf Kursmaterialien für [\textcolor{darkblue}{ALM}](https://www.ipsy.ovgu.de/Institut/Abteilungen+des+Institutes/Methodenlehre+I+_+Experimentelle+und+Neurowissenschaftliche+Psychologie/Lehre/Sommersemester+2023/Allgemeines+Lineares+Modell.html) von [Dirk Ostwald](https://www.ipsy.ovgu.de/Institut/Abteilungen+des+Institutes/Methodenlehre+I+_+Experimentelle+und+Neurowissenschaftliche+Psychologie/Team/Dirk+Ostwald.html), lizenziert unter [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/deed.de)
+
+
+# \textcolor{darkgrey}{Follow-up letzte Wochen}
+\small
+
+*Mal angenommen, wir haben Daten von 20 Proband:innen erhoben. Dann haben wir als Ausgangspunkt 
+die beobachteten Werte für $y_i$*
+
+\color{black}
+
+```{r, echo = F, eval = F}
+library(latex2exp)
+
+fname       = file.path(data_dir, "1_Regression.csv")                  # Datendatei
+D           = read.table(fname, sep = ",", header = TRUE)                        # Dataframe
+y           = D$y_i                                                              # y_i Werte
+x           = D$x_i                                                              # x_i Werte
+
+graphics.off()
+dev.new()
+par(
+family      = "sans",
+mfcol       = c(1,1),
+pty         = "s",
+bty         = "l",
+lwd         = 1,
+las         = 1,
+mgp         = c(2,1,0),
+xaxs        = "i",
+yaxs        = "i",
+font.main   = 1,
+cex         = 1,
+cex.main    = 1)
+plot(
+x,
+y,
+pch        = 16,
+xlab       = "Anzahl Therapiestunden (x)",
+ylab       = "Symptomreduktion (y)",
+xlim       = c(0,21),
+ylim       = c(-10, 40))
+
+legend(
+"topleft",
+TeX("$(x_i,y_i)$"),
+lty         = 0,
+pch         = 16,
+col         = "black",
+bty         = "n",
+cex         = 1,
+x.intersp   = 1)
+
+dev.copy2pdf(
+file        = file.path(abb_dir, "scatter_beispieldatensatz.pdf"),
+width       = 4,
+height      = 4)
+```
+
+```{r, echo = FALSE, out.width = "50%"}
+knitr::include_graphics(file.path(abb_dir,"scatter_beispieldatensatz.pdf"))
+```
+
+\small
+*Jetzt wollen wir die Daten beschreiben. Genauer gesagt, wollen wir beschreiben und quantifizieren, welcher Zusammenhang zwischen "Anzahl Therapiestunden" (x) und "Symptomreduktion" (y) bestehen könnte. Wie können wir vorgehen? Anders gefragt, welche Maße können wir (bisher) bestimmen?*
+
+
+
+
+# \textcolor{darkgrey}{Follow-up letzte Wochen}
+
+
+Was können wir bestimmen, um den Zusammenhang quantitativ zu beschreiben?
+
+* Ausgleichsgerade
+* Einfache lineare Regression
+* Korrelation und Bestimmtheitsmaß
+
+
+
+
+
+# \textcolor{darkgrey}{Follow-up letzte Wochen}
+
+
+
+Was können wir bestimmen, um den Zusammenhang quantitativ zu beschreiben?
+
+\setstretch{1.6}
+\footnotesize
+\color{black}
+| Modell           | Modellannahmen | Was wir auf Basis der beobachteten Daten $(x_i,y_i)$ bestimmen können  | 
+| -                | --             | --                                                               | 
+| Ausgleichsgerade |  Die Ausgleichsgerade mit Funktionswerten $f_{\beta}(x)=\beta_0+\beta_1x_i$ minimiert die Summe der quadrierten Abweichungen $q(\beta)$ |  $\hat\beta_0,\hat\beta_1,q(\hat\beta_0,\hat\beta_1)$    |  
+| Einfache lineare Regression | $\upsilon_i \sim N(\beta_o + \beta_1x_i,\sigma^2)$, u.v. \newline (Wir betrachten $\upsilon_i$ als Zufallsvariable mit Normalverteilung) | $\hat\beta_0,\hat\beta_1,\hat\sigma^2$  |
+| Korrelation |  $\rho(\xi,\upsilon) := \frac{\mathbb{C}(\xi,\upsilon)}{\mathbb{S}(\xi)\mathbb{S}(\upsilon)}$ \newline (Wir betrachten $\upsilon_i$ *und* $\xi_i$ als Zufallsvariablen mit Varianzen $\mathbb{V}(\xi)$ und $\mathbb{V}(\upsilon)$ und Kovarianz $\mathbb{C}(\xi,\upsilon)$) | $r_{xy} := \frac{c_{xy}}{s_xs_y}$, $\mbox{R}^2$ | 
+
+\vspace{-3mm}
+\setstretch{1.1}
+Anmerkungen: 
+
+* Beobachtungen, Messungen oder eine Stichprobe sind konkret vorliegende Datenwerte, die eine Zufallsvariable annehmen kann. Wir nennen einzelne Werte, die eine Zufallsvariable annehmen kann, Realisierungen der Zufallsvariable. 
+
+
+# \textcolor{darkgrey}{Follow-up letzte Wochen}
+Angewendet auf unseren Beispieldatensatz:
+
+\small
+\color{black}
+
+Parameterschätzer für Ausgleichsgeraden:  $\hat\beta_0 = -6.2$, $\hat\beta_1 = 1.7$, $q(\hat\beta) = 250$
+
+Parameterschätzer für einfachen linearen Regression: $\hat\beta_0 = -6.2$, $\hat\beta_1 = 1.7$, $\hat\sigma^2 = 3.54$
+
+Korrelation: $r_{xy} = 0.938$, $\mbox{R}^2 = 0.88$
+
+\vspace{4mm}
+
+```{r, echo = F, eval = F}
+# Einlesen des Beispieldatensatzes
+fname       = file.path(data_dir, "1_Regression.csv")
+D           = read.table(fname, sep = ",", header = TRUE)
+
+# Stichprobenstatistiken
+x_bar       = mean(D$x_i)               # Stichprobenmittel der x_i-Werte
+y_bar       = mean(D$y_i)               # Stichprobenmittel der y_i-Werte
+s2x         = var(D$x_i)                # Stichprobenvarianz der  x_i-Werte
+cxy         = cov(D$x_i, D$y_i)         # Stichprobenkovarianz der (x_i,y_i)-Werte
+
+# Ausgleichsgeradenparameter
+beta_1_hat  = cxy/s2x                   # \hat{\beta}_1, Steigungsparameter
+beta_0_hat  = y_bar - beta_1_hat*x_bar  # \hat{\beta}_0, Offset Parameter
+
+# Ausgabe
+cat("beta_0_hat:", beta_0_hat,
+    "\nbeta_1_hat:", beta_1_hat)
+
+graphics.off()
+dev.new()
+par(
+  family      = "sans",
+  mfcol       = c(1,1),
+  pty         = "s",
+  bty         = "l",
+  lwd         = 1,
+  las         = 1,
+  mgp         = c(2,1,0),
+  xaxs        = "i",
+  yaxs        = "i",
+  font.main   = 1,
+  cex         = 1,
+  cex.main    = 1.2)
+
+# Datenwerte
+plot(
+  D$x_i,
+  D$y_i,
+  pch         = 16,
+  xlab        = "Anzahl Therapiestunden (x)",
+  ylab        = "Symptomreduktion (y)",
+  xlim        = c(0,21),
+  ylim        = c(-10, 40),
+  main        = TeX("$\\hat{\\beta}_0 =  -6.19, \\hat{\\beta}_1 = 1.66$"))
+
+# Ausgleichsgerade
+abline(
+  coef        = c(beta_0_hat, beta_1_hat),
+  lty         = 1,
+  col         = "black")
+  
+# Legende
+legend(
+"topleft",
+c(TeX("$(x_i,y_i)$"), TeX("$f(x) = \\hat{\\beta}_0 + \\hat{\\beta}_1x$")),
+lty = c(0,1),
+pch = c(16, NA),
+bty = "n")
+
+# Speichern
+dev.copy2pdf(
+file        = file.path(abb_dir, "alm_1_ausgleichsgerade_3.pdf"),
+width       = 4,
+height      = 4)
+```
+
+```{r, echo = F, eval = F}
+# Einlesen des Beispieldatensatzes
+fname       = file.path(data_dir, "1_Regression_Beispieldatensatz.csv")
+D           = read.table(fname, sep = ",", header = TRUE)
+
+# Ausgleichsgeradenparameter
+x_bar       = mean(D$x_i)               # Stichprobenmittel der x_i-Werte
+y_bar       = mean(D$y_i)               # Stichprobenmittel der y_i-Werte
+s2x         = var(D$x_i)                # Stichprobenvarianz der  x_i-Werte
+cxy         = cov(D$x_i, D$y_i)         # Stichprobenkovarianz der (x_i,y_i)-Werte
+beta_1_hat  = cxy/s2x                   # \hat{\beta}_1, Steigungsparameter
+beta_0_hat  = y_bar - beta_1_hat*x_bar  # \hat{\beta}_0, Offset Parameter
+cor_dat = cor(D$x_i,D$y_i)
+r_sqr = cor_dat**2
+
+# Visualisierung
+graphics.off()
+dev.new()
+par(
+family      = "sans",
+mfcol       = c(1,1),
+pty         = "s",
+bty         = "l",
+lwd         = 1,
+las         = 1,
+mgp         = c(2,1,0),
+xaxs        = "i",
+yaxs        = "i",
+font.main   = 1,
+cex         = 1,
+cex.main    = 1)
+plot(
+D$x_i,
+D$y_i,
+pch         = 16,
+xlab        = "Anzahl Therapiestunden (x)",
+ylab        = "Symptomreduktion (y)",
+xlim        = c(0,21),
+ylim        = c(-10, 40))
+abline(
+coef        = c(beta_0_hat, beta_1_hat),
+lty         = 1,
+col         = "black")
+points(
+D$x_i,
+beta_0_hat + beta_1_hat*D$x_i,
+pch         = 16,
+col         = "grey")
+arrows(
+x0        = D$x_i,
+y0        = D$y_i,
+x1        = D$x_i,
+y1        = beta_0_hat + beta_1_hat*D$x_i,
+length    = 0,
+col       = "grey")
+
+
+dev.copy2pdf(
+file        = file.path(abb_dir, "Zsfng.pdf"),
+width       = 4,
+height      = 4)
+```
+
+```{r, echo = FALSE, fig.show='hold', out.width = "45%"}
+knitr::include_graphics(file.path(abb_dir,"alm_1_ausgleichsgerade_3.pdf"))
+knitr::include_graphics(file.path(abb_dir,"Zsfng.pdf"))
+
+```
+
+\vspace{-5mm}
+\center
+$\bullet \, (x_i, y_i)$                                     \hspace{2mm}
+\textbf{---} $f_{\hat{\beta}}(x)$                           \hspace{2mm}
+\textcolor{lightgray}{$\bullet$} $\hat{y}_i$                \hspace{2mm}
+\textcolor{lightgray}{\textbf{---}} $\hat{\varepsilon}_i$   \hspace{2mm}
+$i = 1,...,n$
+
+# Selbstkontrollfragen
+
+\setstretch{1.6}
+\footnotesize
+\justifying
+
+1. Geben Sie die Definition der Korrelation zweier Zufallsvariablen wieder.
+2. Geben Sie die Definitionen von Stichprobenmittel, -standardabweichung, -kovarianz und -korrelation wieder.
+3. Erläutern Sie anhand der Mechanik der Kovariationsterme, wann eine Stichprobenkorrelation einen hohen absoluten Wert annimmt, einen hohen positiven Wert annimmt, einen hohen negativen Wert annimmt und einen niedrigen Wert annimmt.
+4. Geben Sie das Theorem zur Stichprobenkorrelation bei linear-affinen Transformationen wieder.
+5. Erläutern Sie das Theorem zur Stichprobenkorrelation bei linear-affinen Transformationen.
+6. Geben Sie die Definitionen von erklärten Werten und Residuen einer Ausgleichsgerade wieder.
+7. Geben Sie das Theorem zur Quadratsummenzerlegung bei einer Ausgleichsgerade wieder.
+8. Erläutern Sie die intuitiven Bedeutungen von $\mbox{SQT}, \mbox{SQE}$ und $\mbox{SQR}$.
+9. Geben Sie die Definition des Bestimmtheitsmaßes $\mbox{R}^2$ wieder.
+10. Geben Sie das Theorem zum Zusammenhang von Stichprobenkorrelation und Bestimmtheitsmaß wieder. 
+11. Erläutern Sie die Bedeutung von hohen und niedrigen  $\mbox{R}^2$ Werten im Lichte der Ausgleichsgerade.
+12. Geben Sie das Theorem zum Zusammenhang von Korrelation und linear-affiner Abhängigkeit wieder.
+
+# Grundlagen Korrelation - Selbstkontrollfragen
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 1. Geben Sie die Definition der Korrelation zweier Zufallsvariablen wieder.
+\vspace{3mm}
+
+\color{black}
+\small
+\begin{definition}[Korrelation]
+\justifying
+Die \textit{Korrelation} zweier Zufallsvariablen $\xi$ und $\upsilon$ ist definiert als
+\begin{equation}
+\rho(\xi,\upsilon) := \frac{\mathbb{C}(\xi,\upsilon)}{\mathbb{S}(\xi)\mathbb{S}(\upsilon)}
+\end{equation}
+wobei $\mathbb{C}(\xi,\upsilon)$ die Kovarianz von $\xi$ und $\upsilon$ und $\mathbb{S}(\xi)$ und
+$\mathbb{S}(\upsilon)$ die Standardabweichungen von $\xi$ und $\upsilon$, respektive, bezeichnen.
+\end{definition} 
+
+\vspace{5mm}
+\textcolor{darkgrey}{- Aus Unabhängigkeit folgt auch Unkorreliertheit}
+\newline
+\textcolor{darkgrey}{- ABER: Aus Unkorreliertheit folgt nicht automatisch Unabhängigkeit!}
+
+
+
+# Grundlagen Korrelation - Selbstkontrollfragen
+\setstretch{1}
+\large
+\color{darkblue} 2. Geben Sie die Definitionen von Stichprobenmittel, -standardabweichung, -kovarianz und -korrelation wieder.
+\vspace{1mm}
+\color{black}
+
+\footnotesize
+\begin{definition}[Stichprobenkorrelation]
+\justifying
+$\{(x_1,y_1),...,(x_n,y_n)\} \subset \mathbb{R}^2$ sei ein Datensatz. Weiterhin seien:
+\begin{itemize}
+\item Die Stichprobenmittel der $x_i$ und $y_i$ definiert als
+\begin{equation}
+\bar{x} := \frac{1}{n}\sum_{i=1}^n x_i
+\mbox{ und }
+\bar{y} := \frac{1}{n}\sum_{i=1}^n y_i.
+\end{equation}
+\item Die Stichprobenstandardabweichungen $x_i$ und $y_i$ definiert als
+\begin{equation}
+s_x := \sqrt{\frac{1}{n-1}\sum_{i=1}^n(x_i - \bar{x})^2}
+\mbox{ und }
+s_y := \sqrt{\frac{1}{n-1}\sum_{i=1}^n(y_i - \bar{y})^2}.
+\end{equation}
+\item Die Stichprobenkovarianz der $(x_1,y_1),...,(x_n,y_n)$ definiert als
+\begin{equation}
+c_{xy} := \frac{1}{n-1}\sum_{i=1}^n (x_i - \bar{x})(y_i - \bar{y}).
+\end{equation}
+\end{itemize}
+Dann ist die \textit{Stichprobenkorrelation} der $(x_1,y_1),...,(x_n,y_n)$ definiert als
+\begin{equation}
+r_{xy} := \frac{c_{xy}}{s_xs_y}
+\end{equation}
+und  wird auch \textit{Stichprobenkorrelationskoeffizient} genannt.
+\end{definition}
+
+# Grundlagen Korrelation - Selbstkontrollfragen
+\setstretch{1}
+\large
+\color{darkblue} 3. Erläutern Sie anhand der Mechanik der Kovariationsterme, wann eine Stichprobenkorrelation einen hohen absoluten Wert annimmt, einen hohen positiven Wert annimmt, einen hohen negativen Wert annimmt und einen niedrigen Wert annimmt.
+\vspace{1mm}
+\color{black}
+\small
+
+Kovariationsterme: 
+$(x_i - \bar{x})(y_i - \bar{y})$
+\vspace{-9mm}
+```{r, echo = FALSE, out.width = "55%",fig.align = 'right'}
+knitr::include_graphics(file.path(abb_dir,"alm_2_korrelationsterme.pdf"))
+```
+\vspace{-4mm}
+\footnotesize
+\setstretch{1.1}
+* \footnotesize \color{darkgrey} Die Stichprobenkorrelation ist die standardisierte Stichprobenkovarianz ($c_{xy}$).
+* $c_{xy}$ misst die insgesamte (aufsummierte) gemeinsame Abweichung der Beobachtungspunkte von ihren Stichprobenmitteln. Für jeden Beobachtungspunkt wird diese gemeinsame Abweichung als Produkt der Abweichung der $x_i$ und $y_i$ von den jeweiligen Stichprobenmitteln errechnet.
+  * \footnotesize \color{darkgrey} Wenn beide Beobachtungspunkte positiv, oder beide Beobachtungspunkte negativ, also richtungsgleich von ihren Mittelwerten abweichen, wird dieses Produkt positiv. 
+  * Wenn beide Beobachtungspunkte in konträre, oder richtungsungleiche Richtungen von ihren Mittelwerten abweichen, wird dieses Produkt negativ.
+* \color{black} Häufige Abweichungen der $x_i$ und $y_i$ von ihren Mittelwerten \newline $\Rightarrow$ hohe absolute Korrelation
+  * \footnotesize Häufige richtungsgleiche Abweichung der $x_i$ und $y_i$ von ihren Mittelwerten $\Rightarrow$ Positive Korrelation
+  * Häufige richtungsungleiche Abweichung der $x_i$ und $y_i$ von ihren Mittelwerten $\Rightarrow$ Negative Korrelation
+* Keine häufigen Abweichungen der $x_i$ und $y_i$ von ihren Mittelwerten $\Rightarrow$ niedrige absolute Korrelation
+
+
+# Grundlagen Korrelation - Selbstkontrollfragen
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 4. Geben Sie das Theorem zur Stichprobenkorrelation bei linear-affinen Transformationen wieder.
+
+\vspace{3mm}
+\color{black}
+\footnotesize
+\begin{theorem}[Stichprobenkorrelation bei linear-affinen Transformationen]
+\justifying
+\normalfont
+Für einen Datensatz $\{(x_i,y_i)\}_{i = 1,...n} \subset \mathbb{R}^2$ sei
+$\{(\tilde{x}_i,\tilde{y}_i)\}_{i = 1,...n} \subset \mathbb{R}^2$ eine linear-affin
+transformierte Wertemenge mit
+\begin{equation}
+(\tilde{x}_i, \tilde{y}_i) = (a_x x_i + b_x, a_y y_i + b_y), a_x,a_y \neq 0.
+\end{equation}
+Dann gilt
+\begin{equation}
+|r_{\tilde{x}\tilde{y}}| = |r_{xy}|.
+\end{equation}
+\end{theorem}
+
+# Grundlagen Korrelation - Selbstkontrollfragen
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 5. Erläutern Sie das Theorem zur Stichprobenkorrelation bei linear-affinen Transformationen.
+
+\vspace{3mm}
+\color{black}
+\small
+
+* Der Betrag der Stichprobenkorrelation ändert sich bei linear-affiner Datentransformation nicht.
+* Man sagt, dass die Stichprobenkorrelation im Gegensatz zur Stichprobenkovarianz \textit{maßstabsunabhängig} ist.
+
+* \color{darkgrey}Das heißt, der Betrag der Stichprobenkorrelation bleibt unverändert, wenn wir die Werte linear-affin transformieren (z.B. Stunden $\to$ Minuten, Grad Celcius $\to$ Grad Fahrenheit)
+
+# Korrelation und Bestimmtheitsmaß - Selbstkontrollfragen
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 6. Geben Sie die Definitionen von erklärten Werten und Residuen einer Ausgleichsgerade wieder.
+
+\vspace{3mm}
+\color{black}
+\small
+\begin{definition}[Erklärte Werte und Residuen einer Ausgleichsgerade]
+\justifying
+Gegeben sei ein Datensatz $\{(x_1,y_1), ..., (x_n,y_n)\} \subset \mathbb{R}^2$
+und die zu diesem Datensatz gehörende Ausgleichsgerade
+\begin{equation}
+f_{\hat{\beta}} : \mathbb{R} \to \mathbb{R}, x \mapsto f_{\hat{\beta}}(x) := \hat{\beta}_0 + \hat{\beta}_1x
+\end{equation}
+Dann werden für $i = 1,...,n$
+\begin{equation}
+\hat{y}_i := \hat{\beta}_0 + \hat{\beta}_1x_i
+\end{equation}
+die durch die Ausgleichsgerade \textit{erklärten Werte} genannt und
+\begin{equation}
+\hat{\varepsilon}_i := y_i - \hat{y}_i
+\end{equation}
+die \textit{Residuen} der Ausgleichsgerade genannt.
+\end{definition}
+
+# Korrelation und Bestimmtheitsmaß - Selbstkontrollfragen
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 7. Geben Sie das Theorem zur Quadratsummenzerlegung bei einer Ausgleichsgerade wieder.
+
+\vspace{3mm}
+\color{black}
+\small
+\begin{theorem}[Quadratsummenzerlegung bei Ausgleichsgerade]
+\justifying
+\normalfont
+Für einen Datensatz $\{(x_1,y_1), ..., (x_n,y_n)\} \subset \mathbb{R}^2$ und seine
+zugehörige Ausgleichsgerade $f_{\hat{\beta}}$ seien für
+\begin{equation}
+\bar{y} := \frac{1}{n}\sum_{i=1}^n y_i \mbox{ und }
+\hat{y}_i := \hat{\beta}_0 + \hat{\beta}_1x_i, \mbox{ für } i= 1,...,n
+\end{equation}
+das Stichprobenmittel der $y$-Werte und die durch die Ausgleichsgerade erklärten Werte,
+respektive. Weiterhin seien
+
+\center
+\vspace{1mm}
+\begin{tabular}{ll}
+$\mbox{SQT} := \sum_{i = 1}^n (y_i - \bar{y})^2$          & die \textit{Total Sum of Squares}      \\\\
+$\mbox{SQE} := \sum_{i = 1}^n (\hat{y}_i - \bar{y})^2$    & die \textit{Explained Sum of Squares}  \\\\
+$\mbox{SQR} := \sum_{i = 1}^n (y_i - \hat{y}_i)^2$        & die \textit{Residual Sum of Squares}   \\
+\end{tabular}
+\vspace{1mm}
+\flushleft
+Dann gilt
+\begin{equation}
+\mbox{SQT} = \mbox{SQE} + \mbox{SQR}
+\end{equation}
+\end{theorem}
+
+# Korrelation und Bestimmtheitsmaß - Selbstkontrollfragen
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 8. Erläutern Sie die intuitiven Bedeutungen von $\mbox{SQT}, \mbox{SQE}$ und $\mbox{SQR}$.
+
+\vspace{3mm}
+\color{black}
+\footnotesize
+\setstretch{1.4}
+
+\begin{itemize}
+\item SQT repräsentiert die Gesamtstreuung der $y_i$-Werte um ihren Mittelwert $\bar{y}$.
+\item SQE repräsentiert die Streuung der erklärten Werte $\hat{y}_i$ um ihren Mittelwert
+\item[] $\Rightarrow$ Große Werte von SQE repräsentieren eine große absolute Steigung der $y_i$ mit den $x_i$
+\item[] $\Rightarrow$ Kleine Werte von SQE repräsentieren eine kleine absolute Steigung der $y_i$ mit den $x_i$
+\item SQE ist also ein Maß für die Stärke des linearen Zusammenhangs der $x_i$- und $y_i$-Werte
+\item SQR ist die Summe der quadrierten Residuen.
+\item[] $\Rightarrow$ Große Werte von SQR repräsentieren große Abweichungen der erklärten von den beobachteten $y_i$-Werten
+\item[] $\Rightarrow$ Kleine Werte von SQR repräsentieren geringe Abweichungen der erklärten von den beobachteten $y_i$-Werten
+\item SQR ist also ein Maß für die Güte der Beschreibung der Datenmenge durch die Ausgleichsgerade.
+\end{itemize}
+
+# Korrelation und Bestimmtheitsmaß - Selbstkontrollfragen
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 9. Geben Sie die Definition des Bestimmtheitsmaßes $\mbox{R}^2$ wieder. 
+
+\vspace{3mm}
+\color{black}
+\footnotesize
+\begin{definition}[Bestimmtheitsmaß $\mbox{R}^2$]
+\justifying
+Für einen Datensatz $\{(x_1,y_1), ..., (x_n,y_n)\} \subset \mathbb{R}^2$ und seine
+zugehörige Ausgleichsgerade $f_{\hat{\beta}}$ sowie die zugehörigen Explained Sum of Squares $\mbox{SQE}$
+und Total Sum of Squares $\mbox{SQT}$ heißt
+\begin{equation}
+\mbox{R}^2 := \frac{\mbox{SQE}}{\mbox{SQT}}
+\end{equation}
+\textit{Bestimmtheitsmaß} oder \textit{Determinationskoeffizient}.
+\end{definition}
+
+# Korrelation und Bestimmtheitsmaß - Selbstkontrollfragen
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 10. Geben Sie das Theorem zum Zusammenhang von Stichprobenkorrelation und Bestimmtheitsmaß wieder. 
+
+\vspace{3mm}
+\color{black}
+\begin{theorem}[Stichprobenkorrelation und Bestimmtheitsmaß]
+\justifying
+\normalfont
+Für einen Datensatz $\{(x_1,y_1), ..., (x_n,y_n)\} \subset \mathbb{R}^2$ sei
+$\mbox{R}^2$ das Bestimmtheitsmaß und $r_{xy}$ sei die Stichprobenkorrelation.
+Dann gilt
+\begin{equation}
+\mbox{R}^2 = r_{xy}^2.
+\end{equation}
+\end{theorem}
+
+
+
+
+# Korrelation und Bestimmtheitsmaß - Selbstkontrollfragen
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 11. Erläutern Sie die Bedeutung von hohen und niedrigen  $\mbox{R}^2$ Werten im Lichte der Ausgleichsgerade.
+
+\vspace{3mm}
+\color{black}
+\footnotesize
+
+\setstretch{1.8}
+\begin{itemize}
+\item  Mit $-1 \le r_{xy} \le 1$ folgt aus dem Theorem direkt, dass $0 \le \mbox{R}^2 \le 1$.
+\item  Es gilt $\mbox{R}^2 = 0$ genau dann, wenn $\mbox{SQE} = 0$ ist
+\item[] $\Rightarrow$ Für $\mbox{R}^2 = 0$ ist die erklärte Streuung der Daten durch die Ausgleichsgerade gleich null.
+\item[] $\Rightarrow$ $\mbox{R}^2 = 0$ beschreibt also den Fall einer denkbar schlechten Erklärung der Daten durch die Ausgleichsgerade.
+\item Es gilt $\mbox{R}^2 = 1$ genau dann, wenn $\mbox{SQE} = \mbox{SQT}$ ist.
+\item[] $\Rightarrow$ Für $\mbox{R}^2 = 0$ ist also die Gesamtstreuung gleich der durch die Ausgleichsgerade erklärten Streuung.
+\item[] $\Rightarrow$ $\mbox{R}^2 = 1$ beschreibt also den Fall das sämtliche Datenvariabilität durch die Ausgleichsgerade erklärt wird.
+\item Man sagt, dass "$\mbox{R}^2$ die durch die Ausgleichsgerade erklärte Varianz an der Gesamtvarianz ist.
+\end{itemize}
+
+
+# Korrelation und lineare Abhängigkeit - Selbstkontrollfragen
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 12. Geben Sie das Theorem zum Zusammenhang von Korrelation und linear-affiner Abhängigkeit wieder.
+
+\vspace{3mm}
+\color{black}
+\small
+\begin{theorem}[Korrelation und linear-affine Abhängigkeit]
+\justifying
+\normalfont
+$\xi$ und $\upsilon$ seien zwei Zufallsvariablen mit positiver Varianz.  Dann besteht genau
+dann eine lineare-affine Abhängigkeit der Form
+\begin{equation}
+\upsilon = \beta_0 + \beta_1\xi \mbox{ mit } \beta_0,\beta_1\in \mathbb{R}
+\end{equation}
+zwischen $\xi$ und $\upsilon$, wenn
+\begin{equation}
+\rho(\xi,\upsilon) = 1 \mbox{ oder } \rho(\xi,\upsilon) = -1
+\end{equation}
+gilt.
+\end{theorem}
