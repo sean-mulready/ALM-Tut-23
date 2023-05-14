@@ -523,7 +523,7 @@ ist. Die Matrix $A^{-1}$ heißt die \textit{inverse Matrix} von $A$.
 \item Wir bezeichnen die \textit{Einheitsmatrix} mit
 
 \begin{equation}
-I_n := (i_{jk})_{1\le i \le n,1\le j \le n} \in \mathbb{R}^{(n \times n)} \mbox{ mit } i_{jk} = 1 \mbox{ für } j=k \mbox{ und } i_{jk}=0 \mbox{ für } j \ne k
+I_n := (i_{jk})_{1\le j \le n,1\le k \le n} \in \mathbb{R}^{(n \times n)} \mbox{ mit } i_{jk} = 1 \mbox{ für } j=k \mbox{ und } i_{jk}=0 \mbox{ für } j \ne k
 \end{equation}
 \item Wir bezeichnen die \textit{Einheitsvektoren} $e_i,i=1,...,n$ mit
 \begin{equation}
@@ -583,7 +583,7 @@ Eine Matrix $S \in \mathbb{R}^{n \times n}$ heißt \textit{symmetrisch}, wenn gi
 \normalsize
 \vspace{3mm}
 \begin{definition}[Diagonalmatrix]
-Eine Matrix $D \in \mathbb{R}^{n \times n}$ heißt \textit{Diagonalmatrix}, wenn $d_{ij} = 0$ für $1 \le i,j \le n, i \neq j$.
+Eine Matrix $D \in \mathbb{R}^{n \times m}$ heißt \textit{Diagonalmatrix}, wenn $d_{ij} = 0$ für $1 \le i,j \le n, i \neq j$.
 \end{definition}
 
 # Spezielle Matrizen - Selbstkontrollfragen
