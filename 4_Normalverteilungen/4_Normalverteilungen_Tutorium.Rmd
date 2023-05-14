@@ -1,0 +1,834 @@
+---
+fontsize: 8pt
+bibliography: ../Referenzen.bib
+citation_package: natbib
+output:
+  beamer_presentation:
+    keep_tex: true
+    includes:
+      in_header: ../Header.tex
+classoption: t
+---
+
+
+```{r, include = FALSE}
+source("../R_common.R")
+abb_dir = file.path(dirname(getwd()), "Abbildungen")
+data_dir = file.path(dirname(getwd()), "Daten")
+```
+
+# {.plain}
+\center
+```{r, echo = FALSE, out.width="20%"}
+knitr::include_graphics(file.path(abb_dir,"wtfi_otto.png"))
+```
+
+\vspace{2mm}
+
+\huge
+Tutorium
+
+\Large
+Allgemeines Lineares Modell
+\vspace{2mm}
+
+\normalsize
+BSc Psychologie SoSe 2023
+
+\vspace{2mm}
+\text{6. Termin: (4) Normalverteilungen}    
+
+\vspace{15mm}
+\normalsize
+Sean Mulready
+
+\vspace{2mm}
+\scriptsize
+Inhalte basieren auf Kursmaterialien für [\textcolor{darkblue}{ALM}](https://www.ipsy.ovgu.de/Institut/Abteilungen+des+Institutes/Methodenlehre+I+_+Experimentelle+und+Neurowissenschaftliche+Psychologie/Lehre/Sommersemester+2023/Allgemeines+Lineares+Modell.html) von [Dirk Ostwald](https://www.ipsy.ovgu.de/Institut/Abteilungen+des+Institutes/Methodenlehre+I+_+Experimentelle+und+Neurowissenschaftliche+Psychologie/Team/Dirk+Ostwald.html), lizenziert unter [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/deed.de)
+
+# Follow-up
+
+\vspace{3mm}
+\normalsize
+Fragen von/während der letzten Woche:
+\vspace{2mm}
+\begin{itemize}
+\footnotesize
+\item Indexierung bei der Definition zu Einheitsmatrizen
+\item Können Diagonalmatrizen auch Nullen auf der Diagonale haben?
+\item Müssen Diagonalmatrizen immer quadratisch sein?
+\end{itemize}
+
+# Follow-up : Korrektur
+
+\vspace{3mm}
+\normalsize
+\color{darkcyan} 1. Korrektur der Definition zu Einheitsmatrizen (Indizes):
+\color{black}
+
+\footnotesize
+\begin{definition}[Einheitsmatrizen und Einheitsvektoren]
+\begin{itemize}
+\item Wir bezeichnen die \textit{Einheitsmatrix} mit
+
+\begin{equation}
+I_n := (i_{jk})_{1\le j \le n,1\le k \le n} \in \mathbb{R}^{(n \times n)} \mbox{ mit } i_{jk} = 1 \mbox{ für } j=k \mbox{ und } i_{jk}=0 \mbox{ für } j \ne k
+\end{equation}
+\item Wir bezeichnen die \textit{Einheitsvektoren} $e_i,i=1,...,n$ mit
+\begin{equation}
+e_i:=({e_i}_j)_{1 \le j \le n} \in \mathbb{R}^n \mbox{ mit } {e_i}_j=1 \mbox{ für } i=j \mbox{ und } {e_i}_j=0 \mbox{ für } i \ne j
+\end{equation}
+\end{itemize}
+\end{definition}
+
+\vspace{3mm}
+\begin{itemize}
+\item In den Vorlesungs- und Tutoriumsfolien korrigiert
+\end{itemize}
+
+# Follow-up - Diagonalmatrizen
+\vspace{3mm}
+\normalsize
+\color{darkcyan}
+\vspace{2mm}
+* Können Diagonalmatrizen auch Nullen auf der Diagonale haben?
+
+\vspace{2mm}
+\color{black}
+\footnotesize
+Ja, können sie. Diagonalmatrizen haben per Definition nur die Bedingung dass **nichtdiagonale** Elemente 0 sind. Eine Nullmatrix ist also auch eine Diagonalmatrix
+\vspace{3mm}
+\normalsize
+\color{darkcyan}
+* Sind Diagonalmatrizen **immer** quadratisch?
+
+\vspace{2mm}
+\color{black}
+\footnotesize
+Nein. Normalerweise sind Diagonalmatrizen zwar quadaratisch aber es gibt auch nichtquadratische Diagonalmatrizen, insbesondere bei der [\color{darkblue} singular value decomposition](https://en.wikipedia.org/wiki/Singular_value_decomposition) . Siehe auch [\color{darkblue} hier](https://en.wikipedia.org/wiki/Diagonal_matrix#Rectangular_diagonal_matrices).
+\vspace{1mm}
+Entsprechend wurde die Definition der Tutoriumsfolien geändert (siehe Definition zu Diagonalmatrizen)
+
+\color{black}
+# Selbstkontrollfragen - Normalverteilungen
+\setstretch{1.1}
+\footnotesize
+\begin{enumerate}
+\item Geben Sie die Definitionen des Erwartungswerts und der Kovarianzmatrix eines Zufallsvektors wieder.
+\item Was repräsentieren die Diagonalelemente der Kovarianzmatrix eines Zufallsvektors?
+\item Was repräsentieren die Nichtdiagonalelemente der Kovarianzmatrix eines Zufallsvektors?
+\item Definieren Sie die WDF eines multivariaten normalverteilten Zufallsvektors und erläutern Sie diese.
+\item Welche Werte haben der Erwartungswert und die Kovarianzmatrix eines normalverteilten Zufallsvektors?
+\item Visualisieren Sie die WDF eines 2-dimensionalen normalverteilten Zufallsvektors mit den Parameterwerten
+\begin{align*}
+\mu := \begin{pmatrix}10\\15\end{pmatrix} \mbox{ und } \Sigma := \begin{pmatrix}3&1\\1&2\end{pmatrix}.
+\end{align*}
+\item Generieren Sie 100 Realisierungen aus dieser Verteilung und visualisieren Sie diese.
+\item Geben Sie das Theorem zur invertierbaren linearen Transformation multivariater Normalverteilungen wieder.
+\item Geben Sie das Theorem zur linear-affinen Transformation multivariater Normalverteilungen wieder.
+\item Geben Sie das Theorem zu sphärischen Normalverteilungen wieder.
+\item Erläutern Sie den Begriff des sphärischen Kovarianzmatrixparameters.
+\item Skizzieren Sie den Beweis des Theorem zu Unabhängigen normalverteilten Zufallsvariablen.
+\end{enumerate}
+
+
+# Kontinuierliche Zufallsvektoren - Selbstkontrollfragen
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 1. Geben Sie die Definitionen des Erwartungswerts und der Kovarianzmatrix eines Zufallsvektors wieder.
+
+\vspace{3mm}
+\color{black}
+\footnotesize
+\begin{definition}[Erwartungswert und Kovarianzmatrix von Zufallsvektoren]
+\justifying
+$\xi$ sei ein $n$-dimensionaler Zufallvektor. Dann ist der \textit{Erwartungwert}
+von $\xi$ definiert als der $n$-dimensionale Vektor
+\begin{equation}
+\mathbb{E}(\xi) :=
+\begin{pmatrix}\mathbb{E}(\xi_1)\\\vdots\\ \mathbb{E}(\xi_n)\end{pmatrix}
+\end{equation}
+und die  \textit{Kovarianzmatrix} von $\xi$ ist definiert als die $n \times n$ Matrix
+\begin{equation}
+\mathbb{C}(\xi) := \mathbb{E}\left((\xi - \mathbb{E}(\xi))(\xi - \mathbb{E}(\xi))^T \right)
+\end{equation}
+\end{definition}
+
+
+# \color{darkgrey} Anmerkung
+
+\color{darkgrey}
+Zur Erinnerung
+
+\footnotesize
+\begin{theorem}[Kovarianzmatrix eines Zufallsvektors]
+\justifying
+\normalfont
+$\xi$ sei ein $n$-dimensionaler Zufallvektor und $\mathbb{C}(\xi)$ sei seine Kovarianzmatrix.
+Dann gilt
+\begin{equation}
+\mathbb{C}(\xi) 
+= \left(\mathbb{C}(\xi_i,\xi_j)\right)_{1 \le i,j \le n}  
+= 
+\begin{pmatrix}
+\mathbb{C}(\xi_1,\xi_1) & \mathbb{C}(\xi_1,\xi_2) & \cdots & \mathbb{C}(\xi_1,\xi_n) \\
+\mathbb{C}(\xi_2,\xi_1) & \mathbb{C}(\xi_2,\xi_2) & \cdots & \mathbb{C}(\xi_2,\xi_n) \\
+\vdots              & \vdots              & \ddots & \vdots              \\
+\mathbb{C}(\xi_n,\xi_1) & \mathbb{C}(\xi_n,\xi_2) & \cdots & \mathbb{C}(\xi_n,\xi_n) \\
+\end{pmatrix}.
+\end{equation}
+\end{theorem}
+
+
+# Konstruktion und Definition - Selbstkontrollfragen
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 2.Was repräsentieren die Diagonalelemente der Kovarianzmatrix eines Zufallsvektors?
+\vspace{3mm}
+
+\normalsize
+\color{black}
+Die Diagonalelemente $\mathbb{C}(\xi_i,\xi_j), i=j$ der Kovarianzmatrix von $\xi$ repräsentieren die Kovarianzen der Elemente des Zufallsvektors $\xi$ mit sich selbst und damit die \textit{Varianzen der einzelnen Elemente von} $\xi$.
+
+\color{darkgrey}
+Anmerkung: Damit spezifizieren die Diagonalelemente der Kovarianzmatrix $\Sigma$ die Breite der WDFen der jeweiligen Elemente $\xi_1,....,\xi_n$ des Zufallsvektors
+
+
+# Konstruktion und Definition - Selbstkontrollfragen
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 3. Was repräsentieren die Nichtdiagonalelemente der Kovarianzmatrix eines Zufallsvektors?
+
+\vspace{3mm}
+\normalsize
+\color{black}
+Die Nichtdiagonalelemente $\mathbb{C}(\xi_i,\xi_j), i \ne j$ der Kovarianzmatrix von $\xi$ repräsentieren die \textit{Kovarianzen der Elemente des Zufallsvektors} $\xi$ 
+
+
+# Konstruktion und Definition - Selbstkontrollfragen
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 4.Definieren Sie die WDF eines multivariaten normalverteilten Zufallsvektors und erläutern Sie diese.
+
+\vspace{3mm}
+\color{black}
+\setstretch{1.7}
+\footnotesize
+Teil 1/2 : Definition
+\justifying
+\begin{definition}[Multivariate Normalverteilung]
+$\xi$ sei ein $n$-dimensionaler Zufallsvektor mit Ergebnisraum $\mathbb{R}^n$ und WDF
+\begin{equation}
+p: \mathbb{R}^n \to \mathbb{R}_{>0}, x \mapsto p(x) := (2\pi)^{-\frac{n}{2}} |\Sigma|^{-\frac{1}{2}} exp \left( -\frac{1}{2} (x-\mu)^T \Sigma^{-1}(x-\mu) \right).
+\end{equation}
+Dann sagen wir, dass $\xi$ einer \textit{multivariaten} (oder $n$\textit{-dimensionalen} ) \textit{Normalverteilung} mit \textit{Erwartungswertparameter} $\mu \in \mathbb{R}^n$ und positiv-definitem \textit{Kovarianzmatrixparameter} $\Sigma \in \mathbb{R}^{n \times n}$ unterliegt und nennen $\xi$ einen \textit{(multivariat) normalverteilten Zufallsvektor}. Wir kürzen dies mit $\xi \sim N(\mu,\Sigma)$ ab. Die WDF eines multivariat normalverteilten Zufallsvektors bezeichnen wir mit
+\begin{equation}
+N(x;\mu,\Sigma) := (2\pi)^{-\frac{n}{2}}|\Sigma|^{-\frac{1}{2}}exp \left( -\frac{1}{2} (x-\mu)^T \Sigma^{-1}(x-\mu)\right).
+\end{equation}
+\end{definition}
+
+# Konstruktion und Definition - Selbstkontrollfragen
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 4.Definieren Sie die WDF eines multivariaten normalverteilten Zufallsvektors und erläutern Sie diese.
+
+\vspace{3mm}
+\color{black}
+
+\footnotesize
+Teil 2/2 : Erläuterung
+\vspace{3mm}
+
+In der WDF sind
+
+\begin{itemize}
+\item $\mu \in \mathbb{R}^n$ der \textit{Erwartungswertparameter}, welcher dem Wert höchster WD entspricht
+\item $\Sigma \in \mathbb{R}^{n \times n}$ der positive-definite \textit{Kovarianzmatrixparameter}
+\item $(2\pi)^{-\frac{n}{2}}|\Sigma|^{-\frac{1}{2}}$ die Normalisierungskonstante, wobei $|\Sigma|$ die Determinante von $\Sigma$ ist, \color{darkgrey}(Anm.: die Normalisierungskonstante wird verwendet, sodass die Fläche unter dem Graphen der WDF $1$ ergibt)
+\item \color{black} und $\Sigma^{-1}$ die (ebenfalls positiv-definite) Inverse des Kovarianzmatrixparameters
+\end{itemize}
+
+Die WDF nimmt (als Definitionsmenge/"input") einen Wert $x \in \mathbb{R}^n$ aus dem Ergebnisraum von $\xi$ (also einen $n$-dimensionalen Wert, den der Zufallsvektor $\xi$ annehmen kann) und gibt eine reelle Zahl ($\mathbb{R}_{>0}$) zurück, welche die Wahrscheinlichkeitsdichte beschreibt. 
+
+\color{darkgrey}
+Anmerkung:
+\begin{itemize}
+\item \color{darkgrey}Werte der WDF für bestimmte $x \in \mathbb{R}^n$ sind \textit{nicht} die Wahrscheinlichkeiten dafür, dass die Zufallsvariable $\xi$ diesen Wert $x$ annimmt, sondern die Wahrscheinlichkeitsdichte für bestimmte $x$.
+\item \color{darkgrey} Die Inverse einer p.d. Matrix ist auch p.d.
+\end{itemize}
+
+
+
+
+
+# Konstruktion und Definition - Selbstkontrollfragen
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 5.Welche Werte haben der Erwartungswert und die Kovarianzmatrix eines normalverteilten Zufallsvektors?
+
+\vspace{3mm}
+\color{black}
+\small
+Der Erwartungswert eines normalverteilten Zufallsvektors entspricht seinem Erwartungswertparameter, formal $\mathbb{E}(\xi) = \mu$ und die Kovarianzmatrix eines normalverteilten Zufallsvektors entspricht seinem Kovarianzmatrixparameter, formal $\mathbb{C}(\xi) = \Sigma$.
+
+\vspace{4mm}
+\color{darkgrey}
+Anmerkung: siehe auch das Theorem zu Erwartungswert und Kovarianzmatrix
+
+
+
+# Konstruktion und Definition - Selbstkontrollfragen
+\vspace{3mm}
+\setstretch{1}
+\normalsize
+\color{darkblue} 6.Visualisieren Sie die WDF eines 2-dimensionalen normalverteilten Zufallsvektors mit den Parameterwerten
+$\mu := \begin{pmatrix}10\\15\end{pmatrix} \mbox{ und } \Sigma := \begin{pmatrix}3&1\\1&2\end{pmatrix}.$
+
+\vspace{3mm}
+\color{black}
+\small
+Teil 1/3 - Visualisierung der WDF
+\footnotesize
+\setstretch{1.1}
+
+\vspace{1mm}
+
+```{r, eval = F, echo = F}
+
+# R Paket für multivariate Normalverteilungen
+library(mvtnorm)
+library(latex2exp)
+
+# Parameterdefinition
+mu     = c(10,15)               # \mu \in \mathbb{R}^2
+Sigma  = matrix(c(3,1,1,2), 2)  # \Sigma in \mathbb{R}^{2 \times 2}
+
+# Ergebnisraumdefintion
+x_min  = 0                                       # x_i Minimum
+x_max  = 20                                      # x_i Maximum
+x_res  = 1e3                                     # x_i Auflösung (1e3 --> 1000 Werte)
+x_1    = seq(x_min, x_max, length.out = x_res)   # x_1 Raum
+x_2    = seq(x_min, x_max, length.out = x_res)   # x_2 Raum
+x      = expand.grid(x_1,x_2)                    # x = (x_1,x_2)^T Raum
+
+# Wahrscheinlichkeitsdichtefunktionauswertung
+WDF = dmvnorm(as.matrix(x), mu, Sigma)  # Multivariate WDF
+p      = matrix(WDF, nrow = y_res)      # Matrixkonversion der WDF
+
+# Abbildungsparameter
+graphics.off()
+fdir        =  file.path(getwd(), "Abbildungen")
+dev.new()
+par(
+  family      = "sans",
+  pty         = "s",
+  bty         = "l",
+  lwd         = 1,
+  las         = 1,
+  mgp         = c(2,1,0),
+  xaxs        = "i",
+  yaxs        = "i",
+  font.main   = 1,
+  cex         = .7,
+  cex.main    = 1.2)
+
+# Visualisierung
+contour(
+  x_1,
+  x_2,
+  p,
+  xlim      =  c(x_min,x_max),
+  ylim      =  c(x_min,x_max),
+  xlab      = TeX("$x_1$"),
+  ylab      = TeX("$x_2$"),
+  nlevels   = 5)
+
+# export to pdf
+dev.copy2pdf(                                                                    # export to PDF
+             file   = file.path(abb_dir, "alm_4_mvnwdf.pdf"),           # filename
+             width  = 8,                                                         # PDF width
+             height = 4                                                          # PDF height
+             )
+```
+```{r, eval = F}
+# R Paket für multivariate Normalverteilungen
+library(mvtnorm)
+library(latex2exp)
+
+# Parameterdefinition
+mu     = c(10,15)               # \mu \in \mathbb{R}^2
+Sigma  = matrix(c(3,1,1,2), 2)  # \Sigma in \mathbb{R}^{2 \times 2}
+
+# Ergebnisraumdefintion
+x_min  = 0                                       # x_i Minimum
+x_max  = 20                                      # x_i Maximum
+x_res  = 1e3                                     # x_i Auflösung (1e3 --> 1000 Werte)
+x_1    = seq(x_min, x_max, length.out = x_res)   # x_1 Raum
+x_2    = seq(x_min, x_max, length.out = x_res)   # x_2 Raum
+x      = expand.grid(x_1,x_2)                    # x = (x_1,x_2)^T Raum
+
+# Wahrscheinlichkeitsdichtefunktionauswertung
+WDF = dmvnorm(as.matrix(x), mu, Sigma)  # Multivariate WDF
+p      = matrix(WDF, nrow = x_res)      # Matrixkonversion der WDF
+```
+
+# Konstruktion und Definition - Selbstkontrollfragen
+\vspace{3mm}
+\setstretch{1}
+\normalsize
+\color{darkblue} 6. Visualisieren Sie die WDF eines 2-dimensionalen normalverteilten Zufallsvektors mit den Parameterwerten $\mu := \begin{pmatrix}10\\15\end{pmatrix}$ und $\Sigma:=\begin{pmatrix}3&1\\1&2\end{pmatrix}$.
+
+\vspace{3mm}
+\color{black}
+\small
+Teil 2/3 - Visualisierung der WDF
+\footnotesize
+\setstretch{1.1}
+\vspace{1mm}
+
+```{r, eval = F}
+# Visualisierung
+contour(
+  x_1,
+  x_2,
+  p,
+  xlim      =  c(x_min,x_max),
+  ylim      =  c(x_min,x_max),
+  xlab      = TeX("$x_1$"),
+  ylab      = TeX("$x_2$"),
+  nlevels   = 5
+  )
+```
+
+# Konstruktion und Definition - Selbstkontrollfragen
+\vspace{3mm}
+\setstretch{1}
+\normalsize
+\color{darkblue} 6. Visualisieren Sie die WDF eines 2-dimensionalen normalverteilten Zufallsvektors mit den Parameterwerten $\mu := \begin{pmatrix}10\\15\end{pmatrix}$ und $\Sigma:=\begin{pmatrix}3&1\\1&2\end{pmatrix}$.
+
+\vspace{3mm}
+\color{black}
+\small
+Teil 3/3 - Visualisierung der WDF
+\footnotesize
+\setstretch{1.1}
+\vspace{1mm}
+
+
+```{r, echo = FALSE, out.width = "80%"}
+knitr::include_graphics(file.path(abb_dir,"alm_4_mvnwdf.pdf"))
+```
+
+
+
+# Konstruktion und Definition - Selbstkontrollfragen
+\vspace{3mm}
+\setstretch{1}
+\normalsize
+\color{darkblue} 7.Generieren Sie 100 Realisierungen aus dieser Verteilung und visualisieren Sie diese.
+\vspace{3mm}
+\color{black}
+\small
+Teil 1/6 - Generierung der 100 Realisierungen
+\footnotesize
+\setstretch{1.1}
+\vspace{1mm}
+
+```{r}
+# R Paket für multivariate Normalverteilungen
+library(mvtnorm)
+
+# Parameterdefinition
+mu     = c(10,15)               # \mu \in \mathbb{R}^2
+Sigma  = matrix(c(3,1,1,2), 2)  # \Sigma in \mathbb{R}^{2 \times 2}
+
+# Zufallsvektorrealisierungen
+Realisierungen = rmvnorm(n = 100, mu, Sigma)
+print(Realisierungen[1:8,])    # Ausgabe der ersten 8 Realisierungen
+```
+
+# Konstruktion und Definition - Selbstkontrollfragen
+\vspace{3mm}
+\setstretch{1}
+\normalsize
+\color{darkblue} 7.Generieren Sie 100 Realisierungen aus dieser Verteilung und visualisieren Sie diese.
+\vspace{3mm}
+\color{black}
+\small
+Teil 2/6 - Visualisierung der 100 Realisierungen
+\footnotesize
+\setstretch{1.1}
+\vspace{1mm}
+
+```{r, eval = F, echo = F}
+
+# R Paket für multivariate Normalverteilungen
+library(mvtnorm)
+library(latex2exp)
+
+# R Paket für multivariate Normalverteilungen
+library(mvtnorm)
+
+# Parameterdefinition
+mu     = c(10,15)               # \mu \in \mathbb{R}^2
+Sigma  = matrix(c(3,1,1,2), 2)  # \Sigma in \mathbb{R}^{2 \times 2}
+
+# Zufallsvektorrealisierungen
+Realisierungen = rmvnorm(n = 100, mu, Sigma)
+print(Realisierungen[1:8,])    # Ausgabe der ersten 8 Realisierungen
+
+# Abbildungsparameter
+graphics.off()
+fdir        =  file.path(getwd(), "Abbildungen")
+dev.new()
+par(
+  family      = "sans",
+  pty         = "s",
+  bty         = "l",
+  lwd         = 1,
+  las         = 1,
+  mgp         = c(2,1,0),
+  xaxs        = "i",
+  yaxs        = "i",
+  font.main   = 1,
+  cex         = .7,
+  cex.main    = 1.2)
+
+# Visualisierung
+plot(
+  Realisierungen,
+  xlim  = c(0,20),
+  ylim  = c(0,20),
+  xlab  = TeX("$x_1$"),
+  ylab  = TeX("$x_2$"),
+  pch   = 21,
+  col   = "white",
+  bg    = "gray60",
+  cex   = 1.5)
+
+# Speichern
+dev.copy2pdf(file=file.path(abb_dir, "alm_4_skf_6.pdf"))
+```
+
+
+
+```{r, eval = F, echo = T}
+
+# R Paket für latex 
+library(latex2exp)
+
+# Abbildungsparameter
+par(
+  family      = "sans",
+  pty         = "s",      # plotting type "s" = square plotting region
+  bty         = "l",      # boxtype 
+  lwd         = 1,
+  las         = 1,        # Achsenbeschriftung 1 = horizontal
+  mgp         = c(2,1,0), # margin line für Achsenbeschriftung und Linie
+  xaxs        = "i",
+  yaxs        = "i",
+  font.main   = 1,
+  cex         = .7,
+  cex.main    = 1.2)
+```
+
+# Konstruktion und Definition - Selbstkontrollfragen
+\vspace{3mm}
+\setstretch{1}
+\normalsize
+\color{darkblue} 7.Generieren Sie 100 Realisierungen aus dieser Verteilung und visualisieren Sie diese.
+\vspace{3mm}
+\color{black}
+\small
+Teil 3/6 - Visualisierung der 100 Realisierungen
+\footnotesize
+\setstretch{1.1}
+\vspace{1mm}
+```{r, eval = F, echo = T}
+# Visualisierung
+plot(
+  Realisierungen,
+  xlim  = c(min(Realisierungen[,1])-1,max(Realisierungen[,1])+1),
+  ylim  = c(min(Realisierungen[,2])-1,max(Realisierungen[,2])+1),
+  xlab  = TeX("$x_1$"),
+  ylab  = TeX("$x_2$"),
+  pch   = 21,        # plotting character 21 = kl. Kreis
+  col   = "white",   # color Umrandung
+  bg    = "gray60",  # background color
+  cex   = 1.5)       # Größe der pch
+```
+
+# Konstruktion und Definition - Selbstkontrollfragen
+\vspace{3mm}
+\setstretch{1}
+\normalsize
+\color{darkblue} 7.Generieren Sie 100 Realisierungen aus dieser Verteilung und visualisieren Sie diese.
+\vspace{3mm}
+\color{black}
+\small
+Teil 4/6 - Visualisierung der 100 Realisierungen
+\footnotesize
+\setstretch{1.1}
+\vspace{1mm}
+```{r, echo = FALSE, out.width = "80%"}
+knitr::include_graphics(file.path(abb_dir,"alm_4_skf_6.pdf"))
+```
+#Konstruktion und Definition - Selbstkontrollfragen
+\vspace{3mm}
+\setstretch{1}
+\normalsize
+\color{darkblue} 7.Generieren Sie 100 Realisierungen aus dieser Verteilung und visualisieren Sie diese.
+\vspace{3mm}
+\color{black}
+\small
+Teil 5/6 - Gemeinsame Visualisierung der 100 Realisierungen und der WDF
+
+```{r, eval = F, echo = F}
+
+# R Paket für multivariate Normalverteilungen
+library(mvtnorm)
+library(latex2exp)
+
+# R Paket für multivariate Normalverteilungen
+library(mvtnorm)
+
+# Parameterdefinition
+mu     = c(10,15)               # \mu \in \mathbb{R}^2
+Sigma  = matrix(c(3,1,1,2), 2)  # \Sigma in \mathbb{R}^{2 \times 2}
+
+# Zufallsvektorrealisierungen
+Realisierungen = rmvnorm(n = 100, mu, Sigma)
+print(Realisierungen[1:8,])    # Ausgabe der ersten 8 Realisierungen
+
+# Abbildungsparameter
+graphics.off()
+fdir        =  file.path(getwd(), "Abbildungen")
+dev.new()
+par(
+  family      = "sans",
+  pty         = "s",
+  bty         = "l",
+  lwd         = 1,
+  las         = 1,
+  mgp         = c(2,1,0),
+  xaxs        = "i",
+  yaxs        = "i",
+  font.main   = 1,
+  cex         = .7,
+  cex.main    = 1.2)
+
+# Ergebnisraumdefintion
+x_nin  = 0                                       # x_i Minimum
+x_nax  = 20                                      # x_i Maximum
+x_res  = 1e3                                     # x_i Auflösung (1e3 --> 1000 Werte)
+x_1    = seq(x_min, x_max, length.out = x_res)   # x_1 Raum
+x_2    = seq(x_min, x_max, length.out = x_res)   # x_2 Raum
+x      = expand.grid(x_1,x_2)                    # x = (x_1,x_2)^T Raum
+
+# Wahrscheinlichkeitsdichtefunktionauswertung
+WDF = dmvnorm(as.matrix(x), mu, Sigma)  # Multivariate WDF
+p      = matrix(WDF, nrow = x_res)      # Matrixkonversion der WDF
+
+# Visualisierung
+contour(
+  x_1,
+  x_2,
+  p,
+  xlim      =  c(x_min,x_max),
+  ylim      =  c(x_min,x_max),
+  xlab      = TeX("$x_1$"),
+  ylab      = TeX("$x_2$"),
+  nlevels   = 5)
+points(
+  Realisierungen,
+  pch   = 21,
+  col   = "white",
+  bg    = "gray60",
+  cex   = 1)
+
+# Speichern
+dev.copy2pdf(file=file.path(abb_dir,"alm_4_skf_6_overlapp.pdf"))
+```
+
+\footnotesize
+\setstretch{1.1}
+\vspace{1mm}
+
+```{r, eval = F, echo = T}
+# Visualisierung der WDF und der 100 Realisierung
+contour(
+  x_1,
+  x_2,
+  p,
+  xlim      =  c(x_min,x_max),
+  ylim      =  c(x_min,x_max),
+  xlab      = TeX("$x_1$"),
+  ylab      = TeX("$x_2$"),
+  nlevels   = 5)
+points(
+  Realisierungen,
+  pch   = 21,
+  col   = "white",
+  bg    = "gray60",
+  cex   = 1)
+
+```
+
+# Konstruktion und Definition - Selbstkontrollfragen
+\vspace{3mm}
+\setstretch{1}
+\normalsize
+\color{darkblue} 7.Generieren Sie 100 Realisierungen aus dieser Verteilung und visualisieren Sie diese.
+\vspace{3mm}
+\color{black}
+\small
+Teil 6/6 - Gemeinsame Visualisierung der 100 Realisierungen und der WDF
+
+\footnotesize
+\setstretch{1.1}
+\vspace{1mm}
+
+
+```{r, echo = FALSE, out.width = "80%"}
+knitr::include_graphics(file.path(abb_dir,"alm_4_skf_6_overlapp.pdf"))
+```
+
+# Transformationen - Selbstkontrollfragen
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 8.Geben Sie das Theorem zur invertierbaren linearen Transformation multivariater Normalverteilungen wieder.
+
+\vspace{3mm}
+\color{black}
+\small
+\begin{theorem}[Invertierbare lineare Transformation]
+\justifying
+\normalfont
+$\xi \sim N(\mu,\Sigma)$ sei ein normalverteilter $n$-dimensionaler Zufallsvektor
+und es sei $\upsilon := A\xi$ mit einer invertierbaren Matrix $A \in \mathbb{R}^{n \times n}$.
+Dann gilt
+\begin{equation}
+\upsilon \sim N\left(A\mu,A\Sigma A^T\right)
+\end{equation}
+\end{theorem}
+
+\small
+\color{darkgrey}
+Anmerkung:
+
+* \color{darkgrey} Eine Matrix ist invertierbar, wenn die Determinante $\ne0$ ist.
+
+
+# Transformationen - Selbstkontrollfragen
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 9.Geben Sie das Theorem zur linear-affinen Transformation multivariater Normalverteilungen wieder.
+\vspace{3mm}
+\color{black}
+\small
+\begin{theorem}[Linear-affine Transformation]
+\justifying
+\normalfont
+$\xi \sim N(\mu,\Sigma)$ sei ein normalverteilter $n$-dimensionaler Zufallsvektor
+und es sei $\upsilon := A\xi + b$ mit $A \in \mathbb{R}^{m \times n}$ und $b \in \mathbb{R}^m$.
+Dann gilt
+\begin{equation}
+\upsilon \sim N\left(A\mu + b,A\Sigma A^T\right)
+\end{equation}
+\end{theorem}
+
+
+# Sphärische Verteilungen - Selbstkontrollfragen
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 10.Geben Sie das Theorem zu sphärischen Normalverteilungen wieder.
+\vspace{3mm}
+\color{black}
+\small
+\begin{theorem}[Sphärische multivariate Normalverteilung]
+\justifying
+\setstretch{1.4}
+\normalfont
+Für $i = 1,...,n$ seien $N(\xi_i; \mu_i,\sigma^2)$ die WDFen von $n$ unabhängigen
+univariaten normalverteilten Zufallsvariablen $\xi_1,...,\xi_n$ mit $\mu_1,...,\mu_n \in \mathbb{R}$
+und $\sigma^2 > 0$. Weiterhin sei $N(x;\mu,\sigma^2I_n)$ die WDF eines $n$-variaten
+Zufallsvektors $\xi$ mit Erwartungswertparameter $\mu := (\mu_1,...,\mu_n) \in \mathbb{R}^n$.
+Dann gilt
+\begin{equation}
+p_\xi(x) = p_{\xi_1,...,\xi_n}(x_1,...,x_n) = \prod_{i=1}^n p_{\xi_i}(x_i)
+\end{equation}
+und insbesondere
+\begin{equation}
+N\left(x;\mu,\sigma^2I_n\right) = \prod_{i=1}^n N\left(x_i;\mu_i,\sigma^2\right).
+\end{equation}
+\end{theorem}
+
+# Sphärische Verteilungen - Selbstkontrollfragen
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 11.Erläutern Sie den Begriff des sphärischen Kovarianzmatrixparameters.
+
+\vspace{3mm}
+\color{black}
+\small
+
+\setstretch{1.2}
+\justify
+
+* Ein \textit{sphärischer} Kovarianzmatrixparameter hat die Form $\sigma^2 I_n$
+* Sphärische Kovarianzmatrixparamter von $n$-variaten Normalverteilungen entsprechen $n$ unabhängigen univariaten Normalverteilungen und umgekehrt. 
+* \color{darkgrey} Die sphärische Form spiegelt die Unabhängigkeit der univariaten Zufallsvariablen wieder, da alle nicht-Diagonal-Elemente gleich $0$ sind (i.e. $(\sigma^2 I_n)_{ij}=0$ für $i\neq j$) und ensprechend keine Kovarianzen existieren. 
+
+\vspace{2mm}
+\color{darkgrey}
+\setstretch{1}
+Beispiel
+\footnotesize
+
+Für $i = 1, .., 5$ seien seien $N(x; \mu_i,\sigma^2)$ die WDFen von $n$ unabhängigen **univariaten** normalverteilten Zufallsvariablen $\xi_1,...,\xi_n$ mit $\mu_1,...,\mu_n \in \mathbb{R}$
+und $\sigma^2 = 9$. Weiterhin sei $N(\upsilon;\mu,\sigma^2I_n)$ die WDF eines $n$-variaten (**multivariaten**) Zufallsvektors $\xi$ mit Erwartungswertparameter $\mu := (\mu_1,...,\mu_n) \in \mathbb{R}^n$. Dann gilt 
+
+\begin{align*}
+N\left(x;\mu,\sigma^2 I_n\right) = \prod_{i=1}^n N\left(x_i;\mu_i,\sigma^2=9\right).
+\end{align*}
+\vspace{-1mm}
+mit 
+\vspace{-1mm}
+\begin{align*}
+\sigma^2 I_n = 9 I_n = 9 \begin{pmatrix}1&0&0&0&0\\0&1&0&0&0\\0&0&1&0&0\\0&0&0&1&0\\0&0&0&0&1\end{pmatrix} 
+= \begin{pmatrix}9&0&0&0&0\\0&9&0&0&0\\0&0&9&0&0\\0&0&0&9&0\\0&0&0&0&9\end{pmatrix}
+\end{align*}
+
+
+
+# Definition und Eigenschaften - Selbstkontrollfragen
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 12.Skizzieren Sie den Beweis des Theorems zu sphärischen Normalverteilungen.
+\vspace{3mm}
+\color{black}
+\small
+
+Zuerst schreiben wir die multivariate WDF $N\left(x;\mu,\sigma^2 I_n\right)$ nach der Definition einer WDF eines multivariaten normalverteilen Zufallsvektors auf, wobei wir anstelle des Kovarianzmatrixparameters $\Sigma$ den sphärischen Kovarianzmatrixparameter $\sigma^2 I_n$ einsetzen.
+
+Da der sphärische Kovarianzmatrixparameter eine Diagonalmatrix ist, entspricht dessen Determinante dem Produkt der Diagonaleinträge und der **Term vor der Exponantialfunktion** lässt sich umschreiben zu einem $n$-fachen Produkt der Normalisierungskonstante. 
+
+Der **Term der Exponentialfunktion** wird durch Matrixmultiplikation zu einem Term, der aus einer multiplikativen Konstante und einer Summe der quadrierten Differenzen zwischen $x_i$ und $\mu_i$ besteht. Mit der Eigenschaft von Exponentialfunktion \color{darkcyan}(i.e. $\exp(x+y) = \exp(x)\exp(y)$) \color{black} können wir die Exponentialfunktion umschreiben zu einem Produkt von Exponentialfunktionen des Terms. 
+
+Mit den Eigenschaften von Produkten können wir beide Produkte zusammenfassen und erhalten ein Produkt von univariaten Normalverteilungen.
+
+
+
+
+
