@@ -583,7 +583,7 @@ Eine Matrix $S \in \mathbb{R}^{n \times n}$ heißt \textit{symmetrisch}, wenn gi
 \normalsize
 \vspace{3mm}
 \begin{definition}[Diagonalmatrix]
-Eine Matrix $D \in \mathbb{R}^{n \times m}$ heißt \textit{Diagonalmatrix}, wenn $d_{ij} = 0$ für $1 \le i,j \le n, i \neq j$.
+Eine Matrix $D \in \mathbb{R}^{n \times m}$ heißt \textit{Diagonalmatrix}, wenn $d_{ij} = 0$ für $1 \le i \le n, 1 \le j \le m $ mit $i \neq j$.
 \end{definition}
 
 # Spezielle Matrizen - Selbstkontrollfragen
