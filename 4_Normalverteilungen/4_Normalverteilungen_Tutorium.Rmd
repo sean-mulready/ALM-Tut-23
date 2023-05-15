@@ -63,7 +63,7 @@ Fragen von/während der letzten Woche:
 
 \vspace{3mm}
 \normalsize
-\color{darkcyan} 1. Korrektur der Definition zu Einheitsmatrizen (Indizes):
+* \color{darkcyan} Korrektur der Definition zu Einheitsmatrizen (Indizes):
 \color{black}
 
 \footnotesize
@@ -89,18 +89,19 @@ e_i:=({e_i}_j)_{1 \le j \le n} \in \mathbb{R}^n \mbox{ mit } {e_i}_j=1 \mbox{ f�
 # Follow-up - Diagonalmatrizen
 \vspace{3mm}
 \normalsize
-\color{darkcyan}
+
 \vspace{2mm}
-* Können Diagonalmatrizen auch Nullen auf der Diagonale haben?
+* \color{darkcyan} Können Diagonalmatrizen auch Nullen auf der Diagonale haben?
 
 \vspace{2mm}
 \color{black}
 \footnotesize
-Ja, können sie. Diagonalmatrizen haben per Definition nur die Bedingung dass **nichtdiagonale** Elemente 0 sind. Eine Nullmatrix ist also auch eine Diagonalmatrix
+Ja, können sie. Diagonalmatrizen haben per Definition nur die Bedingung dass **nichtdiagonale** Elemente 0 sind. Eine Nullmatrix ist also auch eine Diagonalmatrix.
+
 \vspace{3mm}
 \normalsize
-\color{darkcyan}
-* Sind Diagonalmatrizen **immer** quadratisch?
+
+* \color{darkcyan} Sind Diagonalmatrizen **immer** quadratisch?
 
 \vspace{2mm}
 \color{black}
@@ -432,6 +433,7 @@ knitr::include_graphics(file.path(abb_dir,"alm_4_mvnwdf.pdf"))
 \setstretch{1}
 \normalsize
 \color{darkblue} 7.Generieren Sie 100 Realisierungen aus dieser Verteilung und visualisieren Sie diese.
+
 \vspace{3mm}
 \color{black}
 \small
@@ -458,6 +460,7 @@ print(Realisierungen[1:8,])    # Ausgabe der ersten 8 Realisierungen
 \setstretch{1}
 \normalsize
 \color{darkblue} 7.Generieren Sie 100 Realisierungen aus dieser Verteilung und visualisieren Sie diese.
+
 \vspace{3mm}
 \color{black}
 \small
@@ -543,6 +546,7 @@ par(
 \setstretch{1}
 \normalsize
 \color{darkblue} 7.Generieren Sie 100 Realisierungen aus dieser Verteilung und visualisieren Sie diese.
+
 \vspace{3mm}
 \color{black}
 \small
@@ -569,6 +573,7 @@ plot(
 \setstretch{1}
 \normalsize
 \color{darkblue} 7.Generieren Sie 100 Realisierungen aus dieser Verteilung und visualisieren Sie diese.
+
 \vspace{3mm}
 \color{black}
 \small
@@ -579,11 +584,13 @@ Teil 4/6 - Visualisierung der 100 Realisierungen
 ```{r, echo = FALSE, out.width = "80%"}
 knitr::include_graphics(file.path(abb_dir,"alm_4_skf_6.pdf"))
 ```
-#Konstruktion und Definition - Selbstkontrollfragen
+
+# Konstruktion und Definition - Selbstkontrollfragen
 \vspace{3mm}
 \setstretch{1}
 \normalsize
 \color{darkblue} 7.Generieren Sie 100 Realisierungen aus dieser Verteilung und visualisieren Sie diese.
+
 \vspace{3mm}
 \color{black}
 \small
@@ -685,6 +692,7 @@ points(
 \setstretch{1}
 \normalsize
 \color{darkblue} 7.Generieren Sie 100 Realisierungen aus dieser Verteilung und visualisieren Sie diese.
+
 \vspace{3mm}
 \color{black}
 \small
