@@ -766,7 +766,7 @@ Dann gilt
 \justifying
 \setstretch{1.4}
 \normalfont
-Für $i = 1,...,n$ seien $N(\xi_i; \mu_i,\sigma^2)$ die WDFen von $n$ unabhängigen
+Für $i = 1,...,n$ seien $N(x_i; \mu_i,\sigma^2)$ die WDFen von $n$ unabhängigen
 univariaten normalverteilten Zufallsvariablen $\xi_1,...,\xi_n$ mit $\mu_1,...,\mu_n \in \mathbb{R}$
 und $\sigma^2 > 0$. Weiterhin sei $N(x;\mu,\sigma^2I_n)$ die WDF eines $n$-variaten
 Zufallsvektors $\xi$ mit Erwartungswertparameter $\mu := (\mu_1,...,\mu_n) \in \mathbb{R}^n$.
