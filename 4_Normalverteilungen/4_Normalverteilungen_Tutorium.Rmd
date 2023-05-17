@@ -803,8 +803,8 @@ N\left(x;\mu,\sigma^2I_n\right) = \prod_{i=1}^n N\left(x_i;\mu_i,\sigma^2\right)
 Beispiel
 \footnotesize
 
-Für $i = 1, .., 5$ seien seien $N(x; \mu_i,\sigma^2)$ die WDFen von $n$ unabhängigen **univariaten** normalverteilten Zufallsvariablen $\xi_1,...,\xi_n$ mit $\mu_1,...,\mu_n \in \mathbb{R}$
-und $\sigma^2 = 9$. Weiterhin sei $N(\upsilon;\mu,\sigma^2I_n)$ die WDF eines $n$-variaten (**multivariaten**) Zufallsvektors $\xi$ mit Erwartungswertparameter $\mu := (\mu_1,...,\mu_n) \in \mathbb{R}^n$. Dann gilt 
+Für $i = 1, .., 5$ seien seien $N(x_i; \mu_i,\sigma^2)$ die WDFen von $n$ unabhängigen **univariaten** normalverteilten Zufallsvariablen $\xi_1,...,\xi_n$ mit $\mu_1,...,\mu_n \in \mathbb{R}$
+und $\sigma^2 = 9$. Weiterhin sei $N(x;\mu,\sigma^2I_n)$ die WDF eines $n$-variaten (**multivariaten**) Zufallsvektors $\xi$ mit Erwartungswertparameter $\mu := (\mu_1,...,\mu_n) \in \mathbb{R}^n$. Dann gilt 
 
 \begin{align*}
 N\left(x;\mu,\sigma^2 I_n\right) = \prod_{i=1}^n N\left(x_i;\mu_i,\sigma^2=9\right).
@@ -839,4 +839,223 @@ Mit den Eigenschaften von Produkten können wir beide Produkte zusammenfassen un
 
 
 
+# \color{darkgrey} Anhang 
 
+\vspace{3mm}
+\footnotesize
+
+Vorwort:
+Zu Aufgaben 6 und 7 war eine nähere Erläuterung des R-Codes gewünscht, die ich in Präsenz nicht so geben konnte. Diesem Wunsch soll mit dem Anhang nachgekommen werden.
+Vorab sei gesagt: Zur Erläuterung des Codes habe ich mich ChatGPT bedient. Dazu habe ich vor dem Code (siehe nächste Folie) folgende Anweisung gestellt:
+"Erkläre mir folgenden R-Code Blockweise. Als einzelne Blöcke nimmst du die Abschnitte, die durch die Kommentare mit dem "#" ganz links in der Zeile getrennt sind." Damit konnte ChatGPT schon viel machen, jedoch stellenweise nicht in meiner gewünschten Tiefe. So konnte ich nach der ersten Erklärung bspw. nochmal näher nachfragen mit der Folgefrage "was bewirkt das Argument length.out in Block 3?"
+
+Damit möchte ich zwei Dinge sagen:
+
+Erstens, wenn Verständnisprobleme da sind, ist es nicht verboten, auch mal eine künstliche Intelligenz wie ChatGPT zu fragen. Das Programm sollte nicht zur vollständigen Lösung herangezogen werden, kann aber vieles erklären. Auch wenn man Hilfe bei der Hypothesenbildung oder dem Finden einer Fragestellung benötigt, kann ein Dialog mit ChatGPT in die richtige Richtung lenken. 
+
+Zweitens, ähnlich wie beim Programmieren arbeitet ChatGPT am besten, wenn ich genau und logisch schreibe, was ich erwarte. Ich habe in meiner Anfrage nicht nur danach gefragt, mir den Code zu erklären sondern auch wie (nämlich in Abschnitten, dazu habe ich auch geschrieben, wie die Abschnitte getrennt sind).
+
+
+# \color{darkgrey} Anhang
+\vspace{1mm}
+\setstretch{0.9}
+\footnotesize
+Zunächst der Code im ganzen. Hier Aufgaben 6 und 7  in einem ( auf 2 Slides, aus Platzgründen):
+
+```{r, eval = F, echo = T}
+# R Paket für multivariate Normalverteilungen
+library(mvtnorm)
+library(latex2exp)
+
+# Parameterdefinition
+mu     = c(10,15)               # \mu \in \mathbb{R}^2
+Sigma  = matrix(c(3,1,1,2), 2)  # \Sigma in \mathbb{R}^{2 \times 2}
+
+# Zufallsvektorrealisierungen
+Realisierungen = rmvnorm(n = 100, mu, Sigma)
+print(Realisierungen[1:8,])    # Ausgabe der ersten 8 Realisierungen
+
+# Abbildungsparameter
+graphics.off()
+fdir        =  file.path(getwd(), "Abbildungen")
+dev.new()
+par(
+  family      = "sans",
+  pty         = "s",
+  bty         = "l",
+  lwd         = 1,
+  las         = 1,
+  mgp         = c(2,1,0),
+  xaxs        = "i",
+  yaxs        = "i",
+  font.main   = 1,
+  cex         = .7,
+  cex.main    = 1.2)
+
+```
+
+# \color{darkgrey} Anhang
+\vspace{2mm}
+\setstretch{1}
+\footnotesize
+
+```{r, echo = T, eval =F}
+
+# Ergebnisraumdefintion
+x_min  = 0                                       # x_i Minimum
+x_max  = 20                                      # x_i Maximum
+x_res  = 1e3                                     # x_i Auflösung (1e3 --> 1000 Werte)
+x_1    = seq(x_min, x_max, length.out = x_res)   # x_1 Raum
+x_2    = seq(x_min, x_max, length.out = x_res)   # x_2 Raum
+x      = expand.grid(x_1,x_2)                    # x = (x_1,x_2)^T Raum
+
+# Wahrscheinlichkeitsdichtefunktionauswertung
+WDF = dmvnorm(as.matrix(x), mu, Sigma)  # Multivariate WDF
+p      = matrix(WDF, nrow = x_res)      # Matrixkonversion der WDF
+
+# Visualisierung
+contour(
+  x_1,
+  x_2,
+  p,
+  xlim      =  c(x_min,x_max),
+  ylim      =  c(x_min,x_max),
+  xlab      = TeX("$x_1$"),
+  ylab      = TeX("$x_2$"),
+  nlevels   = 5)
+points(
+  Realisierungen,
+  pch   = 21,
+  col   = "white",
+  bg    = "gray60",
+  cex   = 1)
+
+# Speichern
+dev.copy2pdf(file=file.path(abb_dir,"alm_4_skf_6_overlapp.pdf"))
+```
+
+# \color{darkgrey} Anhang 
+\footnotesize
+\vspace{1mm}
+```{r, eval=F, echo =T}
+# R Paket für multivariate Normalverteilungen
+library(mvtnorm)
+library(latex2exp)
+```
+
+\vspace{1mm}
+Laden der notwendigen R-Pakete: **"mvtnorm"** für die Arbeit mit multivariaten Normalverteilungen, **"latex2exp"** für die Verwendung von LaTeX-Ausdrücken.
+
+\vspace{1mm}
+```{r, echo = T, eval=F}
+# Parameterdefinition
+mu     = c(10,15)               # \mu \in \mathbb{R}^2
+Sigma  = matrix(c(3,1,1,2), 2)  # \Sigma in \mathbb{R}^{2 \times 2}
+```
+
+\vspace{1mm}
+Definition der Parameter für die multivatiate Normalverteilung wie in der Aufgabenstellung, mit mu für $\mu$ (Erwartungswertparameter) und Sigma für $\Sigma$ (Kovarianzmatrixparameter)
+
+\vspace{1mm}
+
+```{r, echo = T, eval = F}
+# Zufallsvektorrealisierungen
+Realisierungen = rmvnorm(n = 100, mu, Sigma)
+print(Realisierungen[1:8,])    # Ausgabe der ersten 8 Realisierungen
+```
+\vspace{1mm}
+Hier werden mit **rmvnorm** nun 100 Zufallsvektoren (jeder Vektor hat zwei Werte) aus der multivariaten Normalverteilung (mit den zuvor definierten Parametern) generiert. Diese Zufallsvektoren werden in der Variable **Realisierungen** gespeichert. Zur Veranschaulichung werden die ersten 8 dieser Vektoren ausgegeben.
+
+
+# \color{darkgrey} Anhang
+\vspace{1mm}
+\footnotesize
+```{r, eval = F, echo=T}
+# Abbildungsparameter
+graphics.off()
+fdir        =  file.path(getwd(), "Abbildungen")
+dev.new()
+par(
+  family      = "sans",
+  pty         = "s",
+  bty         = "l",
+  lwd         = 1,
+  las         = 1,
+  mgp         = c(2,1,0),
+  xaxs        = "i",
+  yaxs        = "i",
+  font.main   = 1,
+  cex         = .7,
+  cex.main    = 1.2)
+
+```
+\vspace{1mm}
+\setstretch{1}
+Hier werden Parameter für die Abbildung festgelegt. Dabei wird **graphics.off()** verwendet, um alle vorhandenen Grafikfenster zu schließen, mit **fdir** wird eine Variable definiert, die das Speicherverzeichnis angibt (der Name kann hier selbst gewählt werden, z.B. auch "abb_verzeichnis") und letztlich öffnet **dev.new()** ein neues Grafikfenster. Mit **par()** werden nun verschiedene Grafikparameter gesetzt, u.a. die Schriftart mit **family**, der Rahmentyp mit **bty** (für "boxtype"). Alle möglichen setzbaren Parameter können in der R-Dokumentation nachgelesen werden oder in der entsprechenden Literatur. Oder auch über ChatGPT erfragt werden.
+
+# \color{darkgrey} Anhang
+\vspace{1mm}
+\footnotesize
+```{r, eval = F, echo=T}
+# Ergebnisraumdefintion
+x_min  = 0                                       # x_i Minimum
+x_max  = 20                                      # x_i Maximum
+x_res  = 1e3                                     # x_i Auflösung (1e3 --> 1000 Werte)
+x_1    = seq(x_min, x_max, length.out = x_res)   # x_1 Raum
+x_2    = seq(x_min, x_max, length.out = x_res)   # x_2 Raum
+x      = expand.grid(x_1,x_2)                    # x = (x_1,x_2)^T Raum
+```
+\vspace{1mm}
+Festlegen des Ergebnisraums, mit **x_min** und **x_max** werden, wie man im weiteren Verlauf des Codes sieht, die Grenzen der $x_1$- und $x_2$-Werte gesetzt. Mit **x_res** wird die Auflösung definiert, hier die Anzahl der Werte. Dazu schauen wir uns die folgenden Variablen **x_1** und **x_2** an. Diese werden definiert als Sequenz von Werten zwischen  den zuvor definierten Grenzen, **length.out = x_res** bedeutet hier, dass beide Vektoren x_1 und x_2 je 1000 Werte enthalten, die sich gleichmäßig zwischen den Grenzen verteilen. Wichtig: Ergebnisraum heißt nicht, dass es sich bei x_1 und x_2 um Realisationen handelt. Wir definieren hier lediglich, in welchem Bereich sich die Realisationen bewegen \textit{können}. Ziel ist es, sicherzustellen, dass ausreichend Punkte vorhanden sind, um die WDF genau darstellen zu können.
+Letzlich wird mit **x** ein \textit{Gitter} ("grid") über die Vektoren gespannt und damit eine Matrix erstellt, die alle möglichen Kombinationen der Elemente von **x_1** und **x_2** enthält.
+
+# \color{darkgrey} Anhang
+\vspace{1mm}
+\footnotesize
+```{r, eval = F, echo=T}
+# Wahrscheinlichkeitsdichtefunktionauswertung
+WDF = dmvnorm(as.matrix(x), mu, Sigma)  # Multivariate WDF
+p      = matrix(WDF, nrow = x_res)      # Matrixkonversion der WDF
+```
+
+\vspace{1mm}
+Berechnung der WDF für jede Wertekombination in x mit der Funktion **dmvnorm**. Da **x** als Gitter von Koordinaten definiert wurde und damit in Form eines \textit{data frame} vorliegt, die Funktion **dmvnorm()** aber als Argument eine Matrix erwartet, verwenden wir die **as.datatype()**-Funktion um den Datentyp den wir brauchen, zu erzwingen (ich könnte auch andere Datentypen erzwingen, z.B. mit "as.string()"). Hier **as.matrix(x)**.
+Das Ergebnis der Berechnungen wird dann als Variable **WDF** gespeichert und in der Variable **p** zu einer Matrix mit 1000 Zeilen (=x_res) umgewandelt.
+
+# \color{darkgrey} Anhang
+\vspace{1mm}
+\footnotesize
+```{r, eval = F, echo=T}
+# Visualisierung
+contour(
+  x_1,
+  x_2,
+  p,
+  xlim      =  c(x_min,x_max),
+  ylim      =  c(x_min,x_max),
+  xlab      = TeX("$x_1$"),
+  ylab      = TeX("$x_2$"),
+  nlevels   = 5)
+points(
+  Realisierungen,
+  pch   = 21,
+  col   = "white",
+  bg    = "gray60",
+  cex   = 1)
+```
+\vspace{1mm}
+Jetzt zur Visualisierung. Die Funktion **contour()** wird verwendet, um die Konturlinienen der WDF auf den Ebenen **x_1** und **x_2** zu zeichnen. Als erwähnenswerter Paramter bleibt **nlevels**, damit wird die Anzahl der Konturlinien bestimmt. 
+Im Anschluss wird mit der Funktion **ponts()** die generierten Realisierungen dargestellt.
+
+
+
+# \color{darkgrey} Anhang
+\vspace{3mm}
+Literaturempfehlung:
+
+Murrell, Paul. 2019. \textit{R Graphics.} Third edition. The R Series. Boca Raton: CRC Press, Taylor & Francis Group
+\vspace{3mm}
+
+```{r, echo = F, out.height= "70%", out.width="50%"}
+knitr::include_graphics(file.path(abb_dir,"r_graphics_cover.jpg"))
+```
