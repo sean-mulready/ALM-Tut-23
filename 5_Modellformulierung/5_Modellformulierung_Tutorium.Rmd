@@ -1,0 +1,403 @@
+---
+fontsize: 8pt
+bibliography: ../Referenzen.bib
+citation_package: natbib
+output:
+  beamer_presentation:
+    keep_tex: true
+    includes:
+      in_header: ../Header.tex
+classoption: t
+---
+
+
+```{r, include = FALSE}
+source("../R_common.R")
+abb_dir = file.path(dirname(getwd()), "Abbildungen")
+data_dir = file.path(dirname(getwd()), "Daten")
+```
+
+# {.plain}
+\center
+```{r, echo = FALSE, out.width="20%"}
+knitr::include_graphics(file.path(abb_dir,"wtfi_otto.png"))
+```
+
+\vspace{2mm}
+
+\huge
+Tutorium
+
+\Large
+Allgemeines Lineares Modell
+\vspace{2mm}
+
+\normalsize
+BSc Psychologie SoSe 2023
+
+\vspace{2mm}
+\text{7. Termin: (5) Modellformulierung}    
+
+\vspace{15mm}
+\normalsize
+Sean Mulready
+
+\vspace{2mm}
+\scriptsize
+Inhalte basieren auf Kursmaterialien für [\textcolor{darkblue}{ALM}](https://www.ipsy.ovgu.de/Institut/Abteilungen+des+Institutes/Methodenlehre+I+_+Experimentelle+und+Neurowissenschaftliche+Psychologie/Lehre/Sommersemester+2023/Allgemeines+Lineares+Modell.html) von [Dirk Ostwald](https://www.ipsy.ovgu.de/Institut/Abteilungen+des+Institutes/Methodenlehre+I+_+Experimentelle+und+Neurowissenschaftliche+Psychologie/Team/Dirk+Ostwald.html), lizenziert unter [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/deed.de)
+
+
+
+
+
+
+# Selbstkontrollfragen - Modellformulierung
+\footnotesize
+\setstretch{2}
+\justifying 
+\begin{enumerate}
+\item Erläutern Sie das naturwissenschaftliche Paradigma.
+\item Erläutern Sie die Standardprobleme der Frequentistischen Inferenz.
+\item Geben Sie die Definition des Allgemeinen Linearen Modells wieder.
+\item Erläutern Sie die deterministischen und probabilistischen Aspekte des ALMs.
+\item Wieviele skalare Parameter hat das ALM mit sphärischer Kovarianzmatrix?
+\item Warum sind die Komponenten des ALM Zufallsfehlers unabhängig und identisch verteilt?
+\item Geben Sie das Theorem zur Datenverteilung des Allgemeinen Linearen Modells wieder.
+\item Sind die Komponenten des ALM Datenvektors immer unabhängig und identisch verteilt?
+\item Schreiben Sie das Szenario $n$ unabhängig und identisch normalverteilten Zufallsvariablen in ALM Form.
+\item Schreiben Sie das Szenario der einfachen linearen Regression in ALM Form.
+
+\end{enumerate}
+
+# Überblick - Selbstkontrollfragen
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 1. Erläutern Sie das naturwissenschaftliche Paradigma.
+
+\vspace{3mm}
+\color{black}
+
+```{r, echo = F, out.width = "60%"}
+knitr::include_graphics(file.path(abb_dir,"alm_5_wissenschaft.pdf"))
+```
+
+\setstretch{1.2}
+\footnotesize
+
+* Wir nehmen an, dass eine **Realität** existiert, welche wir idR nur indirekt, teilweise und eingeschränkt beobachten können, indem wir **Daten** erheben (z.B. BDI Fragebogendaten, EEG-Messung).
+* Daten $\neq$ Realität. Daten sind eine Beobachtung/Messung der Realität. 
+* In der (Natur-)wissenschaft bilden wir Theorien und formulieren Modelle über die Realität (**Modellformulierung**). Mithilfe von Modellen treffen wir Vorhersagen über die Realität. 
+* Wir verwenden Daten, um Modelle zu schätzen (Modellschätzung) und darauf basierend die Güte der Modelle evaluieren (**Modellevaluation**) 
+* Ergebnisse der Modellevaluation können wiederum dazu verwendet werden die Modellformulierung anzupassen.
+* Angepasste/veränderte Modelle können wieder mit Daten geschätzt und deren Güte evaluiert werden. 
+
+
+# Überblick - Selbstkontrollfragen
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 2. Erläutern Sie die Standardprobleme der Frequentistischen Inferenz.
+
+\vspace{3mm}
+\color{black}
+
+Standardprobleme Frequentistischer Inferenz
+\small
+
+\noindent (1) Parameterschätzung
+
+Ziel der Parameterschätzung ist es, einen möglichst guten Tipp für wahre,
+aber unbekannte, Parameterwerte oderFunktionen dieser abzugeben,
+typischerweise mithilfe von Daten.
+
+\vspace{2mm}
+
+
+\noindent (2) Konfidenzintervalle
+
+Ziel der Bestimmung von Konfidenzintervallen ist es, basierend auf der angenommenen
+Verteilung der Daten eine quantitative Aussage über die
+mit Schätzwerten assoziierte Unsicherheit zu treffen.
+
+\vspace{2mm}
+
+\noindent (3) Hypothesentests
+
+Das Ziel des Hypothesentestens ist es, basierend auf der angenommenen
+Verteilung der Daten in einer möglichst zuverlässigen Form zu entscheiden, ob ein
+wahrer, aber unbekannter Parameterwert in einer von zwei sich gegenseitig 
+ausschließenden Untermengen des Parameterraumes liegt.
+
+# Allgemeine Theorie - Selbstkontrollfragen
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 3. Geben Sie die Definition des Allgemeinen Linearen Modells wieder.
+
+\vspace{3mm}
+\color{black}
+
+
+\small
+\begin{definition}[Allgemeines Lineares Modell]
+\justifying
+Es sei
+\begin{equation}\label{eq:alm}
+\upsilon = X\beta + \varepsilon,
+\end{equation}
+wobei
+\begin{itemize}
+\item $\upsilon$ ein $n$-dimensionaler beobachtbarer Zufallsvektor ist, der \textit{Daten} genannt wird,
+\item $X \in \mathbb{R}^{n \times p}$ mit $n > p$ eine vorgegebene Matrix ist, die \textit{Designmatrix} genannt wird,
+\item $\beta \in \mathbb{R}^p$ ein unbekannter Parametervektor ist, der \textit{Betaparametervektor} genannt wird,
+\item $\varepsilon$ ein $n$-dimensionaler nicht-beobachtbarer Zufallsvektor ist, der \textit{Zufallsfehler} genannt wird und für den angenommen wird, dass mit einem unbekannten Varianzparameter $\sigma^2>0$ gilt, dass
+\begin{equation}
+\varepsilon \sim N\left(0_n, \sigma^2I_n\right).
+\end{equation}
+\end{itemize}
+Dann heißt \eqref{eq:alm} \textit{Allgemeines Lineares Modell (ALM)}.
+\end{definition}
+
+
+# Allgemeine Theorie - Selbstkontrollfragen
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkgrey} Beispiele ALM mit $n=5$
+
+
+\footnotesize
+$\upsilon$ sei ein $5$-dimensionalter Zufallsvektor mit Erwartungswertparameter $X\beta \in \mathbb{R}^{n\times p}$ und Kovarianzmatrixparameter $\sigma^2I_n$. Die Komponenten $\upsilon_1,...,\upsilon_n$ sind unabhängig aber nicht identisch verteilte Zufallsvariablen der Form $\upsilon_i \sim N(\mu_i,\sigma^2)$ für $i=1,...,n$.
+
+Beispiel 1: p = 1 (Wir haben nur einen Betaparameter $\beta$)
+
+\vspace{-3.5mm}
+
+\tiny
+\begin{align*}
+\upsilon \sim N(X\beta,\sigma^2I_5) \mbox{ mit } X \in \mathbb{R}^{5 \times 1}, \beta \in \mathbb{R}^1, \sigma^2>0.
+\end{align*}
+
+\vspace{-3mm}
+
+\begin{align*}
+\upsilon &= X \beta + \varepsilon \Leftrightarrow \begin{pmatrix} \upsilon_1\\\upsilon_2\\\upsilon_3\\\upsilon_4\\\upsilon_5\end{pmatrix} 
+= \begin{pmatrix}x_1\\x_2\\x_3\\x_4\\x_5\end{pmatrix} 
+\beta + \begin{pmatrix}\varepsilon_1 \\ \varepsilon_2 \\ \varepsilon_3 \\ \varepsilon_4 \\ \varepsilon_5 \end{pmatrix}
+= \begin{pmatrix}x_1 \beta + \varepsilon_1 \\ x_2 \beta +\varepsilon_2 \\ x_3 \beta +\varepsilon_3 \\ x_4 \beta +\varepsilon_4 \\ x_5 \beta + \varepsilon_5 \end{pmatrix}
+\end{align*}
+
+\footnotesize
+Beispiel 2: p = 2 (Wir haben zwei Betaparameter $\beta_1$ und $\beta_2$)
+
+\tiny
+\begin{align*}
+\upsilon \sim N(X\beta,\sigma^2I_5) \mbox{ mit } X \in \mathbb{R}^{5 \times 2}, \beta \in \mathbb{R}^2, \sigma^2>0.
+\end{align*}
+
+\vspace{-3mm}
+
+\begin{align*}
+\upsilon = X \beta + \varepsilon \Leftrightarrow \begin{pmatrix} \upsilon_1\\\upsilon_2\\\upsilon_3\\\upsilon_4\\\upsilon_5\end{pmatrix} 
+= \begin{pmatrix}x_{11}&x_{12}\\x_{21}&x_{22}\\x_{31}&x_{32}\\x_{41}&x_{42}\\x_{51}&x_{52}\end{pmatrix} 
+\begin{pmatrix}\beta_1 \\ \beta_2 \end{pmatrix} + \begin{pmatrix}\varepsilon_1 \\ \varepsilon_2 \\ \varepsilon_3 \\ \varepsilon_4 \\ \varepsilon_5 \end{pmatrix}
+= \begin{pmatrix}x_{11} \beta_1 + x_{12} \beta_2 + \varepsilon_1 \\ x_{21} \beta_1 + x_{22} \beta_2 +\varepsilon_2 \\ x_{31} \beta_1 + x_{32} \beta_2 +\varepsilon_3 \\ x_{41} \beta_1 + x_{42} \beta_2 +\varepsilon_4 \\ x_{51} \beta_1 + x_{52} \beta_2 + \varepsilon_5 \end{pmatrix}
+\end{align*}
+
+# Allgemeine Theorie - Selbstkontrollfragen
+\vspace{3mm}
+\setstretch{1.1}
+\large
+\color{darkblue} 4.Erläutern Sie die deterministischen und probabilistischen Aspekte des ALMs.
+\vspace{3mm}
+\color{black}
+\setstretch{1.3}
+\footnotesize
+
+* Wir nennen $X\beta \in \mathbb{R}^n$ den \textit{deterministichen Modellaspekt} und $\varepsilon$ den \textit{probabilistischen Modellaspekt}.
+* *deterministisch* heißt hier, die Komponenten beinhalten keine Zufälligkeit, sondern sind vorgegeben bzw. im Rahmen der Modellformulierung festgelegt.
+* *probabilistisch* heißt hier, die Komponenten beinhalten Zufälligkeit. Realisierungen dieser Komponente können aus einer Normalverteilung gezogen werden. Der probabilistische Aspekt modelliert bei Normalverteilungen alle Einflussfaktoren auf $y$, die nicht durch den deterministischen Askept abgedeckt werden.
+* \color{black} da $\upsilon$ das Ergebnis der Addition deterministischer und probabilistischer Aspekte ist, ist es auch probabilistisch (i.e. zufällig).
+
+
+# Allgemeine Theorie - Selbstkontrollfragen
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 5.Wieviele skalare Parameter hat das ALM mit sphärischer Kovarianzmatrix?
+
+\vspace{3mm}
+\color{darkgrey}
+
+\small
+Zur Erinnerung: sphärische Koviaranzmatrix 
+
+\footnotesize
+\begin{align*}
+\sigma^2 I_n = \sigma^2 \begin{pmatrix}1&\dots&0\\\vdots&\ddots&\vdots\\0&\dots&1\end{pmatrix} 
+= \begin{pmatrix}\sigma^2&\dots&0\\\vdots&\ddots&\vdots\\0&\dots&\sigma^2\end{pmatrix}
+\end{align*}
+
+\small
+Beispiel $n=5$
+
+\footnotesize
+\begin{align*}
+\sigma^2 I_5 = \sigma^2 \begin{pmatrix}1&0&0&0&0\\0&1&0&0&0\\0&0&1&0&0\\0&0&0&1&0\\0&0&0&0&1\end{pmatrix} 
+= \begin{pmatrix}\sigma^2&0&0&0&0\\0&\sigma^2&0&0&0\\0&0&\sigma^2&0&0\\0&0&0&\sigma^2&0\\0&0&0&0&\sigma^2\end{pmatrix}
+\end{align*}
+
+\color{black}
+Das ALM mit sphärischer Kovarianzmatrix hat $p+1$ Parameter ($p$ Betaparameter und $1$ Varianzparameter)
+
+
+# Allgemeine Theorie - Selbstkontrollfragen
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 6.Warum sind die Komponenten des ALM Zufallsfehlers unabhängig und identisch verteilt?
+
+\vspace{3mm}
+\color{black}
+\footnotesize
+
+Wir gehen davon aus, dass alle weiteren Einflüsse, die der deterministische Aspekt des Modells nicht erklärt (auch unbekannte "Störeinflüsse" genannt), *viele* und *unabhängig* sind, und modellieren diese als eine Vielzahl unabhängiger Zufallsvariabeln. 
+
+Im Sinne des zentralen Grenzwertsatzes ist die Summe vieler unabhängiger Zufallsvariablen asymptotisch, d.h. für unendlich viele Zufallsvariablen, normalverteilt. 
+
+Der Zufallsfehler modelliert also alle nicht durch den deterministischen Aspekt des Modells erklären Einflüsse, die aufaddiert als normalverteilt angenommen werden. 
+
+Formal gilt $\varepsilon\sim N(0_n,\sigma^2I_n)$, wobei der Erwartungswertparameter $0_n$ bedeutet, dass alle Komponenten $\varepsilon_1,...,\varepsilon_n$ den Erwartungswert $0$ haben, und der sphärische Kovarianzmatrixparameter $0_n,\sigma^2 I_n$, bedeutet, dass alle Komponenten die Varianz $\sigma^2$ haben und alle Kovarianzen gleich $0$ sind.
+
+* $\Rightarrow$ identisch verteilte Komponenten, weil alle Komponenten den Erwartungswert $0$ und den Varianzparameter $\sigma^2$ haben. 
+* $\Rightarrow$ unabhängige Komponenten, weil alle nicht-digonal-Elemente, also alle Kovarianzen zwischen Komponenten gleich $0$
+
+# Allgemeine Theorie
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 7.Geben Sie das Theorem zur Datenverteilung des Allgemeinen Linearen Modells wieder.
+
+\vspace{3mm}
+\color{black}
+
+\footnotesize
+\begin{theorem}[ALM Datenverteilung]
+\justifying
+\normalfont
+Es sei
+\begin{equation}
+\upsilon = X\beta + \varepsilon \mbox{ mit } \varepsilon \sim N(0_n,\sigma^2I_n)
+\end{equation}
+das ALM. Dann gilt
+\begin{equation}
+\upsilon \sim N(X\beta,\sigma^2I_n) \mbox{ mit } \mu := X\beta \in \mathbb{R}^n.
+\end{equation}
+\end{theorem}
+
+
+# Allgemeine Theorie - Selbstkontrollfragen
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 8.Sind die Komponenten des ALM Datenvektors immer unabhängig und identisch verteilt?
+
+\vspace{3mm}
+\color{black}
+
+\small
+
+$\upsilon \sim N(X\beta,\sigma^2I_n)$ mit $\upsilon_i \sim N(\mu_i,\sigma^2)$ für $i=1,...,n$.
+
+\setstretch{1.2}
+
+* Der Kovarianzmatrixparameter ist gegeben gegeben durch $\sigma^2I_n \in \mathbb{R}^{n\times n}$ $\Rightarrow$ sphärische Kovarianzmatrix $\Rightarrow$ **unabhängige** Komponenten $\upsilon_1,...,\upsilon_n$
+* Der Erwartungswertparameter ist gegeben durch $X\beta \in \mathbb{R}^n$ $\Rightarrow$ Vektor mit $n$ Einträgen, die in Abhängigkeit von der Designmatrix $X$ für jede Komponente $\upsilon_i$ einen anderen Erwartungswert $\mu_i$ annehmen kann. $\Rightarrow$ **nicht** **identisch** verteilte Komponenten $y_i$.
+
+# Unabhängige und identisch normalverteilte ZV - Selbstkontrollfragen
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 9.Schreiben Sie das Szenario $n$ unabhängig und identisch normalverteilten Zufallsvariablen in ALM Form.
+
+\vspace{3mm}
+\color{black}
+
+\small
+Wir betrachten das Szenario von $n$ unabhängigen und identisch normalverteilten Zufallsvariabeln mit Erwartungswertparameter $\mu \in \mathbb{R}$ und Varianzparameter $\sigma^2$, mit $\upsilon_i \sim N(\mu,\sigma^2)$ für $i=1,...,n$.
+
+\color{darkgrey}
+Anmerkung: Während wir im Theorem zur Datenverteilung im ALM noch gesehen haben, dass die Komponenten $\upsilon_1,...,\upsilon_n$ jeweils "individuelle" Verteilungen $\upsilon_i \sim N(\mu_i,\sigma^2)$ mit "individuellen" $\mu_i$ haben, und somit nicht identisch verteilt sind, haben wir im Szenario **$n$ unabhängig und *identisch* verteilter Zufallsvariablen** nun nur noch ein $\mu$ gegeben, das für alle Komponenten $\upsilon_1,...,\upsilon_n$, also für alle $\upsilon_i$ gleich ist.
+
+\color{black}
+In Matrixschreibweise: 
+
+\begin{align*}
+\upsilon \sim N(X\beta,\sigma^2I_n) \mbox{ mit } X := 1_n\in \mathbb{R}^{n \times 1}, \beta := \mu \in \mathbb{R}^1, \sigma^2>0.
+\end{align*}
+
+# Unabhängige und identisch normalverteilte ZV - Selbstkontrollfragen
+\vspace{3mm}
+\setstretch{1}
+
+\vspace{3mm}
+\color{darkgrey}
+Beispiel $n=5$ unabhängig und identisch normalverteilte Zufallsvariablen
+
+
+\small
+Wir betrachten das Szenario von $n=5$ unabhängigen und identisch normalverteilten Zufallsvariablen mit Erwartungswertparameter $\mu \in \mathbb{R}$ und Varianzparameter $\sigma^2$, mit $\upsilon_i \sim N(\mu,\sigma^2)$ für $i=1,...,5$.
+
+\footnotesize
+In Matrixschreibweise: 
+
+\begin{align*}
+\upsilon \sim N(X\beta,\sigma^2I_5) \mbox{ mit } X := 1_5 \in \mathbb{R}^{5 \times 1}, \beta := \mu \in \mathbb{R}, \sigma^2>0.
+\end{align*}
+
+\begin{align*}
+\upsilon = X \beta + \varepsilon = X \mu + \varepsilon
+\Leftrightarrow \begin{pmatrix}\upsilon_1\\\upsilon_2\\\upsilon_3\\\upsilon_4\\\upsilon_5\end{pmatrix} 
+= \begin{pmatrix}1\\1\\1\\1\\1\end{pmatrix}
+\beta + \begin{pmatrix}\varepsilon_1 \\ \varepsilon_2 \\ \varepsilon_3 \\ \varepsilon_4 \\ \varepsilon_5 \end{pmatrix}
+= \begin{pmatrix}1\\1\\1\\1\\1\end{pmatrix}
+\mu + \begin{pmatrix}\varepsilon_1 \\ \varepsilon_2 \\ \varepsilon_3 \\ \varepsilon_4 \\ \varepsilon_5 \end{pmatrix}
+= \begin{pmatrix}\mu+\varepsilon_1\\\mu+\varepsilon_2\\\mu+\varepsilon_3\\\mu+\varepsilon_4\\\mu+\varepsilon_5\end{pmatrix} 
+\end{align*}
+
+
+# Einfache Lineare Regression - Selbstkontrollfragen
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 10.Schreiben Sie das Szenario der einfachen linearen Regression in ALM Form.
+
+\vspace{3mm}
+\color{black}
+
+\tiny
+\begin{align*}
+\upsilon \sim N(X\beta,\sigma^2I_n) \mbox{ mit } X := \begin{pmatrix}1&x_1\\1&x_2\\\vdots&\vdots\\1&x_n \end{pmatrix} \in \mathbb{R}^{n \times 2}, \beta := \begin{pmatrix} \beta_0 \\\beta_1 \end{pmatrix} \in \mathbb{R}^2, \sigma^2>0.
+\end{align*}
+\vspace{-3mm}
+
+\color{darkgrey}
+
+
+\small
+Beispiel mit $n=5$
+\tiny
+\begin{align*}
+\upsilon = X \beta + \varepsilon \Leftrightarrow
+\begin{pmatrix}\upsilon_1\\\upsilon_2\\\upsilon_3\\\upsilon_4\\\upsilon_5\end{pmatrix} 
+= \begin{pmatrix}1&x_{1}\\1&x_{2}\\1&x_{3}\\1&x_{4}\\1&x_{5}\end{pmatrix} 
+\begin{pmatrix}\beta_0 \\ \beta_1 \end{pmatrix} + \begin{pmatrix}\varepsilon_1 \\ \varepsilon_2 \\ \varepsilon_3 \\ \varepsilon_4 \\ \varepsilon_5 \end{pmatrix} 
+= \begin{pmatrix}\beta_0+x_{1}\beta_1+\varepsilon_1\\\beta_0+x_{2}\beta_1+\varepsilon_2\\\beta_0+x_{3}\beta_1+\varepsilon_3\\\beta_0+x_{4}\beta_1+\varepsilon_4\\\beta_0+x_{5}\beta_1+\varepsilon_5\end{pmatrix} 
+\end{align*}
+
+
+
+
+
+

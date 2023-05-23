@@ -1,0 +1,384 @@
+---
+fontsize: 8pt
+bibliography: ../Referenzen.bib
+citation_package: natbib
+output:
+  beamer_presentation:
+    keep_tex: true
+    includes:
+      in_header: ../Header.tex
+classoption: t
+---
+
+
+```{r, include = FALSE}
+source("../R_common.R")
+abb_dir = file.path(dirname(getwd()), "Abbildungen")
+data_dir = file.path(dirname(getwd()), "Daten")
+```
+
+# {.plain}
+\center
+```{r, echo = FALSE, out.width="20%"}
+knitr::include_graphics(file.path(abb_dir,"wtfi_otto.png"))
+```
+
+\vspace{2mm}
+
+\huge
+Tutorium
+
+\Large
+Allgemeines Lineares Modell
+\vspace{2mm}
+
+\normalsize
+BSc Psychologie SoSe 2023
+
+\vspace{2mm}
+\text{7. Termin: (6) Parameterschätzung}    
+
+\vspace{15mm}
+\normalsize
+Sean Mulready
+
+\vspace{2mm}
+\scriptsize
+Inhalte basieren auf Kursmaterialien für [\textcolor{darkblue}{ALM}](https://www.ipsy.ovgu.de/Institut/Abteilungen+des+Institutes/Methodenlehre+I+_+Experimentelle+und+Neurowissenschaftliche+Psychologie/Lehre/Sommersemester+2023/Allgemeines+Lineares+Modell.html) von [Dirk Ostwald](https://www.ipsy.ovgu.de/Institut/Abteilungen+des+Institutes/Methodenlehre+I+_+Experimentelle+und+Neurowissenschaftliche+Psychologie/Team/Dirk+Ostwald.html), lizenziert unter [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/deed.de)
+
+
+# Parameterschätzung - Selbstkontrollfragen
+
+\vspace{3mm}
+\setstretch{1.7}
+\footnotesize
+\begin{enumerate}
+\item Geben Sie das Theorem zum Betaparameterschätzer wieder.
+\item Warum ist der Betaparameterschätzer ein Maximum-Likelihood Schätzer?
+\item Geben Sie das Theorem zum Varianzparameterschätzer wieder.
+\item Geben Sie die Parameterschätzer bei $n$ unabhängigen und identisch normalverteilten Zufallsvariablen wieder.
+\item Geben Sie die Parameterschätzer bei einfacher linearer Regression wieder.
+\item Geben Sie das Theorem zur Verteilung des Betaparameterschätzers wieder.
+\item Geben Sie das Theorem zur Verteilung des Varianzparameterschätzers wieder.
+\end{enumerate}
+
+# Allgemeine Theorie - Selbstkontrollfragen
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 1.  Geben Sie das Theorem zum Betaparameterschätzer wieder.
+\vspace{3mm}
+\color{black}
+
+\footnotesize
+\begin{theorem}[Betaparameterschätzer]
+\justifying
+\normalfont
+Es sei
+\begin{equation}
+\upsilon = X\beta + \varepsilon \mbox{ mit } \varepsilon \sim N(0_n,\sigma^2I_n)
+\end{equation}
+das ALM und es sei
+\begin{equation}
+\hat{\beta} := (X^TX)^{-1}X^T\upsilon.
+\end{equation}
+der \textit{Betaparameterschätzer}. Dann gilt, dass 
+\begin{equation}
+\hat{\beta} = \argmin_{\tilde{\beta}} (\upsilon - X\tilde{\beta})^T(\upsilon - X\tilde{\beta})
+\end{equation}
+und dass $\hat{\beta}$ ein unverzerrter Maximum Likelihood Schätzer von $\beta \in \mathbb{R}^p$ ist.
+\end{theorem}
+
+
+# Allgemeine Theorie - Selbstkontrollfragen
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkgrey} Beispiel für $\hat{\beta}$ bei ALM mit $n=5$ und $p=2$
+\vspace{3mm}
+
+\footnotesize
+
+Wir betrachten das ALM
+
+\tiny
+\begin{align*}
+\upsilon \sim N(X\beta,\sigma^2I_5) \mbox{ mit } X \in \mathbb{R}^{5 \times 2}, \beta \in \mathbb{R}^2, \sigma^2>0.
+\end{align*}
+
+\vspace{-3mm}
+
+\begin{align*}
+\upsilon = X \beta + \varepsilon \Leftrightarrow \begin{pmatrix}\upsilon_1\\\upsilon_2\\\upsilon_3\\\upsilon_4\\\upsilon_5\end{pmatrix} 
+= \begin{pmatrix}x_{11}&x_{12}\\x_{21}&x_{22}\\x_{31}&x_{32}\\x_{41}&x_{42}\\x_{51}&x_{52}\end{pmatrix} 
+\begin{pmatrix}\beta_1 \\ \beta_2 \end{pmatrix} + \begin{pmatrix}\varepsilon_1 \\ \varepsilon_2 \\ \varepsilon_3 \\ \varepsilon_4 \\ \varepsilon_5 \end{pmatrix}
+= \begin{pmatrix}x_{11} \beta_1 + x_{12} \beta_2 + \varepsilon_1 \\ x_{21} \beta_1 + x_{22} \beta_2 +\varepsilon_2 \\ x_{31} \beta_1 + x_{32} \beta_2 +\varepsilon_3 \\ x_{41} \beta_1 + x_{42} \beta_2 +\varepsilon_4 \\ x_{51} \beta_1 + x_{52} \beta_2 + \varepsilon_5 \end{pmatrix}
+\end{align*}
+
+\footnotesize
+\vspace{2mm}
+Dann sieht die Betaparameterschätzerformel ausgeschrieben wie folgt aus
+
+\tiny
+\begin{align*}
+\hat{\beta} := (X^TX)^{-1}X^T\upsilon 
+= &\left (\begin{pmatrix}x_{11}&x_{21}&x_{31}&x_{41}& x_{51}\\x_{12}&x_{22}&x_{32}&x_{42}&x_{52}\end{pmatrix} 
+\begin{pmatrix}x_{11}&x_{12}\\x_{21}&x_{22}\\x_{31}&x_{32}\\x_{41}&x_{42}\\x_{51}&x_{52}\end{pmatrix} \right)^{-1} \\
+&\times \begin{pmatrix}x_{11}&x_{21}&x_{31}&x_{41}& x_{51}\\x_{12}&x_{22}&x_{32}&x_{42}&x_{52}\end{pmatrix}
+\begin{pmatrix}\upsilon_1\\\upsilon_2\\\upsilon_3\\\upsilon_4\\\upsilon_5\end{pmatrix} 
+\end{align*}
+
+
+
+
+
+
+# Allgemeine Theorie - Selbstkontrollfragen
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkgrey} Beispiel für $\hat{\beta}$ bei ALM mit $n=5$ und $p=2$ (fortgeführt)
+\vspace{3mm}
+
+\tiny
+\begin{align*}
+= & \begin{pmatrix}x_{11}^2+x_{21}^2+x_{31}^2+x_{41}^2+x_{51}^2 & 
+x_{11}x_{12}+x_{21}x_{22}+x_{31}x_{32}+x_{41}x_{42}+x_{51}x_{52} \\
+\\x_{12}x_{11}+x_{22}x_{21}+x_{32}x_{31}+x_{42}x_{41}+x_{52}x_{51} &
+x_{12}^2+x_{22}^2+x_{32}^2+x_{42}^2+x_{52}^2\end{pmatrix}^{-1} \\
+&\times \begin{pmatrix}x_{11}&x_{21}&x_{31}&x_{41}& x_{51}\\x_{12}&x_{22}&x_{32}&x_{42}&x_{52}\end{pmatrix}
+\begin{pmatrix}\upsilon_1\\\upsilon_2\\\upsilon_3\\\upsilon_4\\\upsilon_5\end{pmatrix} \\
+=& \hspace{2mm} \dots \\
+=& \hspace{2mm} \begin{pmatrix}\hat{\beta}_1\\\hat{\beta}_2\end{pmatrix} = \hat{\beta} \in \mathbb{R}^p
+\end{align*}
+
+\footnotesize
+\setstretch{1.5}
+
+Wenn wir uns die Dimensionen der einzelnen Terme anschauen, wird klar, dass das Ergebnis am Ende $2\times 1$-dimensional ist. Im Detail: 
+
+
+* \color{darkgrey}Für den ersten Term ($X^TX$) halten wir fest, dass die Inverse $A^{-1}$ einer Matrix $A \in \mathbb{R}^{n\times n}$ die gleiche Größe hat wie die Matrix, also $A^{-1} \in \mathbb{R}^{n\times n}$. Entsprechend hat das Ergebnis des ersten Terms $2$ Zeilen und $2$ Spalten, i.e. $(2\times2)$ 
+* Für den zweiten Term ($X^Ty$) gilt $(2\times5)(5\times1)=(2\times1)$.
+* Somit ergibt sich insgesamt für $\hat{\beta}$ die Dimension $(2\times2)(2\times1)=(2\times1)$.
+
+# Allgemeine Theorie - Selbstkontrollfragen 
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 2.Warum ist der Betaparameterschätzer ein Maximum-Likelihood Schätzer?
+\vspace{3mm}
+\color{black}
+
+\footnotesize
+Wir betrachten für ein festes $y \in \mathbb{R}^n$ und ein festes $\sigma^2 > 0$ die Log-Likelihood Funktion
+
+\begin{equation}
+\begin{aligned}
+\ln N(y;X\tilde{\beta},\sigma^2I_n) &= \ln \left( (2\pi)^{-\frac{n}{2}} |\sigma^2I_n|^{-\frac{1}{2}} \exp \left( -\frac{1}{2} (x-\mu)^T \Sigma^{-1}(x-\mu) \right) \right) \\
+&= -{\frac{n}{2}} \ln 2\pi - \frac{1}{2} \ln |\sigma^2I_n| - \frac{1}{2\sigma^2}(\upsilon-X\tilde{\beta})^T(\upsilon-X\tilde{\beta})
+\end{aligned}
+\end{equation}
+
+
+Ein Maximum-Likelihood Schätzer **maximiert** diese Funktion.
+
+Der einzige Term der betrachteten Log-Likelihoodfunktion, der von $\tilde{\beta}$ abhängt ist 
+\begin{equation}
+-\frac{1}{2\sigma^2}(\upsilon-X\tilde{\beta})^T(\upsilon-X\tilde{\beta}).
+\end{equation}
+Da aber gilt, dass die Summe der quadrierten Abweichungen $(\upsilon-X\tilde{\beta})^T(\upsilon-X\tilde{\beta}) \ge 0$ ist, wird der Term aufgrund des negativen Vorzeichens maximal, wenn die Summe der quadrierten Abweichungen minimal wird. Dies ist genau für $\tilde{\beta}=\hat{\beta}$ der Fall, wie im [\color{darkblue}{Beweis (1)}](https://www.ipsy.ovgu.de/ipsy_media/Methodenlehre+I/Sommersemester+2023/Allgemeines+Lineares+Modell/6_Parametersch%C3%A4tzung.pdf) gezeigt wurde (Folien 11 & 12).
+
+Siehe auch [\color{darkblue}{Lösung SKF Regression}](https://www.ipsy.ovgu.de/ipsy_media/Methodenlehre+I/Sommersemester+2023/Allgemeines+Lineares+Modell/%281%29+Regression+%28T%29.pdf), SKF 14 Teil 1 (Folie 18).
+
+# Allgemeine Theorie - Selbstkontrollfragen 
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 3.Geben Sie das Theorem zum Varianzparameterschätzer wieder.
+\vspace{3mm}
+\color{black}
+\footnotesize
+
+\begin{theorem}[Varianzparameterschätzer]
+\justifying
+\normalfont
+Es sei 
+\begin{equation}
+\upsilon = X\beta + \varepsilon \mbox{ mit } \varepsilon \sim N(0_n,\sigma^2I_n)
+\end{equation}
+das ALM in generativer Form. Dann ist
+\begin{equation}
+\hat{\sigma}^2 := \frac{(\upsilon - X\hat{\beta})^T(\upsilon - X\hat{\beta})}{n - p}
+\end{equation}
+ein unverzerrter Schätzer von $\sigma^2 > 0$.
+\end{theorem}
+
+# Allgemeine Theorie - Selbstkontrollfragen 
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 4.Geben Sie die Parameterschätzer bei $n$ unabhängigen und identisch normalverteilten Zufallsvariablen wieder.
+
+\vspace{3mm}
+\color{black}
+\footnotesize
+Wir betrachten das Szenario von $n$ unabhängig und identisch normalverteilten Zufallsvariablen mit Erwartungswertparameter $\mu \in \mathbb{R}$ und Varianzparameter $\sigma^2$. \color{darkgrey} D.h., für jede Komponente des Datenvektors gilt $\upsilon_i \sim N(\mu,\sigma^2) \mbox{ für } i = 1,...,n$. Äquivalent dazu können wir das generative Modell schreiben als
+
+\vspace{-3mm}
+\tiny
+\begin{align*}
+\upsilon_i = \mu + \varepsilon_i, \varepsilon_i \sim N(0,\sigma^2) \mbox{ für } i = 1,...,n, \text{ mit unabhängigen }\varepsilon_i
+\end{align*}
+
+\vspace{-3mm}
+\footnotesize
+In Matrixschreibweise: 
+
+\vspace{-3mm}
+\tiny
+\begin{align*}
+\upsilon \sim N(X\beta,\sigma^2I_n) \mbox{ mit } X := 1_n \in \mathbb{R}^{n \times 1}, \beta := \mu \in \mathbb{R}^1, \sigma^2>0.
+\end{align*}
+
+\vspace{-3mm}
+
+\begin{align*}
+\upsilon = X \beta + \varepsilon = X \mu + \varepsilon
+\Leftrightarrow \begin{pmatrix}\upsilon_1\\ \vdots \\\upsilon_n\end{pmatrix} 
+= \begin{pmatrix}1\\\vdots\\1\end{pmatrix}
+\beta + \begin{pmatrix}\varepsilon_1 \\ \vdots \\ \varepsilon_n \end{pmatrix}
+= \begin{pmatrix}1\\ \vdots \\1\end{pmatrix}
+\mu + \begin{pmatrix}\varepsilon_1 \\ \vdots \\ \varepsilon_n \end{pmatrix}
+= \begin{pmatrix}\mu+\varepsilon_1\\ \vdots \\ \mu+\varepsilon_n\end{pmatrix} 
+\end{align*}
+
+\footnotesize
+\color{black}
+Dann gilt für die Beta- und Varianzparameterschätzer
+
+\begin{align*}
+\hat{\beta} = \frac{1}{n}\sum_{i=1}^n \upsilon_i =: \bar{\upsilon}
+\mbox{ und }
+\hat{\sigma}^2 = \frac{1}{n-1}\sum_{i=1}^n (\upsilon_i - \bar{\upsilon})^2 =: s^2_{\upsilon}.
+\end{align*}
+
+In diesem Szenario ist der Betaparameterschätzer mit dem Stichprobenmittel $\bar{\upsilon}$ der $\upsilon_1,...,\upsilon_n$ und der Varianzparameterschätzer mit der Stichprobenvarianz $s^2_{\upsilon}$ der $\upsilon_1,...,\upsilon_n$ identisch.
+
+# Allgemeine Theorie - Selbstkontrollfragen
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 4.Geben Sie die Parameterschätzer bei $n$ unabhängigen und identisch normalverteilten Zufallsvariablen wieder.
+
+\vspace{6mm}
+
+\footnotesize
+\setstretch{1.5}
+\color{darkgrey}
+Anmerkungen: 
+
+*  \color{darkgrey} $\hat{\beta} := (X^T X)^{-1}X^T \upsilon$ ist wie wir im Theorem (Betaparameterschätzer) gelernt haben, ein erwartungstreuer Schätzer für $\beta \in \mathbb{R}^p$ des ALM. 
+* Weiterhin haben wir gelernt, dass im Szenario von $n$ u.i.(normal-)v. Zufallsvariablen gilt, dass $X:=1_n \in \mathbb{R}^n$, und somit $\hat{\beta} =: \bar{\upsilon}$ 
+* Entsprechend ist $\bar{\upsilon}$ ein erwartungstreuer Schätzer für $\beta$ im ALM Szenario von $n$ unabh. u.i.(normal-)v. Zufallsvariablen.
+* Analog ist $s^2_{\upsilon}$ ein erwartungstreuer Schätzer für  $\sigma^2$ im ALM Szenario von $n$ u.i.(normal-)v. Zufallsvariablen.  
+
+
+# Allgemeine Theorie - Selbstkontrollfragen 
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 5.Geben Sie die Parameterschätzer bei einfacher linearer Regression wieder.
+
+\vspace{3mm}
+\color{black}
+\footnotesize
+Wir betrachten das Modell der einfachen linearen Regression 
+\tiny
+\begin{align*}
+\upsilon_i = \beta_0 + \beta_1x_i + \varepsilon_i, \varepsilon_i \sim N(0,\sigma^2) \mbox{ für } i = 1,...,n.
+\end{align*}
+
+\color{darkgrey}
+\footnotesize
+In Matrixschreibweise
+\tiny
+\begin{align*}
+\upsilon \sim N(X\beta,\sigma^2I_n) \mbox{ mit } X \in \mathbb{R}^{n \times 2}, \beta \in \mathbb{R}^2, \sigma^2>0.
+\end{align*}
+\vspace{-3mm}
+
+
+
+\vspace{-3mm}
+\begin{align*}
+\upsilon = X \beta + \varepsilon \Leftrightarrow
+\begin{pmatrix}\upsilon_1\\\vdots\\\upsilon_n\end{pmatrix} 
+= \begin{pmatrix}1&x_{1}\\\vdots&\vdots\\1&x_{n}\end{pmatrix} 
+\begin{pmatrix}\beta_0 \\ \beta_1 \end{pmatrix} + \begin{pmatrix}\varepsilon_1 \\ \vdots \\ \varepsilon_n \end{pmatrix} 
+= \begin{pmatrix}\beta_0+x_{1}\beta_1+\varepsilon_1\\\vdots\\\beta_0+x_{n}\beta_1+\varepsilon_n\end{pmatrix} 
+\end{align*}
+
+\color{black}
+\footnotesize
+Dann gilt für die Beta- und Varianzparameterschätzer
+\tiny
+
+\begin{align*}
+\hat{\beta}
+= \begin{pmatrix} \hat{\beta}_0 \\ \hat{\beta}_1 \end{pmatrix}
+= \begin{pmatrix} \bar{\upsilon} - \frac{c_{x\upsilon}}{s_x^2}\bar{x} \\ \frac{c_{x\upsilon}}{s_x^2} \end{pmatrix}
+\mbox{ und }
+\hat{\sigma}^2 = \frac{1}{n-2}\sum_{i=1}^n (\upsilon_i - (\hat{\beta}_0 + \hat{\beta}_1x_i))^2,
+\end{align*}
+
+wobei $\bar{x}$ und $\bar{\upsilon}$ die Stichprobenmittel der $x_1,...,x_n$ und $\upsilon_1,...,\upsilon_n$, respektive, bezeichnen, $c_{x\upsilon}$ die Stichprobenkovarianz der $x_1, ...,x_n$ und $\upsilon_1,...,\upsilon_n$ bezeichnet, und $s_x^2$ die Stichprobenvarianz der $x_1,...,x_n$ bezeichnet.
+
+
+# Allgemeine Theorie - Selbstkontrollfragen 
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 6.Geben Sie das Theorem zur Verteilung des Betaparameterschätzers wieder.
+\vspace{3mm}
+\color{black}
+\footnotesize
+\setstretch{1.5}
+\begin{theorem}[Frequentistische Verteilung des Betaparameterschätzers]
+Es sei
+\begin{equation}
+\upsilon = X\beta + \varepsilon \mbox{ mit } \varepsilon \sim N(0_n,\sigma^2I_n)
+\end{equation}
+das ALM. Weiterhin sei
+\begin{equation}
+\hat{\beta} := (X^TX)^{-1}X^T\upsilon
+\end{equation}
+der Betaparameterschätzer. Dann gilt
+\begin{equation}
+\hat{\beta} \sim N(\beta,\sigma^2(X^TX)^{-1}).
+\end{equation}
+\end{theorem}
+
+# Allgemeine Theorie - Selbstkontrollfragen 
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 7.Geben Sie das Theorem zur Verteilung des Varianzparameterschätzers wieder.
+\vspace{3mm}
+\color{black}
+\footnotesize
+\setstretch{1.5}
+\begin{theorem}[Frequentistische Verteilung des Varianzparameterschätzers]
+Es sei
+\begin{equation}
+\upsilon = X\beta + \varepsilon \mbox{ mit } \varepsilon \sim N(0_n,\sigma^2I_n)
+\end{equation}
+das ALM. Weiterhin sei
+\begin{equation}
+\hat{\sigma}^2 = \frac{(\upsilon-X\hat{\beta})^T(\upsilon-X\hat{\beta})}{n-p}
+\end{equation}
+der Varianzparameterschätzer. Dann gilt
+\begin{equation}
+\frac{n-p}{\sigma^2}\hat{\sigma}^2 \sim \chi^2(n-p)
+\end{equation}
+\end{theorem}
