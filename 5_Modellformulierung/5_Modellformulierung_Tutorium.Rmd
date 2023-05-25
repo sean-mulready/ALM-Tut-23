@@ -217,7 +217,7 @@ Beispiel 2: p = 2 (Wir haben zwei Betaparameter $\beta_1$ und $\beta_2$)
 
 * Wir nennen $X\beta \in \mathbb{R}^n$ den \textit{deterministichen Modellaspekt} und $\varepsilon$ den \textit{probabilistischen Modellaspekt}.
 * *deterministisch* heißt hier, die Komponenten beinhalten keine Zufälligkeit, sondern sind vorgegeben bzw. im Rahmen der Modellformulierung festgelegt.
-* *probabilistisch* heißt hier, die Komponenten beinhalten Zufälligkeit. Realisierungen dieser Komponente können aus einer Normalverteilung gezogen werden. Der probabilistische Aspekt modelliert bei Normalverteilungen alle Einflussfaktoren auf $y$, die nicht durch den deterministischen Askept abgedeckt werden.
+* *probabilistisch* heißt hier, die Komponenten beinhalten Zufälligkeit. Realisierungen dieser Komponente können aus einer Normalverteilung gezogen werden. Der probabilistische Aspekt modelliert bei Normalverteilungen alle Einflussfaktoren auf $\upsilon$, die nicht durch den deterministischen Aspekt abgedeckt werden.
 * \color{black} da $\upsilon$ das Ergebnis der Addition deterministischer und probabilistischer Aspekte ist, ist es auch probabilistisch (i.e. zufällig).
 
 
@@ -271,7 +271,7 @@ Der Zufallsfehler modelliert also alle nicht durch den deterministischen Aspekt 
 Formal gilt $\varepsilon\sim N(0_n,\sigma^2I_n)$, wobei der Erwartungswertparameter $0_n$ bedeutet, dass alle Komponenten $\varepsilon_1,...,\varepsilon_n$ den Erwartungswert $0$ haben, und der sphärische Kovarianzmatrixparameter $0_n,\sigma^2 I_n$, bedeutet, dass alle Komponenten die Varianz $\sigma^2$ haben und alle Kovarianzen gleich $0$ sind.
 
 * $\Rightarrow$ identisch verteilte Komponenten, weil alle Komponenten den Erwartungswert $0$ und den Varianzparameter $\sigma^2$ haben. 
-* $\Rightarrow$ unabhängige Komponenten, weil alle nicht-digonal-Elemente, also alle Kovarianzen zwischen Komponenten gleich $0$
+* $\Rightarrow$ unabhängige Komponenten, weil alle nicht-diagonal-Elemente, also alle Kovarianzen zwischen Komponenten gleich $0$
 
 # Allgemeine Theorie
 \vspace{3mm}
@@ -292,7 +292,7 @@ Es sei
 \end{equation}
 das ALM. Dann gilt
 \begin{equation}
-\upsilon \sim N(X\beta,\sigma^2I_n) \mbox{ mit } \mu := X\beta \in \mathbb{R}^n.
+\upsilon \sim N(\mu,\sigma^2I_n) \mbox{ mit } \mu := X\beta \in \mathbb{R}^n.
 \end{equation}
 \end{theorem}
 
@@ -313,7 +313,7 @@ $\upsilon \sim N(X\beta,\sigma^2I_n)$ mit $\upsilon_i \sim N(\mu_i,\sigma^2)$ f�
 \setstretch{1.2}
 
 * Der Kovarianzmatrixparameter ist gegeben gegeben durch $\sigma^2I_n \in \mathbb{R}^{n\times n}$ $\Rightarrow$ sphärische Kovarianzmatrix $\Rightarrow$ **unabhängige** Komponenten $\upsilon_1,...,\upsilon_n$
-* Der Erwartungswertparameter ist gegeben durch $X\beta \in \mathbb{R}^n$ $\Rightarrow$ Vektor mit $n$ Einträgen, die in Abhängigkeit von der Designmatrix $X$ für jede Komponente $\upsilon_i$ einen anderen Erwartungswert $\mu_i$ annehmen kann. $\Rightarrow$ **nicht** **identisch** verteilte Komponenten $y_i$.
+* Der Erwartungswertparameter ist gegeben durch $X\beta \in \mathbb{R}^n$ $\Rightarrow$ Vektor mit $n$ Einträgen, die in Abhängigkeit von der Designmatrix $X$ für jede Komponente $\upsilon_i$ einen anderen Erwartungswert $\mu_i$ annehmen kann. $\Rightarrow$ **nicht** **identisch** verteilte Komponenten $\upsilon_i$.
 
 # Unabhängige und identisch normalverteilte ZV - Selbstkontrollfragen
 \vspace{3mm}

@@ -159,7 +159,7 @@ Wenn wir uns die Dimensionen der einzelnen Terme anschauen, wird klar, dass das 
 
 
 * \color{darkgrey}Für den ersten Term ($X^TX$) halten wir fest, dass die Inverse $A^{-1}$ einer Matrix $A \in \mathbb{R}^{n\times n}$ die gleiche Größe hat wie die Matrix, also $A^{-1} \in \mathbb{R}^{n\times n}$. Entsprechend hat das Ergebnis des ersten Terms $2$ Zeilen und $2$ Spalten, i.e. $(2\times2)$ 
-* Für den zweiten Term ($X^Ty$) gilt $(2\times5)(5\times1)=(2\times1)$.
+* Für den zweiten Term ($X^T\upsilon$) gilt $(2\times5)(5\times1)=(2\times1)$.
 * Somit ergibt sich insgesamt für $\hat{\beta}$ die Dimension $(2\times2)(2\times1)=(2\times1)$.
 
 # Allgemeine Theorie - Selbstkontrollfragen 
@@ -175,7 +175,7 @@ Wir betrachten für ein festes $y \in \mathbb{R}^n$ und ein festes $\sigma^2 > 0
 
 \begin{equation}
 \begin{aligned}
-\ln N(y;X\tilde{\beta},\sigma^2I_n) &= \ln \left( (2\pi)^{-\frac{n}{2}} |\sigma^2I_n|^{-\frac{1}{2}} \exp \left( -\frac{1}{2} (x-\mu)^T \Sigma^{-1}(x-\mu) \right) \right) \\
+\ln N(y;X\tilde{\beta},\sigma^2I_n) &= \ln \left( (2\pi)^{-\frac{n}{2}} |\sigma^2I_n|^{-\frac{1}{2}} \exp \left( -\frac{1}{2} (\upsilon-X\tilde{\beta})^T \Sigma^{-1}(\upsilon-X\tilde{\beta}) \right) \right) \\
 &= -{\frac{n}{2}} \ln 2\pi - \frac{1}{2} \ln |\sigma^2I_n| - \frac{1}{2\sigma^2}(\upsilon-X\tilde{\beta})^T(\upsilon-X\tilde{\beta})
 \end{aligned}
 \end{equation}
