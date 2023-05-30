@@ -1,0 +1,484 @@
+---
+fontsize: 8pt
+bibliography: ../Referenzen.bib
+citation_package: natbib
+output:
+  beamer_presentation:
+    keep_tex: true
+    includes:
+      in_header: ../Header.tex
+classoption: t
+---
+
+
+```{r, include = FALSE}
+source("../R_common.R")
+abb_dir = file.path(dirname(getwd()), "Abbildungen")
+data_dir = file.path(dirname(getwd()), "Daten")
+```
+
+# {.plain}
+\center
+```{r, echo = FALSE, out.width="20%"}
+knitr::include_graphics(file.path(abb_dir,"wtfi_otto.png"))
+```
+
+\vspace{2mm}
+
+\huge
+Tutorium
+
+\Large
+Allgemeines Lineares Modell
+\vspace{2mm}
+
+\normalsize
+BSc Psychologie SoSe 2023
+
+\vspace{2mm}
+\text{9. Termin: (7) T-Statistiken}    
+
+\vspace{15mm}
+\normalsize
+Sean Mulready
+
+\vspace{2mm}
+\scriptsize
+Inhalte basieren auf Kursmaterialien für [\textcolor{darkblue}{ALM}](https://www.ipsy.ovgu.de/Institut/Abteilungen+des+Institutes/Methodenlehre+I+_+Experimentelle+und+Neurowissenschaftliche+Psychologie/Lehre/Sommersemester+2023/Allgemeines+Lineares+Modell.html) von [Dirk Ostwald](https://www.ipsy.ovgu.de/Institut/Abteilungen+des+Institutes/Methodenlehre+I+_+Experimentelle+und+Neurowissenschaftliche+Psychologie/Team/Dirk+Ostwald.html), lizenziert unter [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/deed.de)
+
+
+
+# Wiederholung - Frequentistisches Weltbild
+
+\vspace{2mm}
+```{r, echo = FALSE, out.width = "70%"}
+knitr::include_graphics(file.path(abb_dir,"alm_5_frequentistische_inferenz.pdf"))
+```
+
+\vspace{-2mm}
+\footnotesize
+
+* Wir nehmen an, dass wahre, aber unbekannte Parameter existieren.
+* Wir nehmen weiterhin an, dass probabilistische Prozesse existieren, die, gegeben dieser wahren, aber unbekannten Parameter, Datensätze generieren können. 
+* Für diese probabilistischen Prozesse gehen wir davon aus, dass ihnen bestimmte Verteilungen bzw. Wahrscheinlichkeitsdichten zugrundeliegen (z.B. Normalverteilung der Zufallsfehler)
+* Wir verwenden erhobene Daten dafür, Parameterwerte zu schätzen (Wir berechnen eine "Einschätzung", was der wahre Wert sein könnte, den wir nicht beobachten können). 
+* Dabei bilden die angenommenen Verteilungen bzw. Warhscheinlichkeitsdichten der probabilistischen Prozesse (die, wie wir annehmen, die Daten generiert haben), die Grundlage für Parameterschätzung und Modellevaluation.  
+
+
+
+# Wiederholung - Standardannahmen frequentistischer Inferenz
+\vspace{1mm}
+\footnotesize
+\setstretch{1.2}
+
+* Gegeben sei ein statistisches Modell $\mathbb{P}_\theta$ (wir betrachten das ALM), in dem probabilistische Prozesse definiert sind, die Datensätze generieren können. 
+* Es wird angenommen, dass ein vorliegender Datensatz eine der möglichen Realisierungen der Daten des Modells ist. Eine mögliche Realisierung wäre $y^{(1)}$,  $y^{(2)}$ wäre eine andere, $y^{(3)}$ wäre nochmals eine andere.
+* Aus frequentistischer Sicht kann man unendlich oft Datensätze basierend auf einem Modell generieren und zu jedem Datensatz Schätzer oder Statistiken auswerten, z.B. den Betaparameterschätzer (z.B. $\hat{\beta}^{(1)}$ für Datensatz $y^{(1)}$) 
+
+\scriptsize
+\begin{itemize}
+\item[] Datensatz (1) : $y^{(1)} = \left(y_1^{(1)}, y_2^{(1)}, ...,y_n^{(1)}\right)^T$  mit $\hat{\beta}^{(1)} = (X^TX)^{-1}X^Ty^{(1)}$
+\item[] Datensatz (2) : $y^{(2)} = \left(y_1^{(2)}, y_2^{(2)}, ...,y_n^{(2)}\right)^T$  mit $\hat{\beta}^{(2)} = (X^TX)^{-1}X^Ty^{(2)}$
+\item[] Datensatz (3) : $y^{(3)} = \left(y_1^{(3)}, y_2^{(3)}, ...,y_n^{(3)}\right)^T$  mit $\hat{\beta}^{(3)} = (X^TX)^{-1}X^Ty^{(3)}$
+\item[] Datensatz (4) : $y^{(4)} = \left(y_1^{(4)}, y_2^{(4)}, ...,y_n^{(4)}\right)^T$  mit $\hat{\beta}^{(4)} = (X^TX)^{-1}X^Ty^{(4)}$
+\item[] Datensatz (5) : $y^{(5)} = ...$
+\end{itemize}
+
+\footnotesize
+\setstretch{1.2}
+* Um die Qualität statistischer Methoden zu beurteilen betrachtet die frequentistische Statistik die Wahrscheinlichkeitsverteilungen von Schätzern und Statistiken unter Annahme der Datenverteilung 
+* Was ist zum Beispiel die Verteilung (möglicher) Betaparameterschätzer ($\hat{\beta}^{(1)}$, $\hat{\beta}^{(2)}$, $\hat{\beta}^{(3)}$, $\hat{\beta}^{(4)}$), ... also die Verteilung der Zufallsvariable $\hat{\beta} := (X^TX)^{-1}X^T\upsilon$? 
+* eine statistische Methode ist im Sinne der frequentistischen Standardannahmen "gut" , wenn sie bei häufiger Anwendung "im Mittel gut" ist.
+* Im Einzefall (nur ein Datensatz) kann sie auch "schlecht" sein
+
+
+
+# Selbstkontrollfragen
+\vspace{3mm}
+\setstretch{1.5}
+\footnotesize
+\begin{enumerate}
+\item Skizzieren Sie die WDFen von T-Zufallsvariablen mit 2,10 und 30 Freiheitsgraden.
+\item Skizzieren Sie die WDFen von nichtzentralen T-Zufallsvariablen mit Nichtzentralitätsparameter 0,5 und 15.
+\item Geben Sie die Definition der T-Statistik wieder.
+\item Erläutern Sie für die T-Statistik die Bedeutung der Wahl von $c \in \mathbb{R}^p$.
+\item Erläutern Sie für die T-Statistik die Bedeutung der Wahl von $\beta_0 \in \mathbb{R}^p$.
+\item Wann und warum kann die T-Statistik als Signal-zu-Rauschen-Verhältnis interpretiert werden?
+\item Geben Sie das Theorem zur T-Statistik wieder.
+\item Geben Sie die Form der T-Statistik im Szenario von $n$ u.i.n.v. Zufallsvariablen wieder.
+\item Erläutern Sie den Zusammenhang der T-Statistik und Cohen's $d$.
+\item Geben Sie das Theorem zu Konfidenzintervallen für Betaparameterkomponenten wieder.
+
+\end{enumerate}
+
+
+# T-Zufallsvariablen - Selbstkontrollfragen
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 1.Skizzieren Sie die WDFen von T-Zufallsvariablen mit 2,10 und 30 Freiheitsgraden.
+
+
+
+\color{black}
+\footnotesize
+
+```{r, echo = F, eval = F}
+library(latex2exp)
+dev.new()                                                                        # new figure
+fig     = par(                                                                   # figure parameters
+            family     = "sans",                                                 # font family
+            pty        = "m",                                                    # square plots
+            bty        = "l",                                                    # plot box, o, l, 7, c, or ]
+            lwd        = 1,                                                      # line width
+            las        = 1,                                                      # 0: axis parallel, 1: horizontal, 2: axis perpendicular, 3: vertical
+            mgp        = c(2,1,0),                                               # margin line in mex unit
+            xaxs       = "i",                                                    # "internal" (tight) x-axis style
+            yaxs       = "i",                                                    # "internal" (tight) y-axis style
+            font.main  = 1,                                                      # title font type
+            cex        = 1.1,
+            cex.main   = 1.5                                                     # title  magnification factor
+)
+
+# t space
+t_min   = -5                                                                     # minimum t-value
+t_max   = 5                                                                      # maximum t-value
+t_res   = 1e3                                                                    # t-space resolution
+t       = seq(t_min,t_max, len = t_res)                                          # t-space
+
+# parameters of interest
+n       = c(2,10,30)                                                        # degrees of freedom
+
+
+# plotting
+matplot(t,
+        matrix(c(dt(t,n[1]),
+                 dt(t,n[2]),
+                 dt(t,n[3])),
+               ncol = 3),
+        type         = "l",                                                      # line plot
+        lty          = 1,                                                        # solid line
+        lwd          = 2,                                                        # line width
+        col          = c("gray10", "gray70", "gray90"),       # line colors
+        ylim         = c(0,.4),                                                  # y-axis limits
+        xlim         = c(t_min,t_max),                                           # x-axis limits
+        ylab         = " ",                                                      # y-axis label
+        xlab         = "t",                                                      # x-axis label
+        main         = TeX("$\\t(\\cdot;n)$"))                                        # main title
+
+legend( 2,                                                                       # x-ordinate
+        .4,                                                                      # y-ordinate
+        c("n = 2", "n = 10", "n = 30"),                        # legend text
+        lty         = 1,                                                         # line type
+        lwd         = 2,                                                         # line width
+        col         =   c("gray10", "gray70", "gray90"),     # line colors
+        bty         = "n",                                                       # no legend box
+        cex         = 1.1,                                                       # character expansion (fontsize)
+        y.intersp   = 1.6)                                                       # y-direction character spacing
+
+
+dev.copy2pdf(                                                                    # export to PDF
+    file   = file.path(abb_dir, "alm_7_t_SKF1_wdf.pdf"),            # filename
+    width  = 6,                                                                  # PDF width
+    height = 5                                                                   # PDF height
+)
+```
+
+\vfill
+\vspace{2mm}
+```{r, echo = FALSE, out.width="60%"}
+knitr::include_graphics(file.path(abb_dir,"alm_7_t_SKF1_wdf.pdf"))
+```
+\vspace{-3mm}
+\footnotesize
+\color{darkgrey}
+Anmerkungen:
+
+* \color{darkgrey}Die Verteilung ist um 0 symmetrisch
+* Steigendes $n$ verschiebt Wahrscheinlichkeitsmasse aus den Ausläufen zum Zentrum
+
+
+# T-Zufallsvariablen - Selbstkontrollfragen
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 2.Skizzieren Sie die WDFen von nichtzentralen T-Zufallsvariablen mit Nichtzentralitätsparameter 0,5 und 15.
+
+\color{black}
+\footnotesize
+
+```{r, echo = F, eval = F}
+options(warn=-1)                                                                 # warning off
+t_min     = -5                                                                   # Minimum T-Wert
+t_max     = 30                                                                   # Maximum T-Wert
+t_res     = 1e3                                                                  # T-Wert Auflösung
+t         = seq(t_min, t_max, len = t_res)                                       # T-Raum
+delta     = c(0,5,15)                                                            # Nichtzentralitätsparameter
+n         = 30                                                            # Freiheitsgrade
+p         = cbind(
+            matrix(dt(t, n, delta[1]),nrow=length(t)),
+            matrix(dt(t, n, delta[2]),nrow=length(t)),
+            matrix(dt(t, n, delta[3]),nrow=length(t)))
+
+# Visualisierung
+dev.new()
+graphics.off()
+par(
+family      = "sans",
+pty         = "m",
+bty         = "l",
+lwd         = 1,
+las         = 1,
+mgp         = c(2,1,0),
+xaxs        = "i",
+yaxs        = "i",
+font.main   = 1,
+cex         = 1,
+cex.main    = 1.2)
+matplot(
+t,
+p,
+type        = "l",
+lty         = 1,
+col         = c("gray10", "gray50", "gray70"),
+lwd         = 2,
+xlab        = "T",
+ylab        = "",
+ylim        = c(0,.4),
+main        = TeX("$t(\\cdot;\\delta,n)$"))
+legend(
+18,
+.4,
+c(TeX("$\\delta = 0 , n = 30$"),
+  TeX("$\\delta = 5 , n = 30$"),
+  TeX("$\\delta = 15, n = 30$")),
+lty         = 1,
+col         = c("gray10", "gray50", "gray70"),
+lwd         = 2,
+bty         = "n",
+seg.len     = 1.75)
+
+dev.copy2pdf(
+file        = file.path(abb_dir, "alm_7_nichtzentrale_t_verteilung_SKF_2.pdf"),
+width       = 7,
+height      = 4.5)
+```
+
+```{r, echo = FALSE, out.width = "80%"}
+knitr::include_graphics(file.path(abb_dir,"alm_7_nichtzentrale_t_verteilung_SKF_2.pdf"))
+```
+
+# T-Statistiken - Selbstkontrollfragen
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 3.Geben Sie die Definition der T-Statistik wieder.
+
+\vspace{3mm}
+\color{black}
+
+\footnotesize
+\begin{definition}[T-Statistik]
+Es sei
+\begin{equation}
+\upsilon = X\beta + \varepsilon \mbox{ mit } \varepsilon \sim N(0_n,\sigma^2I_n)
+\end{equation}
+das ALM. Weiterhin seien
+\begin{equation}
+\hat{\beta} := (X^TX)^{-1}X^T\upsilon \mbox{ und } \hat{\sigma}^2 := \frac{(\upsilon - X\hat{\beta})^T(\upsilon - X\hat{\beta})}{n-p}
+\end{equation}
+die Betaparameter- und Varianzparameterschätzer, respektive. Dann ist für einen
+\textit{Kontrastgewichtsvektor} $c \in \mathbb{R}^p$ und einen Parameter $\beta_0 \in \mathbb{R}^p$ die \textit{T-Statistik} definiert als
+\begin{equation}
+T := \frac{c^T\hat{\beta}-c^T\beta_0}{\sqrt{\hat{\sigma}^2c^T(X^TX)^{-1}c}}.
+\end{equation}
+\end{definition}
+
+
+# T-Statistiken - Selbstkontrollfragen
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 4.Erläutern Sie für die T-Statistik die Bedeutung der Wahl von $c \in \mathbb{R}^p$.
+\vspace{3mm}
+\color{black}
+\footnotesize
+\begin{itemize}
+\item der \textit{Kontrastgewichtsvektor} $c \in \mathbb{R}^p$ projiziert $\hat{\beta}$ auf einen Skalar $c^T \hat{\beta} \in \mathbb{R}$
+\item Die Wahl p-dimensionaler Einheitsvektoren für $c$ erlaubt die Auswahl einzelner Komponenten von $\hat{\beta}$ bzw $\beta_0$ \color{darkgrey} (Anmerkung: Einheitsvektoren $e_i$ sind Vektoren, die an der Stelle i eine 1 und sonst nur 0en haben)
+\color{black}
+\item Eine generelle Wahl von $c$ erlaubt die Evaluation beliebiger Linearkombinationen von $\hat{\beta}$ bzw $\beta_0$ 
+\end{itemize}
+\vspace{2mm}
+\color{darkgrey} Beispiel:
+Wir nehmen an, wir haben einen Betaparametervektor $\beta \in \mathbb{R}^p$ mit $p=3$, also $\begin{pmatrix} \beta_1 \\ \beta_2 \\ \beta_3 \end{pmatrix}$.
+
+Dann kann ich mit den p-dimensionalen Einheitsvektoren
+
+$e_1 = \begin{pmatrix}1\\0\\0 \end{pmatrix}, e_2 = \begin{pmatrix}0\\1\\0 \end{pmatrix}, e_3 = \begin{pmatrix}0\\0\\1 \end{pmatrix}$
+
+$\beta_1$ oder $\beta_2$ oder $\beta_3$, respektive, einzeln auswählen.
+
+Weitere Beispiele: 
+
+$c = \begin{pmatrix}1\\1\\1\end{pmatrix}$ gewichtet alle Betakomponenten gleich, $c=\begin{pmatrix}2\\1\\0\end{pmatrix}$ gewichtet $\beta_1$ doppelt, $\beta_2$ einfach und $\beta_3$ gar nicht. 
+
+# T-Statistiken - Selbstkontrollfragen
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 5.Erläutern Sie für die T-Statistik die Bedeutung der Wahl von $\beta_0 \in \mathbb{R}^p$.
+
+\vspace{3mm}
+\footnotesize
+\color{black}
+\begin{itemize}
+\item Wählt man $\beta_0$ := $0_p$, so erhält man eine Deskriptivstatistik, die es erlaubt, geschätzte Regressoreffekte (Komponenten/Linearkombinationen (abhängig von $c$) von $\hat{\beta}$) im Sinne eines Signal-zu-Rauschen Verhältnisses in Bezug zu der durch $\hat{\sigma}^2$ quantifizierten Residualdatenvariabilität zu setzen.
+\item Wählt man für $\beta_0 = \beta$, also den w.a.u. Betaparameterwerte, so können mit der T-Statistik Konfidenzintervalle für einzelene Komponenten des Betaparametervektors bestimmt werden.
+\item Sagt man, $\beta_0 \in \Theta_0$ im Kontext eines Testszenarios als das Element der Nullhypothese $\Theta_0$, so eröffnet die T-Statistik die hypothesentestbasierte Inferenz über Betaparameterkomponenten und ihrer Linearkombinationen des ALMs \color{darkgrey} (abhängig von $c$)
+\end{itemize}
+
+# T-Statistiken - Selbstkontrollfragen
+\vspace{3mm}
+\setstretch{1} 
+\large
+\color{darkblue} 6.Wann und warum kann die T-Statistik als Signal-zu-Rauschen-Verhältnis interpretiert werden?
+
+\vspace{3mm}
+\color{black}
+\footnotesize
+\begin{itemize}
+\item  Wenn $\beta_0 := 0_p$, dann ergibt sich die T-Statistik zu
+\begin{equation}
+T =  \frac{c^T\hat{\beta}}{\sqrt{\hat{\sigma}^2c^T(X^TX)^{-1}c}} = \frac{\mbox{Geschätzte Effektstärke}}{\mbox{Geschätzte stichprobenumfangskalierte Datenvariabilität}}
+\end{equation}
+\item Im Zähler steht der Betaparameterschätzer, im Nenner der Varianzparameterschätzer
+\item Im Nennen der T-Statistik wird vor allem sichergestellt, dass die adäquate (Co-)Standardabweichung (durch multiplikation mit $c$) als Bezugsgröße dient, da es sich bei $\hat{\sigma}^2(X^TX)^{-1}$ um die Kovarianz des Betaparameterschätzers handelt
+\item Der Effekt ist also das ("eigentliche") Signal, das laut dem formulierten Modell "übertragen" werden sollte und die Fehlervarianz ist das "Restrauschen"
+\item Damit bestimmt die T-Statistik für $\beta_0 = 0_p$ das Verhältnis von Signal zu Rauschen und somit auch Unsicherheit.
+\item eine weitere Sichtweise für diesen Fall ist die T-Statistik als in Varianzeinheiten ausgedrücke geschätzte Effektstärke
+\end{itemize}
+
+# T-Statistiken - Selbstkontrollfragen
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 7.Geben Sie das Theorem zur T-Statistik wieder.
+
+\vspace{3mm}
+\color{black}
+\footnotesize
+
+\begin{theorem}[T-Teststatistik]
+\normalfont
+\justifying
+Es sei
+\begin{equation}
+\upsilon = X\beta + \varepsilon \mbox{ mit } \varepsilon \sim N(0_n,\sigma^2I_n)
+\end{equation}
+das ALM. Weiterhin seien
+\begin{equation}
+\hat{\beta} := (X^TX)^{-1}X^T\upsilon \mbox{ und } \hat{\sigma}^2 := \frac{(\upsilon - X\hat{\beta})^T(\upsilon - X\hat{\beta})}{n-p}
+\end{equation}
+die Betaparameter- und Varianzparameterschätzer, respektive. Schließlich sei für
+einen Kontrastgewichtsvektor $c \in \mathbb{R}^p$ und
+einen Parameter $\beta_0 \in \mathbb{R}^p$
+\begin{equation}
+T := \frac{c^T\hat{\beta} - c^T\beta_0}{\sqrt{\hat{\sigma}^2 c^T(X^TX)^{-1}c}}.
+\end{equation}
+die T-Statistik. Dann gilt
+\begin{equation}
+T \sim t(\delta,n-p) \mbox{ mit } \delta:= \frac{c^T\beta-c^T\beta_0}{\sqrt{\hat{\sigma}^2c^T(X^TX)^{-1}c}}.
+\end{equation}
+\end{theorem}
+
+# T-Statistiken - Selbstkontrollfragen
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 8.Geben Sie die Form der T-Statistik im Szenario von $n$ u.i.n.v. Zufallsvariablen wieder.
+
+\vspace{3mm}
+\footnotesize
+\color{darkgrey} Wir haben das ALM Szenario unabhängiger und identisch normalverteilter Zufallsvariablen
+\begin{align*}
+\upsilon \sim N(X\beta,\sigma^2 I_n)
+\mbox{ mit }
+X := 1_n \in \mathbb{R}^{n\times 1},
+\beta := \mu \in \mathbb{R}
+\mbox{ und } \sigma^2 > 0.
+\end{align*}
+Weiterhin sei $c := 1$ und $\beta_0=\mu_0$. Dann gilt für die T-Statistik
+\color{black}
+\begin{align*}
+T
+= \frac{c^T\hat{\beta}-c^T\mu_0}{\sqrt{\hat{\sigma}^2c^T(X^TX)^{-1}c}}
+= \frac{1^T\bar{\upsilon}-1^T\mu_0}{\sqrt{s^2_{\upsilon} 1^T (1_n^T 1_n)^{-1}1}}
+= \sqrt{n}\frac{\bar{\upsilon}-\mu_0}{s_\upsilon}
+\end{align*}
+\color{darkgrey} was der Einstichproben-T-Teststatistik für den Fall $\mu_0 = 0$ entspricht (vgl. Einheit(12)
+Hypothesentests in WTFI und Einheit (9) T-Tests in ALM. )
+
+
+# T-Statistiken - Selbstkontrollfragen
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 9.Erläutern Sie den Zusammenhang der T-Statistik und Cohen's $d$.
+
+\vspace{3mm}
+\color{black}
+\footnotesize
+
+Die T-Statistik ist im ALM Szenario u.i.v. Zufallsvariablen gegeben durch
+\begin{equation}
+T = \sqrt{n}\frac{\bar{\upsilon}-\mu_0}{s_\upsilon}
+\end{equation}
+
+Die T-Statistik nimmt hohe Werte für hohe Werte $\upsilon$ (Effekt), kleine Werte von $s^2_{\upsilon}$ (Datenvariabilität) und hohe Werte von $n$ (Stichprobenumfang) an.
+
+Cohen's $d$ als \textit{Effekstärkenmaß} ist gegeben als
+\begin{equation}
+d := \frac{\bar{\upsilon}}{s_{\upsilon}},
+\end{equation}
+so dass für $\mu_0:=0$ gilt, dass
+\begin{equation}
+T = \sqrt{n}d \mbox{ bzw. } d = \frac{1}{\sqrt{n}}T.
+\end{equation}
+Cohen's $d$ ist also ein stichprobenumfang**unabhängiges** Signal-zu-Rauschen-Verhältnis.
+
+# Konfidenzintervalle - Selbstkontrollfragen
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 10.Geben Sie das Theorem zu Konfidenzintervallen für Betaparameterkomponenten wieder.
+
+\vspace{3mm}
+\footnotesize
+\color{black}
+\begin{theorem}[Konfidenzintervalle für Betaparameterkomponenten]
+Es sei
+\begin{equation}
+\upsilon = X\beta+\varepsilon \mbox{ mit } \varepsilon \sim N(0_n,\sigma^2I_n)
+\end{equation}
+das ALM, $\hat{\beta}$ und $\hat{\sigma}^2$ seien die Betaparameter- und Varianzparameterschätzer, respektive und für ein $\delta \in \left] 0, 1 \right[$ sei
+\begin{equation}
+t_{\delta} := \Psi^{-1} \left( \frac{1+\delta}{2};n-p \right).
+\end{equation}
+Schließlich seit für $j=1,...,p$
+\begin{equation}
+\lambda_j= \left( (X^TX)^{-1} \right)_{jj} \mbox{ das $j$te Diagonalelement von } (X^TX)^{-1}.
+\end{equation}
+Dann ist für $j=1,...,p$
+\begin{equation}
+\kappa_j:= \left[ \hat{\beta}_j - \hat{\sigma} \sqrt{\lambda_j}t_{\delta}, \hat{\beta}_j + \hat{\sigma}\sqrt{\lambda_j}t_{\delta} \right]
+\end{equation}
+ein $\delta$-Konfidenzintervall für die $j$te Komponente $\beta_j$ des Betaparameters $\beta = (\beta_1,...,\beta_p)^T$.
+\end{theorem}
+
+\vspace{2mm}
+\color{darkgrey}
+Anmerkung:
+
+* \color{darkgrey} $\Psi$ ist die kumulative Verteilungsfunktion der T-Zufallsvariable und damit $\Psi^{-1}$ ihre Inverse
+* vgl auch (11) Konfidenzintervalle in WTFI

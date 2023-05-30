@@ -359,6 +359,13 @@ der Betaparameterschätzer. Dann gilt
 \end{equation}
 \end{theorem}
 
+\vspace{2mm}
+\color{darkgrey}
+Anmerkung: aus diesem Theorem ergibt sich für n u.i.n.v. ZV die Verteilung von $\hat{\beta} = \bar{\upsilon}$ zu
+\begin{equation}
+\bar{\upsilon} \sim N(\mu, \frac{\sigma^2}{n}
+\end{equation}
+
 # Allgemeine Theorie - Selbstkontrollfragen 
 \vspace{3mm}
 \setstretch{1}
@@ -382,3 +389,10 @@ der Varianzparameterschätzer. Dann gilt
 \frac{n-p}{\sigma^2}\hat{\sigma}^2 \sim \chi^2(n-p)
 \end{equation}
 \end{theorem}
+
+\vspace{2mm}
+\color{darkgrey}
+Anmerkung: für n u.i.n.v. ZV ergibt sich die Verteilung des skalierten Varianzparameterschätzers durch einsetzen von p=1 zu:
+\begin{equation}
+\frac{n-1}{\sigma^2}\hat{\sigma}^2 \sim \chi^2(n-1)
+\end{equation}
