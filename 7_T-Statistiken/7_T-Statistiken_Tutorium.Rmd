@@ -388,7 +388,7 @@ T := \frac{c^T\hat{\beta} - c^T\beta_0}{\sqrt{\hat{\sigma}^2 c^T(X^TX)^{-1}c}}.
 \end{equation}
 die T-Statistik. Dann gilt
 \begin{equation}
-T \sim t(\delta,n-p) \mbox{ mit } \delta:= \frac{c^T\beta-c^T\beta_0}{\sqrt{\hat{\sigma}^2c^T(X^TX)^{-1}c}}.
+T \sim t(\delta,n-p) \mbox{ mit } \delta:= \frac{c^T\beta-c^T\beta_0}{\sqrt{\sigma^2c^T(X^TX)^{-1}c}}.
 \end{equation}
 \end{theorem}
 
