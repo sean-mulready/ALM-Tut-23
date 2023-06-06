@@ -1,0 +1,544 @@
+---
+fontsize: 8pt
+bibliography: ../Referenzen.bib
+citation_package: natbib
+output:
+  beamer_presentation:
+    keep_tex: true
+    includes:
+      in_header: ../Header.tex
+classoption: t
+---
+
+
+```{r, include = FALSE}
+source("../R_common.R")
+abb_dir = file.path(dirname(getwd()), "Abbildungen")
+data_dir = file.path(dirname(getwd()), "Daten")
+```
+
+# {.plain}
+\center
+```{r, echo = FALSE, out.width="20%"}
+knitr::include_graphics(file.path(abb_dir,"wtfi_otto.png"))
+```
+
+\vspace{2mm}
+
+\huge
+Tutorium
+
+\Large
+Allgemeines Lineares Modell
+\vspace{2mm}
+
+\normalsize
+BSc Psychologie SoSe 2023
+
+\vspace{2mm}
+\text{9. Termin: (8) F-Statistiken}    
+
+\vspace{15mm}
+\normalsize
+Sean Mulready
+
+\vspace{2mm}
+\scriptsize
+Inhalte basieren auf Kursmaterialien für [\textcolor{darkblue}{ALM}](https://www.ipsy.ovgu.de/Institut/Abteilungen+des+Institutes/Methodenlehre+I+_+Experimentelle+und+Neurowissenschaftliche+Psychologie/Lehre/Sommersemester+2023/Allgemeines+Lineares+Modell.html) von [Dirk Ostwald](https://www.ipsy.ovgu.de/Institut/Abteilungen+des+Institutes/Methodenlehre+I+_+Experimentelle+und+Neurowissenschaftliche+Psychologie/Team/Dirk+Ostwald.html), lizenziert unter [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/deed.de)
+
+
+
+# Wiederholung Naturwissenschaft
+
+\vspace{6mm}
+```{r, echo= FALSE, out.width="90%"}
+knitr::include_graphics(file.path(abb_dir,"alm_5_wissenschaft.pdf"))
+```
+# Wiederholung Naturwissenschaft
+
+\vspace{4mm}
+Modellformulierung
+\begin{equation}
+\upsilon = X\beta+\varepsilon,\varepsilon \sim N(0_n,\sigma^2I_n)
+\end{equation}
+
+\vspace{4mm}
+Modellschätzung
+\begin{equation}
+\hat{\beta}=(X^TX)^{-1}x^T\upsilon,\mbox{ }\hat{\sigma}^2=\frac{(\upsilon-X\hat{\beta})^T(\upsilon-X\hat{\beta})}{n-p}
+\end{equation}
+
+\vspace{4mm}
+Modellevaluation
+\begin{equation}
+T=\frac{c^T\hat{\beta}-c^T\beta_0}{\sqrt{\hat{\sigma}^2c^T(X^TX)^{-1}c}},\mbox{ }F=\frac{(\hat{\varepsilon}^T_0\hat{\varepsilon}_0-\hat{\varepsilon}^T\hat{\varepsilon})/p_1}{\hat{\varepsilon}^T\hat{\varepsilon}/(n-p)}
+\end{equation}
+
+# Wiederholung - Standardprobleme der frequentistischen Inferenz
+
+\vspace{3mm}
+\color{black}
+
+Standardprobleme Frequentistischer Inferenz
+\small
+
+\noindent (1) Parameterschätzung
+
+Ziel der Parameterschätzung ist es, einen möglichst guten Tipp für wahre,
+aber unbekannte, Parameterwerte oder Funktionen dieser abzugeben,
+typischerweise mithilfe von Daten.
+
+\vspace{2mm}
+
+
+\noindent (2) Konfidenzintervalle
+
+Ziel der Bestimmung von Konfidenzintervallen ist es, basierend auf der angenommenen
+Verteilung der Daten eine quantitative Aussage über die
+mit Schätzwerten assoziierte Unsicherheit zu treffen.
+
+\vspace{2mm}
+
+\noindent (3) Hypothesentests
+
+Das Ziel des Hypothesentestens ist es, basierend auf der angenommenen
+Verteilung der Daten in einer möglichst zuverlässigen Form zu entscheiden, ob ein
+wahrer, aber unbekannter Parameterwert in einer von zwei sich gegenseitig 
+ausschließenden Untermengen des Parameterraumes liegt.
+
+# Wiederholung Standardprobleme der frequentistischen Inferenz
+
+\vspace{1mm}
+
+```{r, echo=FALSE, out.width="100%"}
+knitr::include_graphics(file.path(abb_dir,"alm_5_frequentistische_inferenz.pdf"))
+```
+\vspace{-4mm}
+\footnotesize
+
+\begin{center}
+$\theta := (\beta,\sigma^2)$, $\Theta:= \mathbb{R}p \times \mathbb{R}_{>0}$ , $\mathbb{P}_{\beta,\sigma^2}(\upsilon)$ mit WDF $p_{\beta,\sigma^2}(y):= N(y;X\beta,\hat{\sigma}^2I_n)$
+\end{center}
+
+
+# Wiederholung Standardannahmen frequentistischer Inferenz
+\vspace{3mm}
+\footnotesize
+Gegeben sei das Allgemeine Lineare Modell. Es wird angenommen, dass ein vorliegender Datensatz eine der möglichen
+Realisierungen der Daten des Modells ist. Aus Frequentistischer Sicht kann man unendlich oft Datensätze basierend auf
+einem Modell generieren und zu jedem Datensatz Schätzer oder Statistiken auswerten, z.B. den Betaparameterschätzer
+
+\scriptsize
+\begin{itemize}
+\item[] Datensatz (1) : $y^{(1)} = \left(y_1^{(1)}, y_2^{(1)}, ...,y_n^{(1)}\right)^T$  mit $\hat{\beta}^{(1)} = (X^TX)^{-1}X^Ty^{(1)}$
+\item[] Datensatz (2) : $y^{(2)} = \left(y_1^{(2)}, y_2^{(2)}, ...,y_n^{(2)}\right)^T$  mit $\hat{\beta}^{(2)} = (X^TX)^{-1}X^Ty^{(2)}$
+\item[] Datensatz (3) : $y^{(3)} = \left(y_1^{(3)}, y_2^{(3)}, ...,y_n^{(3)}\right)^T$  mit $\hat{\beta}^{(3)} = (X^TX)^{-1}X^Ty^{(3)}$
+\item[] Datensatz (4) : $y^{(4)} = \left(y_1^{(4)}, y_2^{(4)}, ...,y_n^{(4)}\right)^T$  mit $\hat{\beta}^{(4)} = (X^TX)^{-1}X^Ty^{(4)}$
+\item[] Datensatz (5) : $y^{(5)} = ...$
+\end{itemize}
+\footnotesize
+Um die Qualität statistischer Methoden zu beurteilen betrachtet die Frequentistische Statistik die Wahrscheinlichkeitsverteilungen von Schätzern und Statistiken unter Annahme der Datenverteilung. Was zum Beispiel ist die Verteilung
+von $\hat{\beta}^{(1)}$, $\hat{\beta}^{(2)}$, $\hat{\beta}^{(3)}$, $\hat{\beta}^{(4)}$, . . . also die Verteilung der Zufallsvariable $\hat{\beta}:=(X^TX)^{-1}X^T\upsilon$? Wenn eine
+statistische Methode im Sinne der Frequentistischen Standardannahmen “gut” ist, dann heißt das also, dass sie bei
+häufiger Anwendung “im Mittel gut” ist. Im Einzelfall, also im Normalfall nur eines vorliegenden Datensatzes, kann
+sie auch “schlecht” sein.
+
+# Selbstkontrollfragen
+
+\vspace{3mm}
+\footnotesize
+\setstretch{1.6}
+
+1. Skizzieren Sie die f-Verteilung für $\nu_1 = 2, \nu_2 = 13$ und $\nu_1 = 4, \nu_2 = 13$.
+2. Geben Sie die Definition der Likelihood-Quotienten-Statistik wieder.
+3. Erläutern Sie die Definition der Likelihood-Quotienten-Statistik.
+4. Geben Sie die Definition eines vollständigem und eines reduziertem ALMs wieder.
+5. Geben Sie das Theorem zum Likelihood-Quotienten von vollständigem und reduzierten ALM wieder.
+6. Definieren Sie die F-Statistik.
+7. Erläutern Sie den Zähler der F-Statistik.
+8. Erläutern Sie den Nenner der F-Statistik.
+9. Erläutern Sie die F-Statistik.
+10. Geben Sie das Theorem F-Statistik und Likelihood-Quotienten-Statistik wieder.
+11. Geben Sie das Theorem zur Verteilung der F-Statistik wieder.
+
+# F-Zufallsvariablen - Selbstkontrollfragen
+
+\vspace{3mm}
+\large
+\color{darkblue} 1. Skizzieren Sie die f-Verteilung für $\nu_1 = 2, \nu_2 = 13$ und $\nu_1 = 4, \nu_2 = 13$.
+
+\color{black}
+\footnotesize
+
+```{r, echo = F, eval = F}
+library(latex2exp)
+dev.new()                                                                        # new figure
+fig     = par(                                                                   # figure parameters
+            family     = "sans",                                                 # font family
+            pty        = "m",                                                    # square plots
+            bty        = "l",                                                    # plot box, o, l, 7, c, or ]
+            lwd        = 1,                                                      # line width
+            las        = 1,                                                      # 0: axis parallel, 1: horizontal, 2: axis perpendicular, 3: vertical
+            mgp        = c(2,1,0),                                               # margin line in mex unit
+            xaxs       = "i",                                                    # "internal" (tight) x-axis style
+            yaxs       = "i",                                                    # "internal" (tight) y-axis style
+            font.main  = 1,                                                      # title font type
+            cex        = 1.1,
+            cex.main   = 1.5                                                     # title  magnification factor
+)
+
+library(MASS)
+library(latex2exp)
+
+
+#paramteres of interest
+
+v_1 = c(2,4)
+v_2 = 13
+
+#x-space
+x_min = 0
+x_max = 6
+x_res = 1e5
+
+x = seq(x_min,x_max, len = x_res)
+
+#plot of the lines
+matplot(x,
+        matrix(c(df(x,v_1[1],v_2),
+                 df(x,v_1[2],v_2)),
+                ncol = 2),
+        type = "l",
+        lty = 1,
+        lwd = 2,
+        col = c("gray10", "gray60"),
+        xlim = c(x_min,x_max),
+        ylim = c(0,1),
+        ylab = "",
+        xlab = "x",
+        main = TeX("f(x; $\\nu_1, \\nu_2$)"))
+#legend
+legend(3,
+       .95,
+       c(TeX("$\\nu_1 = 2, \\nu_2=13$"), TeX("$\\nu_1 = 4, \\nu_2=13$")),
+       lty = 1,
+       lwd = 2,
+       col = c("gray10","gray60"),
+       bty = "n",
+       cex = 1.1,
+       y.intersp = 1.6)
+
+
+dev.copy2pdf(                                                                    # export to PDF
+    file   = file.path(abb_dir, "alm_8_f_SKF1.pdf"),            # filename
+    width  = 6,                                                                  # PDF width
+    height = 5                                                                   # PDF height
+)
+```
+
+\vspace{2mm}
+```{r, echo = FALSE, out.width="60%"}
+knitr::include_graphics(file.path(abb_dir,"alm_8_f_SKF1.pdf"))
+```
+
+
+
+# Likelihood-Quotienten-Statistiken - Selbstkontrollfragen
+
+\vspace{3mm}
+\large
+\setstretch{1}
+\color{darkblue} 2. Geben Sie die Definition der Likelihood-Quotienten-Statistik wieder.
+
+\vspace{3mm}
+\color{black}
+\footnotesize
+\begin{definition}[Likelihood-Quotienten-Statistik]
+Gegeben seien zwei parametrische statistische Modelle
+\begin{equation}
+\mathcal{M}_0 := \left( \mathcal{Y}, \mathcal{A}, \left\{ \mathbb{P}_{\theta_0}^0 |\theta_0 \in \Theta_0 \right\} \right) \mbox{ und } \mathcal{M}_1 := \left( \mathcal{Y}, \mathcal{A},\left\{ \mathbb{P}_{\theta_1}^1 | \theta_1 \in \Theta_1 \right\} \right)
+\end{equation}
+mit identischem Datenraum, identischer $\sigma$-Algebra und potentiell distinkten Wahrscheinlichkeitsmaßmengen und Parameterräumen. Sei weiterhin $\upsilon$ ein Zufallsvektor mit Datenraum $\mathcal{Y}$. Seien schließlich $L_0^{\upsilon}$ und $L_1^{\upsilon}$ die Likelihood-Funktionen von $\mathcal{M}_0$ und $\mathcal{M}_1$, respektive, wobei das Superskript $^\upsilon$ jeweils an die Datenabhängigkeit der Likelihood Funktion erinnern soll. Dann wird 
+\begin{equation}
+\Lambda := \frac{\max_{\theta_0 \in \Theta_0}L_0^{\upsilon}(\theta_0)}{\max_{\theta_1 \in \Theta_1}L_1^{\upsilon}(\theta_1)},
+\end{equation}
+\textit{Likelihood-Quotienten-Statistik} genannt.
+\end{definition}
+
+
+
+
+
+# Likelihood-Quotienten-Statistiken - Selbstkontrollfragen
+
+\vspace{3mm}
+\large
+\color{darkblue} 3.Erläutern Sie die Definition der Likelihood-Quotienten-Statistik.
+
+\vspace{3mm}
+\color{black}
+\footnotesize
+Eine Likelihood-Quotienten-Statistik setzt die Wahrscheinlichkeitsmassen/dichten eines beobachteten Datensatzes $y \in \mathcal{Y}$ unter zwei statistischen Modellen nach \textit{Optimierung der jeweiligen Modellparameter} ins Verhältnis.
+Ein hoher Wert des Likelihood-Quotienten-Statistik entspricht einer höhereren Wahrscheinlichkeitsmasse/dichte
+des beobachteten Datensatzes $y \in \mathcal{Y}$ unter $\mathcal{M}_0$ als unter $\mathcal{M}_1$ und vice versa.
+
+\vspace{3mm}
+\color{darkgrey}
+Anmerkungen:
+\begin{itemize}
+\item \color{darkgrey} Grob gesagt sagt mir die Likelihoodfunktion, wie sicher ich mir sein kann, dass der beobachtete Datensatz bzw seine Komponenten so zusammen auftreten (in Abhängigkeit vom Modell und Parameter)
+\item Wir betrachten das Verhältnis der maximalen Funktionswerte zweier Likelihood-Funktionen 
+\item \textit{Optimierter Modellparameter} bedeutet, wir nehmen jeweils den ML-Schätzer der Funktion, wie wir bereits gesehen haben, maximiert dieser die Likelohoodfunktion
+\item Das Ganze betrachten wir immer in Abhängigkeit **eines** Datensatzes
+\end{itemize}
+
+
+
+# Likelihood-Quotienten-Statistiken -Selbstkontrollfragen
+
+\vspace{3mm}
+\large
+\color{darkblue} 4.Geben Sie die Definition eines vollständigen und eines reduzierten ALMs wieder.
+
+\vspace{3mm}
+\footnotesize
+\color{black}
+
+\begin{definition}[Vollständiges und reduziertes Modell]
+Für $p > 1$ mit $p = p_0 + p_1$ seien
+\begin{equation}
+X := \begin{pmatrix} X_0 & X_1 \end{pmatrix}  \in \mathbb{R}^{n \times p}
+\mbox{ mit }
+X_0 \in \mathbb{R}^{n \times p_0}
+\mbox{ und }
+X_1 \in \mathbb{R}^{n \times p_1},
+\end{equation}
+sowie
+\begin{equation}
+\beta := \begin{pmatrix} \beta_0 \\ \beta_1 \end{pmatrix} \in \mathbb{R}^p
+\mbox{ mit }
+\beta_0 \in \mathbb{R}^{p_0}
+\mbox{ und }
+\beta_1 \in \mathbb{R}^{p_1}
+\end{equation}
+Partitionierungen einer $n \times p$ Designmatrix und eines $p$-dimensionalen
+Betaparametervektors. Dann nennen wir
+\begin{equation}
+\upsilon = X\beta + \varepsilon \mbox{ mit } \varepsilon \sim N(0_n,\sigma^2I_n)
+\end{equation}
+das \textit{vollständige Modell} und
+\begin{equation}
+\upsilon = X_0\beta_0 + \varepsilon_0 \mbox{ mit } \varepsilon_0 \sim N(0_n,\sigma^2I_n)
+\end{equation}
+das \textit{reduzierte Modell} und sprechen von einer \textit{Partitionierung eines
+(vollständigen) Modells}.
+\end{definition}
+
+# Beispiel - vollständiges und reduziertes Modell
+
+\color{darkgrey}
+\footnotesize
+
+Wir haben das ALM
+\vspace{-2mm}
+\begin{align*}
+\upsilon = X\beta + \varepsilon \mbox{ mit } \varepsilon \sim N(0_n,\sigma^2I_n)
+\end{align*}
+\vspace{-2mm}
+
+in Matrix- bzw. ALM-Schreibweise
+\vspace{-2mm}
+\begin{align*}
+\upsilon \sim N(X\beta,\sigma^2I_n) \mbox{ mit } X \in \mathbb{R}^{n \times p}, \beta \in \mathbb{R}^p \sigma^2 > 0
+\end{align*}
+\vspace{-4mm}
+
+mit der Partitionierung
+\vspace{-2mm}
+\begin{align*}
+X      = \begin{pmatrix} X_0     & X_1      \end{pmatrix},
+X_0      \in \mathbb{R}^{n\times p_0},
+X_1      \in \mathbb{R}^{n\times p_1},
+\text{ und }
+\beta := \begin{pmatrix} \beta_0 \\ \beta_1 \end{pmatrix},
+\beta_0 \in \mathbb{R}^{p_0},
+\beta_1 \in \mathbb{R}^{p_1}
+\end{align*}
+\vspace{-4mm}
+
+mit $p=p_1+p_2$.
+
+Ausgeschrieben sieht das für ein Beispiel mit $p_1=1$ und $p_2=1$ wie folgt aus:
+
+\begin{align*}
+X_0 = \begin{pmatrix}x_{0,1}\\\vdots\\x_{0,n}\end{pmatrix},
+X_1 = \begin{pmatrix}x_{1,1}\\\vdots\\x_{1,n}\end{pmatrix}
+\end{align*}
+
+\begin{align*}
+\upsilon = X \beta + \varepsilon \Leftrightarrow
+\begin{pmatrix}\upsilon_1\\\vdots\\\upsilon_n\end{pmatrix} 
+= \begin{pmatrix}x_{0,1}&x_{1,1}\\\vdots&\vdots\\x_{0,n}&x_{1,n}\end{pmatrix} 
+\begin{pmatrix}\beta_0 \\ \beta_1 \end{pmatrix} + \begin{pmatrix}\varepsilon_1 \\ \vdots \\ \varepsilon_n \end{pmatrix} 
+= \begin{pmatrix}x_{0,1}\beta_0+x_{1,1}\beta_1+\varepsilon_1\\\vdots\\x_{0,n}\beta_0+x_{1,n}\beta_1+\varepsilon_n\end{pmatrix} 
+\end{align*}
+
+
+# Beispiel - vollständiges und reduziertes Modell
+\color{darkgrey}
+\footnotesize
+
+Die Residuenvektoren
+\begin{align*}
+\hat{\varepsilon}_0 := \upsilon - X_0\hat{\beta}_0 \mbox{ und } \hat{\varepsilon} := \upsilon - X\hat{\beta}
+\end{align*}
+sehen dann ausgeschrieben so aus: 
+
+\begin{align}\label{part_1}
+\hat{\varepsilon}_0 := \upsilon - X_0\hat{\beta}_0
+\Leftrightarrow
+\begin{pmatrix}\hat{\varepsilon}_{0,1}\\\vdots\\\hat{\varepsilon}_{0,n}\end{pmatrix}
+= \begin{pmatrix}\upsilon_1\\\vdots\\\upsilon_n\end{pmatrix} 
+- \begin{pmatrix}x_{0,1}\\\vdots\\x_{0,n}\end{pmatrix} 
+\hat{\beta}_0
+= \begin{pmatrix}\upsilon_1-x_{0,1}\hat{\beta}_0\\\vdots\\\upsilon_n-x_{0,n}\hat{\beta}_0\end{pmatrix} 
+\end{align}
+
+und
+
+\begin{align}\label{voll}
+\hat{\varepsilon} := \upsilon - X \hat{\beta}
+\Leftrightarrow
+\begin{pmatrix}\hat{\varepsilon}_{1}\\\vdots\\\hat{\varepsilon}_{n}\end{pmatrix}
+= \begin{pmatrix}\upsilon_1\\\vdots\\\upsilon_n\end{pmatrix} 
+- \begin{pmatrix}x_{0,1}&x_{1,1}\\\vdots&\vdots\\x_{0,n}&x_{1,n}\end{pmatrix} 
+\begin{pmatrix}\hat{\beta}_0\\\hat{\beta}_1\end{pmatrix}
+= \begin{pmatrix}\upsilon_1-x_{0,1}\hat{\beta}_0-x_{1,1}\hat{\beta}_1\\\vdots\\\upsilon_n-x_{0,n}\hat{\beta}_0-x_{1,n}\hat{\beta}_1\end{pmatrix} 
+\end{align}
+
+
+
+
+# Likelihood-Quotienten-Statistiken - Selbstkontrollfragen
+
+\vspace{3mm}
+\large
+\color{darkblue} 5.Geben Sie das Theorem zum Likelihood-Quotienten von vollständigem und reduzierten ALM wieder.
+
+\vspace{3mm}
+\footnotesize
+\color{black}
+\begin{theorem}[Likelihood-Quotient von vollständigem und reduziertem Modell]
+Für $p=p_0+p_1,p>1$ sei eine Partitionierung eines vollständigen ALMs gegeben und es seien $\hat{\sigma}^2$ und $\hat{\sigma}^2_0$ die Maximum-Likelihood-Schätzer des Varianzparameters unter vollständigem und reduziertem Modell, respektive. Weiterhin seien die zwei parametrischen statistischen Modelle $\mathcal{M}_0$ und $\mathcal{M}_1$ in der Definition der Likelihood-Quotienten-Statistik durch das reduzierte Modell und das vollständige Modell gegeben. Dann gilt
+\begin{equation}
+\Lambda = \left(\frac{\hat{\sigma}^2}{\hat{\sigma}^2_0} \right)^{\frac{n}{2}}
+\end{equation}
+\end{theorem}
+
+\vspace{2mm}
+\color{darkgrey}
+Anmerkung: ML-Schätzer, darum $n$ und nicht $n-p$ 
+
+
+#  Definition und Verteilung - Selbstkontrollfragen
+
+\vspace{3mm}
+\large
+\color{darkblue} 6.Definieren Sie die F-Statistik.
+
+\vspace{3mm}
+\color{black}
+\footnotesize
+
+\begin{definition}[F-Statistik]
+Für $X \in \mathbb{R}^{n \times p}, \beta \in \mathbb{R}^p$ und $\sigma^2 > 0$ sei ein ALM der Form
+\begin{equation}
+\upsilon = X\beta+\varepsilon \mbox{ mit } \varepsilon \sim N(0_n, \sigma^2I_n)
+\end{equation}
+mit der Partitionierung
+\begin{equation}
+X = \begin{pmatrix} X_0 & X_1 \end{pmatrix}, X_0 \in \mathbb{R}^{n \times p0}, X_1 \in \mathbb{R}^{n \times p_1}, \mbox{ und } \beta := \begin{pmatrix} \beta_0 \\ \beta_1 \end{pmatrix}, \beta_0 \in \mathbb{R}^{p_0}, \beta_1 \in \mathbb{R}^{p_1},
+\end{equation}
+mit $p = p_0+p_1$ gegeben. Weiterhin seien mit
+\begin{equation}
+\hat{\beta}_0 := \left(X_0^T X_0 \right)^{-1}X_0^T\upsilon \mbox{ und } \hat{\beta} := \left(X^TX\right)^{-1}X^T\upsilon
+\end{equation}
+die Residuenvektoren
+\begin{equation}
+\hat{\varepsilon}_0 := \upsilon-X_0\hat{\beta}_0 \mbox{ und } \hat{\varepsilon} := \upsilon-X\hat{\beta}
+\end{equation}
+definiert. Dann ist die F-Statistik definiert als
+\begin{equation}
+F:= \frac{(\hat{\varepsilon}^T_0 \hat{\varepsilon}_0-\hat{\varepsilon}^T\hat{\varepsilon})/p_1}{\hat{\varepsilon}^T\hat{\varepsilon}/(n-p)}
+\end{equation}
+\end{definition}
+
+# Definition und Verteilung - Selbstkontrollfragen
+
+\vspace{3mm}
+\large
+\color{darkblue} 7.Erläutern Sie den Zähler der F-Statistik.
+
+\vspace{3mm}
+\color{black}
+\footnotesize
+Der Zähler der F-Statistik
+\begin{equation}
+\frac{\hat{\varepsilon}^T_0 \hat{\varepsilon}_0- \hat{\varepsilon}^T \hat{\varepsilon}}{p_1}
+\end{equation}
+misst, inwieweit die $p_1$ Regressoren in $X_1$ die Residualquadratsumme reduzieren und zwar im Verhältnis
+zur Anzahl dieser Regressoren. Das heißt, dass bei gleicher Größe der Residualquadratsummenreduktion (und
+gleichem Nenner) ein größerer $F$ Wert resultiert, wenn diese durch weniger zusätzliche Regressoren resultiert,
+also $p_1$ klein ist (und vice versa). Im Sinne der Anzahl der Spalten von $X$ und der entsprechenden Komponenten
+von $\beta$ favorisiert die $F$ -Statistik also weniger “komplexe” Modelle.
+
+# Definition und Verteilung - Selbstkontrollfragen
+
+\vspace{3mm}
+\large
+\color{darkblue} 8.Erläutern Sie den Nenner der F-Statistik.
+
+\vspace{3mm}
+\color{black}
+\footnotesize
+Für den Nenner der F-Statistik gilt
+\begin{equation}
+\frac{\hat{\varepsilon}^T\hat{\varepsilon}}{n-p} = \hat{\sigma}^2,
+\end{equation}
+wobei $\hat{\sigma}^2$ hier der aufgrund des vollständigen Modells geschätzte Schätzer von $\sigma^2$ ist. Werden die Daten
+tatsächlich unter dem reduzierten Modell generiert, so kann das vollständige Modell dies durch $\hat{\beta}_1 \approx 0_{p1}$
+abbilden und erreicht eine ähnliche $\sigma^2$- Schätzung wie das reduzierte Modell. Werden die Daten de-facto unter
+dem vollständigem Modell generiert, so ist $\hat{\varepsilon}^T \hat{\varepsilon}/(n-p)$ ein besserer Schätzer von $\sigma^2$ als $\hat{\varepsilon}^T_0 \hat{\varepsilon}_0/(n-p$),
+da sich für diesen die Datenvariabilität, die nicht durch die $p_0$ Regressoren in $X_0$ erklärt wird, in der Schätzung
+von $\sigma^2$ widerspiegeln würde. Der Nenner der F-Statistik ist also in beiden Fällen der sinnvollere Schätzer von $\sigma^2$.
+
+
+# Definition und Verteilung - Selbstkontrollfragen
+
+\vspace{3mm}
+\large
+\color{darkblue} 9.Erläutern Sie die F-Statistik.
+
+\vspace{6mm}
+\color{black}
+\footnotesize
+Die F-Statistik misst die Residualquadratsummenreduktion durch die $p_1$-Regressoren in $X_1$ gegenüber den $p_0$ Regressoren in $X_0$ pro Datenvariabilitäts($\sigma^2$)- und Regressor($p_1$)-Einheit.
+
+# Definition und Verteilung - Selbstkontrollfragen
+
+\vspace{3mm}
+\large
+\color{darkblue} 10.Geben Sie das Theorem F-Statistik und Likelihood-Quotienten-Statistik wieder.
+
+\vspace{3mm}
+\color{black}
+\footnotesize
+\begin{theorem}[F-Statistik und Likelihood-Quotienten-Statistik]
+Es sei die Partitionierung eines ALMs in ein vollständiges und ein reduziertes Modell gegeben und $F$ und $\Lambda$ seien die entsprechenden F- und Likelihood-Quotienten-Statistiken. Dann gilt
+\begin{equation}
+F = \frac{n-p}{p_1} \left( \Lambda^{-\frac{2}{n}}-1 \right).
+\end{equation}
+\end{theorem}
+\vspace{3mm}
+\color{darkgrey}
+Anmerkung: Ich kann die F-Statistik also auch als Funktion der Likelihood-Quotienten-Statistik schreiben oder umgekehrt.
