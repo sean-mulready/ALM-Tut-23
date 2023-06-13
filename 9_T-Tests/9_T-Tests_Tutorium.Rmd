@@ -1,0 +1,1751 @@
+---
+fontsize: 8pt
+bibliography: ../Referenzen.bib
+citation_package: natbib
+output:
+  beamer_presentation:
+    keep_tex: true
+    includes:
+      in_header: ../Header.tex
+classoption: t
+---
+
+
+```{r, include = FALSE}
+source("../R_common.R")
+abb_dir = file.path(dirname(getwd()), "Abbildungen")
+data_dir = file.path(dirname(getwd()), "Daten")
+```
+
+# {.plain}
+\center
+```{r, echo = FALSE, out.width="20%"}
+knitr::include_graphics(file.path(abb_dir,"wtfi_otto.png"))
+```
+
+\vspace{2mm}
+
+\huge
+Tutorium
+
+\Large
+Allgemeines Lineares Modell
+\vspace{2mm}
+
+\normalsize
+BSc Psychologie SoSe 2023
+
+\vspace{2mm}
+\text{10. Termin: (9) T-Tests}    
+
+\vspace{15mm}
+\normalsize
+Sean Mulready
+
+\vspace{2mm}
+\scriptsize
+Inhalte basieren auf Kursmaterialien für [\textcolor{darkblue}{ALM}](https://www.ipsy.ovgu.de/Institut/Abteilungen+des+Institutes/Methodenlehre+I+_+Experimentelle+und+Neurowissenschaftliche+Psychologie/Lehre/Sommersemester+2023/Allgemeines+Lineares+Modell.html) von [Dirk Ostwald](https://www.ipsy.ovgu.de/Institut/Abteilungen+des+Institutes/Methodenlehre+I+_+Experimentelle+und+Neurowissenschaftliche+Psychologie/Team/Dirk+Ostwald.html), lizenziert unter [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/deed.de)
+
+
+
+# Selbstkontrollfragen
+
+\vspace{3mm}
+\footnotesize
+\setstretch{1.6}
+
+1. Erläutern Sie die Extremszenarien im Kontinuum von ALM Designs.
+2. Erläutern Sie die Begriffe der faktoriellen und parametrischen ALM Designs.
+3. Nennen Sie Beispiele für faktorielle, parametrische, und faktoriell-parametrische ALM Designs.
+4. Erläutern Sie das Anwendungsszenario eines Einstichproben-T-Tests.
+5. Erläutern Sie mögliche Hypothesenszenarien eines Einstichproben-T-Tests.
+6. Geben Sie die Definition des Einstichproben-T-Test Modells wieder.
+7. Geben Sie das Theorem zur Parameterschätzung im Einstichproben-T-Test Modell wieder.
+8. Geben Sie das Theorem zur T-Teststatistik des Einstichproben-T-Tests wieder.
+9. Geben Sie die Definition des zweiseitigen Einstichproben-T-Tests (mit ungerichteter Hypothese) wieder.
+10. Skizzieren Sie die Testgütefunktion des zweiseitigen Einstichproben-T-Tests.
+11. Geben Sie das Theorem zur Testumfangkontrolle im zweiseitigen Level-$\alpha_0$-Einstichproben-T-Test wieder.
+12. Erläutern Sie das praktische Vorgehen bei Durchführung eines zweiseitigen Level-$\alpha_0$-Einstichproben-T-Tests.
+13. Geben Sie die Definition des p-Wertes Werts für einen zweiseitigen Einstichproben-T-Test wieder.
+14. Von welchen Werten hängt die Powerfunktion eines zweiseitigen Einstichproben-T-Tests ab?
+15. Skizzieren Sie die Powerfunktion des zweiseitigen Einstichproben-T-Tests bei fester Stichprobengröße.
+16. Skizzieren Sie die Powerfunktion des zweiseitigen Einstichproben-T-Tests bei festem Nichtzentralitätsparameter.
+
+# Selbstkontrollfragen
+
+\vspace{3mm}
+\footnotesize
+\setstretch{1.6}
+
+17. Erläutern Sie das Anwendungsszenario eines Zweistichproben-T-Tests.
+18. Geben Sie die Definition des Zweistichproben-T-Test Modells wieder.
+19. Geben Sie das Theorem zur Parameterschätzung im Zweistichproben-T-Test Modell wieder.
+20. Geben Sie das Theorem zur T-Teststatistik des Zweistichproben-T-Tests wieder.
+21. Erläutern Sie mögliche Hypothesenszenarien eines Zweistichproben-T-Tests.
+22. Geben Sie die Definition des zweiseitigen Zweistichproben-T-Tests (mit ungerichteter Hypothese) wieder.
+23. Geben Sie das Theorem zur Testumfangkontrolle im zweiseitigen Level-$\alpha_0$-Zweistichproben-T-Test wieder.
+24. Erläutern Sie das praktische Vorgehen bei Durchführung eines zweiseitigen Level-$\alpha_0$-Zweistichproben-T-Tests.
+25. Geben Sie die Definition des p-Wertes Werts für einen zweiseitigen Zweistichproben-T-Test wieder.
+
+# Überblick - Extremszenarien
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 1. Erläutern Sie die Extremszenarien im Kontinuum von ALM Designs.
+
+\vspace{3mm}
+\color{black}
+\footnotesize
+
+Extremszenario (1) Die Erwartungswerte aller Datenvariablen sind identisch.
+\begin{multline}
+\upsilon_i \sim N(\mu,\sigma^2) \mbox{ u.i.v. für } i = 1,...,n  \Leftrightarrow \\
+\upsilon = X\beta + \varepsilon,  X := 1_n \in \mathbb{R}^{n\times 1}, \beta := \mu \in \mathbb{R}, \varepsilon \sim N(0_n,\sigma^2 I_n)
+\end{multline}
+$\Rightarrow$ Jegliche Datenvariabilität wird dem Fehlerterm zugeschrieben.
+\vspace{2mm}
+
+Extremszenario (2) Die Erwartungswerte aller Datenvariablen sind paarweise verschieden
+\begin{multline}
+\upsilon_i \sim N(\mu_i,\sigma^2) \mbox{ u.v. für } i = 1,...,n \Leftrightarrow \\
+\upsilon = X\beta + \varepsilon \mbox{ mit } X := I_n \in \mathbb{R}^{n \times n}, \beta := (\mu_1,..., \mu_n)^T \in \mathbb{R}^n, \varepsilon \sim N(0_n,\sigma^2 I_n)
+\end{multline}
+$\Rightarrow$ Jegliche Datenvariabilität wird dem Erwartungswertparameter zugeschrieben.
+
+$\Rightarrow$ Es gilt $\hat{\beta} = (I_n^TI_n)^{-1}I_n^T\upsilon = \upsilon$ und $\hat{\sigma}^2 = \frac{(\upsilon - I_n\upsilon)^T(\upsilon - I_n\upsilon)}{n-p} = 0$.
+\vspace{2mm}
+
+Beide Extremszenarien sind wissenschaftlich nicht ergiebig, da sie keine
+theoriegeleitete systematische Abhängigkeit zwischen der UV und der AV repräsentieren.
+Die im weiteren Verlauf der Vorlesung betrachteten ALM Designs liegen zwischen den beiden
+Extremszenarien und repräsentieren verschiedene Formen der systematischen Abhängigkeit
+zwischen UV und AV.
+
+\color{darkgrey}
+
+Anmerkung: 
+
+* \color{darkgrey} Mit Datenvariablen sind hier die Komponenten des Datenvektors $\upsilon$, also die $\upsilon_i$ gemeint 
+
+# Wiederholung: ALM Modelle u.i.v. und für $p=2$ ausgeschrieben
+\vspace{3mm}
+\setstretch{1}
+
+
+\vspace{3mm}
+\color{darkgrey}
+\footnotesize
+**ALM für u.i.v. Zufallsvektor** mit Erwartungswertparameter $\mu \in \mathbb{R}$ und Varianzparameter $\sigma^2$. D.h., für jede Komponente des Datenvektors gilt $\upsilon_i \sim N(\mu,\sigma^2) \mbox{ für } i = 1,...,n$. Äquivalent dazu ($\Leftrightarrow$) in Matrixschreibweise
+
+
+\vspace{-3mm}
+\tiny
+\begin{align*}
+\upsilon \sim N(X\beta,\sigma^2I_n) \mbox{ mit } X := 1_n \in \mathbb{R}^{n \times 1}, \beta := \mu \in \mathbb{R}^1, \varepsilon \sim N(0_n,\sigma^2 I_n).
+\end{align*}
+
+\vspace{-3mm}
+
+\begin{align*}
+\upsilon = X \beta + \varepsilon
+\Leftrightarrow \begin{pmatrix}\upsilon_1\\ \vdots \\\upsilon_n\end{pmatrix} 
+= \begin{pmatrix}1\\\vdots\\1\end{pmatrix}
+\beta + \begin{pmatrix}\varepsilon_1 \\ \vdots \\ \varepsilon_n \end{pmatrix}
+= \begin{pmatrix}1\\ \vdots \\1\end{pmatrix}
+\mu + \begin{pmatrix}\varepsilon_1 \\ \vdots \\ \varepsilon_n \end{pmatrix}
+= \begin{pmatrix}\mu+\varepsilon_1\\ \vdots \\ \mu+\varepsilon_n\end{pmatrix} 
+\end{align*}
+
+\footnotesize
+**ALM für u.v. Zufallsvektor** mit "individuellen" Erwartungswertparametern $\mu_i$ und Varianzparameter $\sigma^2$. D.h., für jede Komponente des Datenvektors gilt $y_i \sim N(\mu_i,\sigma^2) \mbox{ für } i = 1,...,n$. Für ein Beispiel  mit p = 2 ($\beta = \begin{pmatrix} \beta_1 & \beta_2 \end{pmatrix}^T$) gilt äquivalent dazu in Matrixschreibweise
+
+\tiny
+\begin{align*}
+\upsilon \sim N(X\beta,\sigma^2I_n) \mbox{ mit } X \in \mathbb{R}^{n \times 2}, \beta \in \mathbb{R}^2, \varepsilon \sim N(0_n,\sigma^2 I_n).
+\end{align*}
+
+\vspace{-3mm}
+
+\begin{align*}
+\upsilon = X \beta + \varepsilon \Leftrightarrow \begin{pmatrix}\upsilon_1\\ \vdots \\\upsilon_n\end{pmatrix} 
+= \begin{pmatrix}x_{11}&x_{12}\\ \vdots&\vdots \\x_{n1}&x_{n2}\end{pmatrix} 
+\begin{pmatrix}\beta_1 \\ \beta_2 \end{pmatrix} + \begin{pmatrix}\varepsilon_1 \\  \vdots \\ \varepsilon_5 \end{pmatrix}
+= \begin{pmatrix}x_{11} \beta_1 + x_{12} \beta_2 + \varepsilon_1 \\ \vdots \\ x_{n1} \beta_1 + x_{n2} \beta_2 + \varepsilon_n \end{pmatrix}
+\end{align*}
+
+# Extremszenarien aus SKF 1 ausgeschrieben
+\vspace{3mm}
+\setstretch{1}
+
+
+\vspace{3mm}
+\color{darkgrey}
+\footnotesize
+Extremszenario (1) Die Erwartungswerte aller Datenvariablen sind identisch $\Rightarrow$ wir haben nur ein $\mu$ für alle Datenvariablen. \color{orange} $\Rightarrow$ Jegliche Datenvariabilität wird dem Fehlerterm zugeschrieben
+
+\vspace{-3mm}
+
+\color{darkgrey}
+\tiny
+\begin{align*}
+\upsilon \sim N(X\beta,\sigma^2I_n) \mbox{ mit } X := 1_n \in \mathbb{R}^{n \times 1}, \beta := \mu \in \mathbb{R}^1, \varepsilon \sim N(0_n,\sigma^2 I_n).
+\end{align*}
+
+\vspace{-3mm}
+
+\begin{align*}
+\upsilon = X \beta + \varepsilon 
+\Leftrightarrow \begin{pmatrix}\upsilon_1\\\upsilon_2\\ \vdots \\\upsilon_n\end{pmatrix} 
+= \begin{pmatrix}1\\1\\\vdots\\1\end{pmatrix}
+\beta + \begin{pmatrix}\varepsilon_1 \\ \varepsilon_2\\ \vdots \\ \varepsilon_n \end{pmatrix}
+= \begin{pmatrix}1\\1\\ \vdots \\1\end{pmatrix}
+\mu + \begin{pmatrix}\varepsilon_1 \\ \varepsilon_2 \\ \vdots \\ \varepsilon_n \end{pmatrix}
+= \begin{pmatrix}\mu+ \color{orange}\varepsilon_1 \\ \color{darkgrey} \mu+ \color{orange}\varepsilon_2 \\
+\color{darkgrey}\vdots \\ \mu+\color{orange}\varepsilon_n\end{pmatrix} 
+\end{align*}
+
+\footnotesize
+Extremszenario (2) Die Erwartungswerte aller Datenvariablen sind paarweise verschieden $\Rightarrow$ jede Datenvariable $\upsilon_i$ hat ein "individuelles" $\mu_i$. \color{orange} $\Rightarrow$ Jegliche Datenvariabilität wird dem Erwartungswertparameter zugeschrieben. 
+\color{darkgrey} $\Rightarrow$ Es gilt \color{orange} $\hat{\beta} = \upsilon$ \color{darkgrey} und \color{plum} $\hat{\sigma}^2  = 0$.
+ 
+\color{darkgrey}
+\tiny
+\begin{align*}
+\upsilon \sim N(X\beta,\sigma^2I_n) \mbox{ mit } X:=I_n \in \mathbb{R}^{n \times n}, \beta := (\mu_1,...,\mu_n)^T \in \mathbb{R}^2, \varepsilon \sim N(0_n,\sigma^2 I_n).
+\end{align*}
+
+\vspace{-3mm}
+
+\begin{align*}
+\upsilon = X \beta + \varepsilon \Leftrightarrow 
+\begin{pmatrix}\upsilon_1\\ \upsilon_2 \\ \vdots \\\upsilon_n\end{pmatrix} 
+= \begin{pmatrix}1& \dots & 0\\ 0 & \dots & 0 \\ \vdots & \ddots & \vdots \\ 0 & \dots &1\end{pmatrix}
+\begin{pmatrix}\mu_1 \\ \mu_2  \\ \vdots \\ \mu_n \end{pmatrix} + \begin{pmatrix}0 \\0 \\  \vdots \\ 0 \end{pmatrix}
+= \color{darkgrey} \begin{pmatrix}1 \color{orange}\mu_1 \color{darkgrey} +  0 \mu_2 + ... + 0 \mu_n + \color{plum} 0 \\
+\color{darkgrey} 0\mu_1  +  1 \color{orange} \mu_2 \color{darkgrey} + ... + 0 \mu_n + \color{plum} 0 \\
+ \vdots \\ 0 \mu_1 + 0 \mu_2 + ... + 1 \color{orange}\mu_n + \color{plum} 0 \end{pmatrix}
+\end{align*}
+
+# Überblick - faktoriell vs. parametrisch
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue}2. Erläutern Sie die Begriffe der faktoriellen und parametrischen ALM Designs.
+
+\vspace{3mm}
+\color{black}
+\setstretch{1.2}
+\footnotesize
+
+**Faktorielle ALM Designs**
+\vspace{-2mm}
+
+* Designmatrizen mit $1$en und $0$en, manchmal $-1$en.
+* Betaparameter repräsentieren Gruppenerwartungswerte.
+* Betaparameterschätzer repräsentieren Gruppenstichprobenmittel.
+
+
+**Parametrische ALM Designs**
+\vspace{-2mm}
+
+* Designmatrizen besitzen Spalten mit kontinuierlichen reellen Werten.
+* Die Designmatrixsspalten werden *Regressoren*, *Prädiktoren*, oder *Kovariaten* genannt.
+* Betaparameter repräsentieren Steigungsparameter.
+* Betaparameterschätzer ergeben sich als normalisierte Regressor-Daten Kovarianzen.
+* Es besteht ein enger Bezug zur Theorie der Korrelation.
+
+**Faktoriell-parametrische ALM Designs**
+\vspace{-2mm}
+
+* Designmatrizen mit mehreren faktoriellen und parametrischen Werten.
+* Die parametrischen Regressoren werden oft als kontrollierte Kovariaten betrachtet.
+
+
+
+# Überblick - faktoriell vs. parametrisch - Beispiele 
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue}3. Nennen Sie Beispiele für faktorielle, parametrische, und faktoriell-parametrische ALM Designs.
+
+\vspace{3mm}
+\color{black}
+\setstretch{1.5}
+\footnotesize
+
+**Faktorielle ALM Designs**
+\vspace{-2mm}
+
+* T-Tests, Einfaktorielle Varianzanalyse, Mehrfaktorielle Varianzanalyse
+* Anwendungsbeispiel: Gruppenvergleich Treatment vs. No-Treatment
+
+**Parametrische ALM Designs**
+\vspace{-2mm}
+
+* Einfache lineare Regression, Multiple lineare Regression
+* Anwendungsbeispiel: Effekt von Medikamentendosierung und/oder Anzahl Therapiestunden auf Symptomreduktion
+
+**Faktoriell-parametrische ALM Designs**
+\vspace{-2mm}
+
+* Kovarianzanalyse
+* Anwendungsbeispiel: Kombination Treatment vs. No-Treatment und Medikamentendosierung 
+
+
+# Einstichproben-T-Tests - Anwendungsszenario
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue}4. Erläutern Sie das Anwendungsszenario eines Einstichproben-T-Tests.
+
+\vspace{3mm}
+\color{black}
+\setstretch{1.5}
+\footnotesize
+
+Im Anwendungsszenario eines Einstichproben-T-Tests betrachten wir **eine Gruppe** (Stichprobe) randomisierter experimenteller Einheiten. Wir nehmen an, dass die Datenpunkte unabhängig und identisch normalverteilte Realisierungen von ZVen ($\upsilon_i \sim N(\mu,\sigma^2)$) sind, wobei $\mu$ und $\sigma^2$ unbekannt sind. 
+
+Wir sind daran interessiert die *Unsicherheit*, die mit dem inferentiellen Vergleich von $\mu$ und $\mu_0$ verbunden ist, im Sinne eines Hypothesentests zu *quantifizieren*.
+
+# Einstichproben-T-Tests - Hypothesenszenarien
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue}5. Erläutern Sie mögliche Hypothesenszenarien eines Einstichproben-T-Tests.
+
+\vspace{3mm}
+\color{black}
+\footnotesize
+
+\setstretch{1.1}
+**Einfache Nullhypothese, einfache Alternativhypothese $H_0:\mu = \mu_0, H_1:\mu = \mu_1$**
+\begin{itemize}
+\item Theoretisch wichtiges Szenario (Neymann-Pearson Lemma)
+\item Praktische Relevanz eher gering
+\end{itemize}
+
+**Einfache Nullhypothese, zusammengesetzte Alternativhypothese $H_0:\mu = \mu_0, H_1:\mu \neq \mu_0$**
+\begin{itemize}
+\item Zweiseitiger Einstichproben-T-Test mit ungerichteter Hypothese
+\item Ungerichtete Fragestellung nach einem Unterschied
+\end{itemize}
+
+**Zusammengesetzte Nullhypothese/Alternativhypothese $H_0:\mu \le \mu_0, H_1:\mu > \mu_0$**
+\begin{itemize}
+\item Einseitiger Einstichproben-T-Test mit gerichteter Hypothese
+\item Gerichtete Fragestellung nach einem positiven Unterschied
+\end{itemize}
+
+**Zusammengesetzte Nullhypothese/Alternativhypothese $H_0:\mu\ge\mu_0,H_1:\mu<\mu_0$**
+\begin{itemize}
+\item Gerichtete Fragestellung nach einem negativen Unterschied
+\item Qualitativ äquivalente Theorie zum umgekehrten Fall
+\end{itemize}
+
+
+
+# Einstichproben-T-Tests - Modellformulierung
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue}6. Geben Sie die Definition des Einstichproben-T-Test-Modells wieder.
+
+\vspace{3mm}
+\color{black}
+\footnotesize
+
+\begin{definition}[Einstichproben-T-Test-Modell]
+\justifying
+$\upsilon_i, i = 1,...,n$ seien Zufallsvariablen, die die $n$ Datenpunkte eines Einstichproben-T-Test-Anwendungsszenarios modellieren. Dann hat das \textit{Einstichproben-T-Test-Modell}
+die strukturelle Form
+\begin{equation}
+\upsilon_i = \mu + \varepsilon_i
+\mbox{ mit }
+\varepsilon_i \sim N(0,\sigma^2) \mbox{ u.i.v. für } i = 1,...,n \mbox{ mit } \mu \in \mathbb{R} \mbox{ und } \sigma^2 > 0,
+\end{equation}
+die Datenverteilungsform
+\begin{equation}
+\upsilon_i \sim  N(\mu,\sigma^2) \mbox{ u.i.v. für } i = 1,...,n \mbox{ mit } \mu \in \mathbb{R} \mbox{ und } \sigma^2 > 0,
+\end{equation}
+und für den Datenvektor $\upsilon = (\upsilon_1,...,\upsilon_n)^T$ die Designmatrixform
+\begin{equation}
+\upsilon = X\beta + \varepsilon \mbox{ mit }
+X := 1_n \in \mathbb{R}^{n \times 1},
+\beta := \mu \in \mathbb{R},
+\varepsilon \sim N(0_n,\sigma^2I_n),
+\mbox{ und }
+\sigma^2 > 0.
+\end{equation}
+\end{definition}
+
+\color{darkgrey}
+
+Anmerkung
+
+* \color{darkgrey} Das Modell ist identisch mit dem Modell unabhängiger und identisch normalverteilter Zufallsvariablen.
+
+# # Einstichproben-T-Tests - Modellschätzung - Parameterschätzer
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue}7. Geben Sie das Theorem zur Parameterschätzung im Einstichproben-T-Test-Modell wieder.
+
+\vspace{3mm}
+\color{black}
+\setstretch{1.5}
+\footnotesize
+
+\begin{theorem}[Parameterschätzung im Einstichproben-T-Test-Modell]
+\normalfont
+\justifying
+Gegeben sei die Designmatrixform des Einstichproben-T-Test-Modells. Dann ergeben
+sich für den Betaparameterschätzer
+\begin{equation}
+\hat{\beta} = \frac{1}{n}\sum_{i=1}^n \upsilon_i =: \bar{\upsilon},
+\end{equation}
+und für den Varianzparameterschätzer
+\begin{equation}
+\hat{\sigma}^2 = \frac{1}{n-1}\sum_{i=1}^n (\upsilon_i - \bar{\upsilon})^2 =: s_{\upsilon}^2
+\end{equation}
+\end{theorem}
+
+
+# Einstichproben-T-Tests - Modellevaluation 
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue}8. Geben Sie das Theorem zur T-Teststatistik des Einstichproben-T-Tests wieder.
+
+\vspace{3mm}
+\color{black}
+\setstretch{1.5}
+\footnotesize
+
+\begin{theorem}[T-Teststatistik des Einstichproben-T-Tests]
+\normalfont
+\justifying
+Gegeben sei die Designmatrixform des Einstichproben-T-Test-Modells. Dann ergibt
+sich für die T-Teststatistik mit
+\begin{equation}
+c := 1 \mbox{ und } c^T\beta_0 =: \mu_0,
+\end{equation}
+dass
+\begin{equation}
+T = \sqrt{n}\left(\frac{\bar{y} - \mu_0}{s_y}\right)
+\end{equation}
+und es gilt
+\begin{equation}
+T \sim t(\delta, n-1) \mbox{ mit } \delta = \sqrt{n}\left(\frac{\mu - \mu_0}{\sigma}\right)
+\end{equation}
+\end{theorem}
+
+
+
+# \color{darkgrey} Wiederholung: T-Teststatistik 
+\vspace{3mm}
+
+\footnotesize
+
+
+\begin{theorem}[T-Teststatistik]
+\normalfont
+\justifying
+Es sei
+\begin{equation}
+\upsilon = X\beta + \varepsilon \mbox{ mit } \varepsilon \sim N(0_n,\sigma^2I_n)
+\end{equation}
+das ALM. Weiterhin seien
+\begin{equation}
+\hat{\beta} := (X^TX)^{-1}X^T\upsilon \mbox{ und } \hat{\sigma}^2 := \frac{(\upsilon - X\hat{\beta})^T(\upsilon - X\hat{\beta})}{n-p}
+\end{equation}
+die Betaparameter- und Varianzparameterschätzer, respektive. Schließlich sei für
+einen Kontrastgewichtsvektor $c \in \mathbb{R}^p$ und
+einen Parameter $\beta_0 \in \mathbb{R}^p$
+\begin{equation}
+T := \frac{c^T\hat{\beta} - c^T\beta_0}{\sqrt{\hat{\sigma}^2 c^T(X^TX)^{-1}c}}.
+\end{equation}
+die T-Statistik. Dann gilt
+\begin{equation}
+T \sim t(\delta,n-p) \mbox{ mit } \delta:= \frac{c^T\beta-c^T\beta_0}{\sqrt{\sigma^2c^T(X^TX)^{-1}c}}.
+\end{equation}
+\end{theorem}
+\vspace{-2mm}
+
+
+# \color{darkgrey} Herleitung (Beweis) der T-Teststatistik des Einstichproben-T-Tests
+\vspace{3mm}
+
+\footnotesize
+
+Mit dem  T-Teststatistik Theorem in Einheit (7) T-Statistiken gilt
+\begin{align*}
+T
+= \frac{c^T \hat{\beta} - c^T \beta_0}{\sqrt{\hat{\sigma}^2 c^T (X^TX)^{-1}c}}
+= \frac{1^T \bar{\upsilon} - 1^T \mu_0}{\sqrt{s_{\upsilon}^2 1^T (1_n^T1_n)^{-1}1}}
+= \sqrt{n}\left(\frac{\bar{\upsilon} - \mu_0}{s_{\upsilon}}\right).
+\end{align*}
+\vspace{2mm}
+
+Weiterhin gilt mit demselben Theorem
+\begin{align*}
+\delta
+= \frac{c^T \beta - c^T \beta_0}{\sqrt{\sigma^2 c^T (X^TX)^{-1}c}}
+= \frac{1^T \mu   - 1^T \mu_0  }{\sqrt{\sigma^2 1^T (1_n^T 1_n)^{-1}1}}
+= \sqrt{n}\left(\frac{\mu - \mu_0}{\sigma}\right)
+\end{align*}
+
+# \color{darkgrey} Veranschaulichung Einstichproben-T-Test mit $n=5$
+
+\footnotesize
+Anmerkung: Theoretische Aspekte sind \textcolor{darkgrey}{grau} und mit Daten geschätzte Größen sind \textcolor{orange}{orange} 
+
+\vspace{3mm}
+\footnotesize
+**Modellformulierung**
+(Wie bei ALM für u.i.v. ZVen)
+
+\color{darkgrey}
+\vspace{-3mm}
+\tiny
+\begin{align*}
+\upsilon \sim N(X\beta,\sigma^2I_n) \mbox{ mit } X := 1_5 \in \mathbb{R}^{5 \times 1}, \beta := \mu \in \mathbb{R}^1, \varepsilon \sim N(0_5,\sigma^2 I_5).
+\end{align*}
+
+\vspace{-3mm}
+
+\begin{align*}
+\upsilon = X \beta + \varepsilon
+\Leftrightarrow \begin{pmatrix}\upsilon_1\\ \upsilon_2 \\ \upsilon_3 \\ \upsilon_4 \\\upsilon_5\end{pmatrix} 
+= \begin{pmatrix}1\\1\\1\\1\\1\end{pmatrix}
+\beta + \begin{pmatrix}\varepsilon_1 \\ \varepsilon_2 \\ \varepsilon_3 \\ \varepsilon_4  \\ \varepsilon_5 \end{pmatrix}
+= \begin{pmatrix}1\\ 1\\1\\1 \\1\end{pmatrix}
+\mu + \begin{pmatrix}\varepsilon_1 \\ \varepsilon_2 \\ \varepsilon_3 \\ \varepsilon_4  \\ \varepsilon_5 \end{pmatrix}
+= \begin{pmatrix}\mu+\varepsilon_1\\ \mu+\varepsilon_2 \\ \mu+\varepsilon_3 \\ \mu+\varepsilon_4  \\ \mu+\varepsilon_5\end{pmatrix} 
+\end{align*}
+
+\footnotesize
+\color{black}
+**Modellschätzung**
+\tiny
+\begin{align*}
+\hat{\beta} = \textcolor{orange}{\bar{\upsilon}}, \text{ und } \hat{\sigma}^2 = \textcolor{orange}{s_{\upsilon}^2}
+\end{align*}
+
+# \color{darkgrey}Veranschaulichung Einstichproben-T-Test mit $n=5$ (fortgeführt)
+
+\footnotesize
+**Modellevaluation**
+
+Für die Modellevaluation wollen wir die T-Teststatistik berechnen. Dafür wählen wir im Fall eines Einstichproben-T-Tests einen Kontrastgewichtsvektor von $c:=1$, wobei $c^T\beta_0=\mu_0$. 
+
+Wir berechnen die T-Teststatistik $T$ mit den Stichproben-Daten mit der Formel
+\tiny
+\begin{align*}
+T = \textcolor{orange}{\sqrt{n}}\left(\frac{\textcolor{orange}{\bar{\upsilon}} - \mu_0}{\textcolor{orange}{s_\upsilon}}\right),
+\end{align*}
+\footnotesize
+
+wobei wir eine Theorie darüber haben, wie $T$ verteilt ist. Nämlich
+\tiny
+\color{darkgrey}
+\begin{align*}
+T \sim t(\delta, 5-1) \mbox{ mit } \delta = \sqrt{5}\left(\frac{\mu - \mu_0}{\sigma}\right)
+\end{align*}
+\footnotesize
+
+# \color{darkgrey} Veranschaulichung Einstichproben-T-Test mit $n=5$ (fortgeführt)
+
+\footnotesize
+Wir ziehen zwei mögliche Szenarien davon, was der wahre, aber unbekannte Parameter und die jeweils damit verbundenen (wahren, aber unbekannten) Verteilungen der T-Teststatistik sein könnten, in Betracht.
+
+**Nullhypothesen-Szenario:** \textcolor{darkcyan}{$c^T\beta = c^T\beta_0$} $\Leftrightarrow$ \textcolor{darkcyan}{$\mu  = \mu_0$} $\Leftrightarrow$ \textcolor{darkcyan}{$\delta = 0$} $\Leftrightarrow$ $T$ ist in Wahrheit zentral-t-verteilt.  
+
+
+**Alternativhytpothesen-Szenario:** \textcolor{darkcyan}{$c^T\beta \neq c^T\beta_0$} $\Leftrightarrow$ \textcolor{darkcyan}{$\mu  \neq \mu_0$} $\Leftrightarrow$ \textcolor{darkcyan}{$\delta \neq 0$} $\Leftrightarrow$ $T$ ist in Wahrheit nicht-zentral-t-verteilt.  
+
+\vspace{2mm}
+\tiny
+\setstretch{1}
+```{r, eval=F, echo=F}
+# Libraries
+library(MASS)                                                  # multivariate Normalverteilung
+
+# Modellformulierung
+n          = 5                                                 # Anzahl von Datenpunkten
+p          = 1                                                 # Anzahl von Betaparametern
+X          = matrix(c(rep(1,n)), nrow = n)                     # Designmatrix
+I_n        = diag(n)                                           # Einheitsmatrix
+beta       = c(0,0.2,1)                                        # wahre , aber unbekannte , Betaparameter
+nscn       = length(beta)                                      # Anzahl wahrer, aber unbekannter, Hypothesenszenarien
+sigsqr     = 1                                                 # wahrer, aber unbekannter, Varianzparameter
+c          = 1                                                 # Kontrastvektor von Interessse
+beta_0     = 0                                                 # Nullhypothesebetaparameter
+
+# Frequentistische Simulation
+nsim       = 1e4                                               # Anzahl Simulationen
+delta      = rep(NaN, nscn)                                    # Anzahl Nichtzentralitätsparameter
+Tee        = matrix(rep(NaN, nscn*nsim), ncol = nscn)          # T-Teststatistik Realisierungsarray
+for(s in 1:nscn){                                              # Hypothesenszenarien
+  delta[s]    = ((t(c) %*% beta[s] - t(c) %*% beta_0)/         # Nichtzentralitätsparameter
+                sqrt(sigsqr*t(c)%*%solve(t(X)%*%X)%*%c))
+  for(i in 1:nsim){                                            # Simulationsiterationen
+    y          = mvrnorm(1, X %*% beta[s], sigsqr*I_n)         # y
+    beta_hat   = solve(t(X) %*% X) %*% t(X) %*% y              # \hat{\beta}
+    eps_hat    = y - X %*% beta_hat                            # \hat{\eps}
+    sigsqr_hat = (t(eps_hat) %*% eps_hat)/(n-p)                # \hat{\sigma}^2
+    Tee[i,s]   = ((t(c) %*% beta_hat - t(c) %*% beta_0)/       # T
+                  sqrt(sigsqr_hat*t(c)%*%solve(t(X)%*%X)%*%c))
+  }
+}
+```
+
+```{r, eval = F, echo = F}
+library(latex2exp)
+# Visualisierung
+graphics.off()
+dev.new()
+par(
+family      = "sans",
+mfcol       = c(1,3),
+pty         = "s",
+bty         = "l",
+lwd         = 1,
+las         = 1,
+mgp         = c(2.5,1,0),
+xaxs        = "i",
+yaxs        = "i",
+xpd         = TRUE,
+font.main   = 1,
+cex         = 1,
+cex.main    = 1.2)
+
+# T-Teststatistik Ergebnisraum
+xlims  = c(-5,12)
+t_min  = xlims[1]
+t_max  = xlims[2]
+t_res  = 1e3
+t      = seq(t_min, t_max, len = t_res)
+lab    = c(TeX("$\\c^T beta = \\c^T beta_0$"), TeX("$\\c^T beta \\neq \\c^T beta_0$") )
+mu_text = c(TeX("$\\mu  = \\mu_0$"), TeX("$\\mu  \\neq \\mu_0=0.2$"), TeX("$\\mu  \\neq \\mu_0=1$"))
+mu_text_xcoord = c(9,9,11)
+delta_text = c(TeX("$\\delta=0$"), TeX("$\\delta=0.45$"), TeX("$\\delta=2.24$"))
+possible_t_values = c(0.55, 3.67)
+
+# T-Teststatistiken
+for(s in 1:nscn){
+  p_t    = dt(t,n-p, delta[s])
+  plot(x=possible_t_values, y=c(0,0),
+  col    = "orange", type = "b", pch = 19,
+  prob   = TRUE,
+  xlab   = TeX("$T$"),
+  ylab   = "",
+  xlim   = xlims,
+  ylim   = c(0,.4),
+  main   = mu_text[s])
+  text(mu_text_xcoord[s],0.2, cex=0.9, delta_text[s])
+  lines(
+  t,
+  p_t,
+  type  = "l",
+  lwd   = 2,
+  col   = "darkgrey")
+}
+
+# Speichern
+dev.copy2pdf(
+file        = file.path(abb_dir, "alm_9_T_Teststatistik_1.pdf"),
+width       = 8,
+height      = 4)
+```
+
+
+
+```{r, echo = FALSE, out.width = "80%"}
+knitr::include_graphics(file.path(abb_dir,"alm_9_T_Teststatistik_1.pdf"))
+```
+
+\vspace{-3mm}
+
+\footnotesize
+Wenn wir basierend auf Daten Parameterwerte geschätzt haben (in diesem Fall also Stichprobenmittel berechnet) und mit den Schätzern die T-Teststatistik berechnen, könnten wir zum Beispiel einen Wert von \textcolor{orange}{$T=0.55$} oder einen Wert von \textcolor{orange}{$T=3.67$} erhalten. 
+
+
+\footnotesize
+Anmerkung: Theoretische Aspekte sind \textcolor{darkgrey}{grau} und mit  Daten geschätzte Größen sind \textcolor{orange}{orange} 
+
+
+
+
+# Einstichproben-T-Test - Modellevaluation
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue}9. Geben Sie die Definition des zweiseitigen Einstichproben-T-Tests (mit ungerichteter Hypothese) wieder.
+
+\vspace{3mm}
+\color{black}
+\setstretch{1.5}
+
+\footnotesize
+\begin{definition}[Zweiseitiger Einstichproben-T-Tests]
+\justifying
+Gegeben sei das Einstichproben-T-Test-Modell. Für ein $\mu_0 \in \mathbb{R}$ seien
+die einfache Nullhypothese und die zusammengesetzte Alternativhypothese als
+\begin{equation}
+H_0 : \mu = \mu_0 \Leftrightarrow \Theta_0 := \{\mu_0\}
+\mbox{ und }
+H_1 : \mu \neq \mu_0 \Leftrightarrow \Theta_1 := \mathbb{R} \setminus \{\mu_0\},
+\end{equation}
+definiert. Weiterhin sei die T-Teststatistik definiert als
+\begin{equation}
+T := \sqrt{n}\left(\frac{\bar{\upsilon} - \mu_0}{s_\upsilon}\right)
+\end{equation}
+Dann ist der \textit{zweiseitige Einstichproben-T-Test} definiert als der
+kritische wertbasierte Test
+\begin{equation}
+\phi(\upsilon) := 1_{\{|T| \ge k\}} =
+{\begin{cases}
+1 & |T| \ge k \\
+0 & |T|  <  k
+\end{cases}}.
+\end{equation}
+\end{definition}
+
+
+# Überblick - Extremszenarien
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue}10. Skizzieren Sie die Testgütefunktion des zweiseitigen Einstichproben-T-Tests.
+
+\vspace{3mm}
+\color{black}
+\setstretch{1.5}
+\footnotesize
+
+
+\small
+\center Testgütefunktion $q_\phi$ für $\sigma^2 = 9, \mu_0 = 4, n = 12$ und $k = 1,2,3$.
+\vspace{2mm}
+\begin{equation*}
+\quad q_{\phi}(\mu) = \mathbb{P}_\mu(\phi = 1)
+\end{equation*}
+
+```{r, echo = F, eval = F}
+dev.new()
+graphics.off()
+par(
+family      = "sans",
+bty         = "l",
+lwd         = 1,
+las         = 1,
+mgp         = c(2,1,0),
+xaxs        = "i",
+yaxs        = "i",
+font.main   = 1,
+cex         = 1.1,
+cex.main    = 1.1)
+
+# Parameter
+mu_0        = 4
+n           = 12
+sigsqr      = 9
+sigma       = sqrt(9)
+k           = c(1,2,3)
+mu          = matrix(seq(0, 8,len = 1e3), nrow = 1e3)
+d           = sqrt(n)*(mu - mu_0)/sigma
+q_mu        = cbind(matrix(1-pt(k[1],n-1,d)+ pt(-k[1],n-1,d),nrow=length(mu)),
+                    matrix(1-pt(k[2],n-1,d)+ pt(-k[2],n-1,d),nrow=length(mu)),
+                    matrix(1-pt(k[3],n-1,d)+ pt(-k[3],n-1,d),nrow=length(mu)))
+
+# Visualisierung
+matplot(
+mu,
+q_mu,
+type        = "l",
+lty         = c(1,2,3),
+col         = "black",
+lwd         = 2,
+xlab        = "",
+ylab        = "",
+ylim        = c(0,1.05),
+)
+lines(
+4,
+0,
+pty         = "p",
+pch         = 16,
+xpd         = TRUE
+)
+legend(
+6,
+.4,
+c("k = 1", "k = 2", "k = 3"),
+lty         = c(1,2,3),
+col         = "black",
+bty         = "n"
+)
+text(8.3,-.01, TeX("$\\mu$")                        , cex = 1.1, xpd = TRUE)
+text(4  ,-.25, TeX("$H_0\\,:\\, \\mu = \\mu_0$")    , cex = 1.1, xpd = TRUE)
+text(2  ,-.35, TeX("$H_1\\,:\\, \\mu \\neq \\mu_0$"), cex = 1.1, xpd = TRUE)
+text(6  ,-.35, TeX("$H_1\\,:\\, \\mu \\neq \\mu_0$"), cex = 1.1, xpd = TRUE)
+dev.copy2pdf(
+file        = file.path(abb_dir, "alm_9_t_test_ungerichtet_guetefunktion.pdf"),
+width       = 7,
+height      = 4)
+```
+
+```{r, echo = FALSE, out.width = "80%"}
+knitr::include_graphics(file.path(abb_dir,"alm_9_t_test_ungerichtet_guetefunktion.pdf"))
+```
+
+
+
+
+# Einstichproben-T-Tests - Modellevaluation
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue}11. Geben Sie das Theorem zur Testumfangkontrolle im zweiseitigen Level-$\alpha_0$-Einstichproben-T-Test wieder.
+\vspace{3mm}
+\color{black}
+\setstretch{1.5}
+\footnotesize
+
+\begin{theorem}[Testumfangkontrolle]
+\justifying
+\normalfont
+$\phi$ sei ein zweiseitiger Einstichproben-T-Test. Dann ist $\phi$ ein
+Level-$\alpha_0$-Test mit Testumfang $\alpha_0$, wenn der kritische Wert
+definiert ist durch
+\begin{equation}
+k_{\alpha_0} := \psi^{-1}\left(1 - \frac{\alpha_0}{2}; n-1 \right),
+\end{equation}
+wobei $\psi^{-1}(\cdot; n-1)$ die inverse KVF der $t$-Verteilung mit $n-1$
+Freiheitsgraden ist.
+\end{theorem}
+# Einstichproben-T-Tests - Modellevaluation - Testumfangkontrolle
+\vspace{3mm}
+\small
+Veranschaulichung
+
+\footnotesize
+\center Wahl von $k_{\alpha_0} := \psi^{-1}(1 - \alpha_0/2; n-1)$ mit $n =12$,
+$\alpha_0 := 0.05$ und Ablehnungsbereich
+\vspace{3mm}
+
+```{r, echo = F, eval = F}
+dev.new()
+graphics.off()
+par(
+family      = "sans",
+mfcol       = c(1,2),
+pty         = "m",
+bty         = "l",
+lwd         = 1,
+las         = 1,
+mgp         = c(2,1,0),
+xaxs        = "i",
+yaxs        = "i",
+font.main   = 1,
+cex         = 1,
+cex.main    = 1.2)
+
+# Parameter
+n           = 12
+alpha_0     = 0.05                                                               # Konfidenzniveau
+k_alpha_0   = qt(1 - alpha_0/2, n-1)                                             # kritischer Wert
+t           = seq(-4,4,length=1e4)                                               # T-Statistikwerte
+Pt          = pt(t,n-1)                                                          # T-Statistik KVF für H_0
+pt          = dt(t,n-1)                                                          # T-Statistik WDF für H_0
+
+# KVF Perspektive
+plot(                                                                            # original density function
+t,
+Pt,
+type        = "l",
+ylab        = " ",
+ylim        = c(0,1),
+main        = TeX("$\\psi$"))
+
+lines(
+k_alpha_0,
+0,
+type        = "p",
+pch         = 16,
+xpd         = TRUE)
+
+lines(
+min(t),
+1 - alpha_0/2,
+type        = "p",
+pch         = 16,
+xpd         = TRUE)
+
+arrows(
+x0          = min(t),
+y0          = 1 - alpha_0/2,
+x1          = k_alpha_0,
+y1          = 1 - alpha_0/2,
+col         = "darkorange",
+angle       = 45,
+length      = .1)
+
+arrows(
+x0          = k_alpha_0,
+y0          = 1-alpha_0/2,
+x1          = k_alpha_0,
+y1          = 0,
+col         = "darkorange",
+angle       = 45,
+length      = .1)
+
+text(k_alpha_0, -.25 , TeX("$\\k_{\\alpha_0}$"), xpd = TRUE)
+text(-3       , 1.05 , TeX("$1 - \\alpha_0/2$"), xpd = TRUE)
+
+
+# WDF Perspektive
+plot(
+t,
+pt,
+type        = "l",
+ylab        = " ",
+ylim        = c(0,.4),
+main        = TeX("$t$"))
+
+polygon(
+c(t[t  <= -k_alpha_0] , 0, 0),
+c(pt[t <= -k_alpha_0],  min(t), -k_alpha_0),
+col = "gray90",
+border = NA)
+
+polygon(
+c(t[t  >= k_alpha_0] , max(t), k_alpha_0),
+c(pt[t >= k_alpha_0],       0, 0),
+col = "gray90",
+border = NA)
+
+lines(
+seq(min(t), -k_alpha_0, len = 1e2),
+rep(0,1e2),
+type        = "l",
+lwd         = 5,
+col         = "darkorange")
+
+lines(
+seq(k_alpha_0, max(t), len = 1e2),
+rep(0,1e2),
+type        = "l",
+lwd         = 5,
+col         = "darkorange")
+
+lines(
+- k_alpha_0,
+0,
+type        = "p",
+pch         = 16,
+xpd         = TRUE,)
+
+lines(
+k_alpha_0,
+0,
+type        = "p",
+pch         = 16,
+xpd         = TRUE)
+
+text(-k_alpha_0,-.11, TeX("$-\\k_{\\alpha_0}$"), xpd = TRUE)
+text( k_alpha_0,-.11, TeX("$\\k_{\\alpha_0}$") , xpd = TRUE)
+text( 3, .05 , TeX("$P(T > = k_{\\alpha_0}) = \\alpha_0/2$"), xpd = TRUE, cex = .8, col = "gray50")
+text(-3, .05 , TeX("$P(T < = k_{\\alpha_0}) = \\alpha_0/2$"), xpd = TRUE, cex = .8, col = "gray50")
+
+fdir        =  file.path(getwd(), "9_Abbildungen")
+dev.copy2pdf(
+file        = file.path(abb_dir,"alm_9_t_test_ungerichtet_testumfangkontrolle.pdf"),
+width       = 8,
+height      = 4)
+```
+
+```{r, echo = FALSE, out.width = "80%"}
+knitr::include_graphics(file.path(abb_dir,"alm_9_t_test_ungerichtet_testumfangkontrolle.pdf"))
+```
+
+
+# Einstichproben-T-Tests - Modellevaluation
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue}12. Erläutern Sie das praktische Vorgehen bei Durchführung eines zweiseitigen Level-$\alpha_0$-Einstichproben-T-Tests.
+
+\vspace{3mm}
+\color{black}
+\setstretch{1.2}
+\footnotesize
+\justify
+\begin{itemize}
+
+\item Man nimmt an, dass ein Datensatz $\upsilon_1,...,\upsilon_n$ eine
+Realisation von $\upsilon_i \sim N(\mu,\sigma^2) \mbox{ u.i.v. für } i = 1,...,n$ mit
+unbekannten Parametern $\mu$ und $\sigma^2 > 0$ ist.
+
+\item Man möchte entscheiden ob für ein $\mu_0 \in \mathbb{R}$ eher
+$H_0 : \mu = \mu_0$ oder $H_1: \mu \neq \mu_0$ zutrifft.
+
+\item Man wählt ein Signifikanzniveau $\alpha_0$ und bestimmt den
+zugehörigen Freiheitsgradparameter-abhängigen kritischen Wert $k_{\alpha_0}$.
+
+\item Anhand von $n, \mu_0, \bar{\upsilon}$ und $s_\upsilon$ berechnet man die
+Realisierung der T-Teststatistik
+\begin{equation}
+t := \sqrt{n}\left(\frac{\bar{\upsilon} - \mu_0}{s_\upsilon}\right)
+\end{equation}
+
+\item Wenn $t$ größer-gleich $k_{\alpha_0}$ ist oder wenn $t$ kleiner-
+gleich $-k_{\alpha_0}$ ist, lehnt man die Nullhypothese ab, andernfalls lehnt
+man sie nicht ab.
+
+\item Die oben entwickelte Theorie  garantiert dann, dass
+man in höchstens $\alpha_0 \cdot 100$ von $100$ Fällen die Nullhypothese
+fälschlicherweise ablehnt.
+
+\end{itemize}
+
+# Einstichproben-T-Tests - Modellevaluation
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue}13. Geben Sie die Definition des p-Wertes Werts für einen zweiseitigen Einstichproben-T-Test wieder.
+
+\vspace{3mm}
+\color{black}
+\setstretch{1.5}
+\footnotesize
+\begin{itemize}
+
+\item Der p-Wert ist das kleinste Signifikanzlevel $\alpha_0$, bei
+welchem man die Nullhypothese basierend auf einem vorliegendem Wert der
+Teststatistik ablehnen würde.
+
+\item \color{darkgrey} Bei $T = t$ würde $H_0$ für jedes $\alpha_0$ mit
+$|t| \ge \psi^{-1}(1-\alpha_0/2; n-1)$ abgelehnt werden. Für diese $\alpha_0$
+gilt
+
+\begin{align*}
+\alpha_0 \ge 2 \mathbb{P}(T \ge |t|).
+\end{align*}
+
+\item Das kleinste $\alpha_0 \in [0,1]$ mit $\alpha_0 \ge 2 \mathbb{P}(T \ge |t|)$ ist
+dann $\alpha_0 = 2 \mathbb{P}(T \ge |t|)$, also folgt
+\begin{align*}
+\color{black} \mbox{p-Wert} =  2 \mathbb{P}(T \ge |t|) = 2(1 - \psi(|t|;n-1)).
+\end{align*}
+
+\item \color{darkgrey} Im Gegensatz zum Z-Test hängt bei T-Tests der p-Wert auch von der
+Stichprobengröße ab.
+
+\item Zum Beispiel ist für $T = 2.00$ und $n = 10$ der p-Wert $0.076$, für $T = 2.00$
+und $n = 100$ ist der p-Wert dagegen $0.048$.
+
+\end{itemize}
+
+# Einstichproben-T-Tests - Modellevaluation
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue}14. Von welchen Werten hängt die Powerfunktion eines zweiseitigen Einstichproben-T-Tests ab?
+
+\vspace{3mm}
+\color{black}
+\setstretch{1.5}
+\footnotesize
+
+Die Powerfunktion des zweiseitigen T-Tests mit einfacher Nullhypothese hängt bei festgelegtem $\alpha_0$ vom wahren, aber unbekannten, Parameterwert $\delta = \sqrt{n}\frac{\mu - \mu_0}{\sigma}$ und von der Stichprobengröße $n$ ab.
+
+
+# Einstichproben-T-Tests - Modellevaluation
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue}15. Skizzieren Sie die Powerfunktion des zweiseitigen Einstichproben-T-Tests bei fester Stichprobengröße.
+
+\vspace{3mm}
+\color{black}
+\setstretch{1.5}
+\footnotesize 
+
+```{r, echo = F, eval = F}
+dev.new()
+graphics.off()
+par(
+family      = "sans",
+mfcol       = c(2,1),
+pty         = "m",
+bty         = "l",
+lwd         = 1,
+las         = 1,
+xaxs        = "i",
+yaxs        = "i",
+font.main   = 1,
+cex         = 1,
+cex.main    = 1)
+
+# Szenariospezifikation
+mu_0      = 0                                 # einfache Nullhypothese
+d_min     = -5                                # d  Minimum
+d_max     =  5                                # d Maximum
+d_res     = 50                                # d Auflösung
+d         = seq(d_min, d_max, len = d_res)    # d Raum
+n_min     = 2                                 # n Minimum
+n_max     = 50                                # n Maximum
+n_res     = 1e2                               # n Auflösung
+n         = seq(n_min,n_max, len = n_res)     # n Raum
+
+
+# Funktion von d, n = 12, \alpha_0 = 0.05
+alpha_0   = 0.05
+n_fix     = 12
+k_alpha_0 = qt(1 - alpha_0/2, n_fix-1)
+pi_d      = 1-pt(k_alpha_0, n_fix-1, d)+pt(-k_alpha_0, n_fix-1, d)
+plot(
+d,
+pi_d,
+type      = "l",
+lwd       = 2,
+ylim      = c(0,1),
+ylab      = " ",
+xlab      = TeX("$\\delta $"),
+main      = TeX("$\\pi(\\delta ,n = 12),\\, \\alpha_0 = 0.05$"))
+
+# Funktion von d, n = 12, \alpha_0 = 0.001
+alpha_0   = 0.001
+n_fix     = 12
+k_alpha_0 = qt(1-alpha_0/2, n_fix-1)
+pi_d      = 1-pt(k_alpha_0, n_fix-1, d)+pt(-k_alpha_0, n_fix-1, d)
+plot(
+d,
+pi_d,
+type      = "l",
+lwd       = 2,
+ylim      = c(0,1),
+ylab      = " ",
+xlab      = TeX("$\\delta $"),
+main      = TeX("$\\pi(\\delta ,n = 12),\\, \\alpha_0 = 0.001$"))
+
+
+dev.copy2pdf(
+file        = file.path(abb_dir, "alm_9_t_test_ungerichtet_powerfunktionen_skf15.pdf"),
+width       = 8,
+height      = 7)
+
+```
+
+
+```{r, echo = FALSE, out.width = "65%"}
+knitr::include_graphics(file.path(abb_dir,"alm_9_t_test_ungerichtet_powerfunktionen_skf15.pdf"))
+```
+
+# Einstichproben-T-Tests - Modellevaluation
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue}16. Skizzieren Sie die Powerfunktion des zweiseitigen Einstichproben-T-Tests bei festem Nichtzentralitätsparameter.
+
+\vspace{3mm}
+\color{black}
+\setstretch{1.5}
+\footnotesize 
+
+```{r, echo = F, eval = F}
+dev.new()
+graphics.off()
+par(
+family      = "sans",
+mfcol       = c(2,1),
+pty         = "m",
+bty         = "l",
+lwd         = 1,
+las         = 1,
+xaxs        = "i",
+yaxs        = "i",
+font.main   = 1,
+cex         = 1,
+cex.main    = 1)
+
+# Szenariospezifikation
+mu_0      = 0                                 # einfache Nullhypothese
+d_min     = -5                                # d  Minimum
+d_max     =  5                                # d Maximum
+d_res     = 50                                # d Auflösung
+d         = seq(d_min, d_max, len = d_res)    # d Raum
+n_min     = 2                                 # n Minimum
+n_max     = 50                                # n Maximum
+n_res     = 1e2                               # n Auflösung
+n         = seq(n_min,n_max, len = n_res)     # n Raum
+
+# Funktion von n, d = 3, \alpha_0 = 0.05
+alpha_0   = 0.05
+d_fix     = 3
+k_alpha_0 = qt(1-alpha_0/2, n-1)
+pi_n      = 1-pt(k_alpha_0, n-1, d_fix)+pt(-k_alpha_0, n-1, d_fix)
+plot(
+n,
+pi_n,
+type      = "l",
+lwd       = 2,
+ylab      = " ",
+ylim      = c(0,1),
+xlab      = TeX("$n$"),
+main      = TeX("$\\pi(\\delta  = 3,n),\\, \\alpha_0 = 0.05$"))
+
+# Funktion von n, d = 3, \alpha_0 = 0.001
+alpha_0   = 0.001
+d_fix     = 3
+k_alpha_0 = qt(1-alpha_0/2, n-1)
+pi_n      = 1-pt(k_alpha_0, n-1, d_fix)+pt(-k_alpha_0, n-1, d_fix)
+plot(
+n,
+pi_n,
+type      = "l",
+lwd       = 2,
+ylab      = " ",
+ylim      = c(0,1),
+xlab      = TeX("$n$"),
+main      = TeX("$\\pi(\\delta = 3,n),\\, \\alpha_0 = 0.001$"))
+
+dev.copy2pdf(
+file        = file.path(abb_dir, "alm_9_t_test_ungerichtet_powerfunktionen_skf16.pdf"),
+width       = 8,
+height      = 7)
+
+```
+
+```{r, echo = FALSE, out.width = "65%"}
+knitr::include_graphics(file.path(abb_dir,"alm_9_t_test_ungerichtet_powerfunktionen_skf16.pdf"))
+```
+
+
+
+
+
+
+
+
+# Zweistichproben-T-Test - Anwendungsszenario
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue}17. Erläutern Sie das Anwendungsszenario eines Zweistichproben-T-Tests.
+
+\vspace{3mm}
+\color{black}
+\setstretch{1.5}
+\footnotesize
+
+Im Anwendungsszenario eines Zweistichproben-T-Tests betrachten wir \textcolor{darkblue}{**zwei Gruppen**} (Stichproben) randomisierter experimenteller Einheiten. Wir nehmen an, dass die Datenpunkte in beiden Gruppen unabhängig und identisch normalverteilte Realisierungen von ZVen sind.
+
+Gruppe 1: $\upsilon_{1j} \sim N(\mu_1,\sigma^2)$, und 
+Gruppe 2: $\upsilon_{1j} \sim N(\mu_2,\sigma^2)$ für $j = 1, ..., n$,
+
+wobei $\mu_1,\mu_2$ und $\sigma^2$ w.a.u. sind. Wir nehmen weiterhin an, dass wir daran interessiert sind, Unsicherheit, die mit dem inferentiellen Vergleich von $\mu_1$ und $\mu_2$ verbunden ist, im Sinne eines Hypothesentests zu quantifizieren.
+
+
+
+
+# Zweistichproben-T-Test - Modellformulierung
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue}18. Geben Sie die Definition des Zweistichproben-T-Test-Modells wieder.
+
+\vspace{3mm}
+\color{black}
+
+\footnotesize
+\begin{definition}[Zweistichproben-T-Test-Modell]
+\justifying
+$\upsilon_{ij}$ mit $i = 1,2$ und $j = 1,...,n_i$ seien Zufallsvariablen, die die Datenpunkte
+eines Zweistichproben-T-Test Anwendungsszenarios modellieren. Dann hat das
+\textit{Zweistichproben-T-Test-Modell} die strukturelle Form
+\begin{equation}
+\upsilon_{ij} = \mu_i + \varepsilon_{ij}
+\mbox{ mit } \varepsilon_{ij} \sim N(0,\sigma^2)
+\mbox{ u.i.v. für } i = 1,2, j = 1,...,n_i \mbox{ mit } \mu_i \in \mathbb{R} \mbox{ und } \sigma^2 > 0,
+\end{equation}
+die Datenverteilungsform
+\begin{equation}
+\upsilon_{ij} \sim N(\mu_i,\sigma^2)
+\mbox{ u.i.v. für } i = 1,2, j = 1,...,n_i \mbox{ mit } \mu_i \in \mathbb{R} \mbox{ und } \sigma^2 > 0,
+\end{equation}
+und für den Datenvektor $\upsilon = (\upsilon_{11}, ...,\upsilon_{1n_1}, \upsilon_{21}, ...,\upsilon_{2n_2})^T$ und $n := n_1 + n_2$ die Designmatrixform
+\begin{equation}
+\upsilon = X\beta + \varepsilon \mbox{ mit }
+X     := \begin{pmatrix} 1_{n_1} & 0_{n_1} \\ 0_{n_2} & 1_{n_2} \end{pmatrix} \in \mathbb{R}^{n \times 2},
+\beta := \begin{pmatrix} \mu_1 \\ \mu_2 \end{pmatrix} \in \mathbb{R}^2,
+\varepsilon \sim N(0_n,\sigma^2I_n),
+\sigma^2 > 0.
+\end{equation}
+\end{definition}
+
+\color{darkgrey}Bemerkungen
+
+* \color{darkcyan} $i$ indiziert die Gruppen, $j$ indiziert die Daten in jeder Gruppe.
+* $n_1$ und $n_2$ repräsentieren die Gruppengrößen, $n$ repräsentiert die Gesamtanzahl an Datenpunkten.
+* Es ist $p = 2$.
+
+
+
+#  Zweistichproben-T-Test - Modellschätzung
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue}19. Geben Sie das Theorem zur Parameterschätzung im Zweistichproben-T-Test-Modell wieder.
+
+\vspace{3mm}
+\color{black}
+
+\setstretch{1.2}
+\footnotesize
+\begin{theorem}[Parameterschätzung im Zweistichproben-T-Test-Modell]
+\normalfont
+\justifying
+Gegeben sei die Designmatrixform des Zweistichproben-T-Test-Modells. Dann ergeben
+sich für den Betaparameterschätzer
+\begin{equation}
+\hat{\beta}
+=  \begin{pmatrix} \frac{1}{n_1}\sum_{j=1}^{n_1} \upsilon_{1j} \\  \frac{1}{n_2}\sum_{j=1}^{n_2} \upsilon_{2j} \end{pmatrix}
+=: \begin{pmatrix} \bar{\upsilon}_1 \\  \bar{\upsilon}_2 \end{pmatrix}
+\end{equation}
+und für den Varianzparameterschätzer
+\begin{equation}
+\hat{\sigma}^2_{12}
+= \frac{\sum_{j=1}^{n_1} (\upsilon_{1j} - \bar{\upsilon}_1)^2 + \sum_{j=1}^{n_2} (\upsilon_{2j} - \bar{\upsilon}_2)^2}{n_1+n_2-2}
+=: s_{12}^2
+\end{equation}
+\end{theorem}
+
+\color{darkgrey}Bemerkungen
+
+* \color{darkgrey}\justifying $\bar{\upsilon}_1$ und $\bar{\upsilon}_2$ bezeichnen die gruppenspezifischen Stichprobenmittel.
+* $s_{12}^2$ wird als \textit{gepoolte Stichprobenvarianz} bezeichnet.
+* Für einen Datensatz $\upsilon = (\upsilon_1,\upsilon_2)^T \in \mathbb{R}^{n_1 + n_2}$ gilt im Allgemeinen, 
+  dass $s_\upsilon^2 \neq s_{12}^2$; die gepoolte Stichprobenvarianz und die Stichprobenvarianz eines
+  konkatenierten  Datensatzes sind im Allgemeinen also nicht identisch. Wir wollen das Konzept 
+  der gepoolten Stichprobenvarianz hier aber nicht weiter vertiefen.
+
+
+
+# Zweistichproben-T-Test - Modellevaluation
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue}20. Geben Sie das Theorem zur T-Teststatistik des Zweistichproben-T-Tests wieder.
+
+\vspace{3mm}
+\color{black}
+
+\footnotesize
+\begin{theorem}[T-Teststatistik des Zweistichproben-T-Tests]
+\justifying
+\normalfont
+Gegeben sei die Designmatrixform des Zweistichproben-T-Tests. Dann ergibt sich
+für die T-Teststatistik mit
+\begin{equation}
+c := (1,-1)^T \mbox{ und } c^T\beta_0 =: \mu_0,
+\end{equation}
+dass
+\begin{equation}
+T = \sqrt{\frac{n_1n_2}{n_1+n_2}}\left(\frac{\bar{\upsilon}_1-\bar{\upsilon}_2 - \mu_0}{s_{12}}\right)
+\end{equation}
+und es gilt
+\begin{equation}
+T \sim t(\delta, n_1 + n_2 - 2) \mbox{ mit } \delta = \sqrt{\frac{n_1n_2}{n_1+n_2}}\left(\frac{\mu_1-\mu_2-\mu_0}{\sigma}\right).
+\end{equation}
+\end{theorem}
+
+
+
+# Zweistichproben-T-Tests - Modellevaluation
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue}21. Erläutern Sie mögliche Hypothesenszenarien eines Zweistichproben-T-Tests.
+
+\vspace{3mm}
+\color{black}
+\footnotesize
+
+$H_0:\mu_1 - \mu_2  =  \mu_0$ und $H_1: \mu_1 - \mu_2 \neq \mu_0$
+
+* Zweiseitiger Zweistichproben T-Test mit ungerichteter Hypothese
+* Ungerichtete Fragestellungen nach einem Unterschied zwischen $\mu_1$ und $\mu_2$
+* Für $\mu_0 := 0$ gelten dabei insbesondere
+  * \footnotesize$H_0:\mu_1 - \mu_2 =    0 \Leftrightarrow H_0: \mu_1 =    \mu_2$
+  * $H_1:\mu_1 - \mu_2 \neq 0 \Leftrightarrow H_1: \mu_1 \neq \mu_2$
+
+
+$H_0:\mu_1 - \mu_2 \le \mu_0$ und $H_1: \mu_1 - \mu_2 >    \mu_0$
+
+* Einseitiger Zweistichproben T-Test mit gerichteter Hypothese
+* Gerichtete Fragestellungen nach einem positiven Unterschied zwischen $\mu_1$ und $\mu_2$
+
+
+$H_0:\mu_1 - \mu_2 \ge \mu_0$ und $H_1: \mu_1 - \mu_2 <    \mu_0$
+
+* Einseitiger Zweistichproben T-Test mit gerichteter Hypothese
+* Gerichtete Fragestellungen nach einem negativen Unterschied zwischen $\mu_1$ und $\mu_2$
+
+# \color{darkgrey} Veranschaulichung Zweistichproben T-Test mit $n=n_1+n_2=2+3=5$
+
+\footnotesize
+Anmerkung: Theoretische Aspekte sind \textcolor{darkgrey}{grau} und mit Daten geschätzte Größen sind \textcolor{orange}{orange} 
+
+\footnotesize
+**Modellformulierung**
+(Ähnlich wie bei ALM für u.i.v. ZVen, aber mit Aufteilung in $2$ Gruppen, indiziert mit $i=1,2$ und Gruppengrößen $n_1=2$ und $n_2=3$)
+
+\vspace{-3mm}
+
+\color{darkgrey}
+\begin{align*}
+\upsilon_{ij} = \mu_{i} + \varepsilon_{ij} \text{ mit } \varepsilon_{ij} \sim N(0,\sigma^2) u.i.v. \text{ für } i=1,2 \text{ und } j=1,...,n_i
+\end{align*}
+
+\vspace{-3mm}
+\tiny
+\begin{align*}
+\upsilon = X\beta + \varepsilon \mbox{ mit }
+X     := \begin{pmatrix} 1_{2} & 0_{2} \\ 0_{3} & 1_{3} \end{pmatrix} \in \mathbb{R}^{5 \times 2},
+\beta := \begin{pmatrix} \mu_1 \\ \mu_2 \end{pmatrix} \in \mathbb{R}^2,
+\varepsilon \sim N(0_5,\sigma^2I_5),
+\sigma^2 > 0.
+\end{align*}
+
+\vspace{-3mm}
+
+\begin{align*}
+y = X \beta + \varepsilon
+\Leftrightarrow \begin{pmatrix}\upsilon_{11}\\ \upsilon_{12} \\ \upsilon_{21} \\ \upsilon_{22} \\\upsilon_{23}\end{pmatrix} 
+= \begin{pmatrix}1&0\\1&0\\0&1\\0&1\\0&1\end{pmatrix}
+\begin{pmatrix}\mu_1\\ \mu_2 \end{pmatrix} + \begin{pmatrix}\varepsilon_{11} \\ \varepsilon_{12} \\ \varepsilon_{21}\\ \varepsilon_{22}  \\ \varepsilon_{23} \end{pmatrix}
+= \begin{pmatrix}1\mu_1+0\mu_2+\varepsilon_{11}\\ 1\mu_1+0\mu_2+\varepsilon_{12} \\ 0\mu_1+1\mu_2+\varepsilon_{21} \\ 0\mu_1+1\mu_2+\varepsilon_{22}  \\ 0\mu_1+1\mu_2+\varepsilon_{23}\end{pmatrix} 
+= \begin{pmatrix}1\mu_1+\varepsilon_{11}\\ 1\mu_1+\varepsilon_{12} \\ 1\mu_2+\varepsilon_{21} \\ 1\mu_2+\varepsilon_{22}  \\ 1\mu_2+\varepsilon_{23}\end{pmatrix} 
+\end{align*}
+
+\footnotesize
+\color{black}
+**Modellschätzung**
+\tiny
+\begin{align*}
+\hat{\beta} = \textcolor{orange}{\begin{pmatrix}\bar{\upsilon}_1 \\ \bar{\upsilon}_2\end{pmatrix}}, \text{ und } \hat{\sigma}^2_{12} = \textcolor{orange}{s_{12}^2}
+\end{align*}
+
+\footnotesize
+Anmerkung:
+
+* $s_{12}^2$ ist die gepoolte Stichprobenvarianz
+
+
+
+
+
+
+# \color{darkgrey} Veranschaulichung Zweistichproben T-Test mit $n=n_1+n_2=2+3=5$
+
+
+\footnotesize
+**Modellevaluation**
+
+Für die Modellevaluation wollen wir die T-Teststatistik berechnen. Dafür wählen wir diesem Fall eines Zweistichproben-T-Tests einen Kontrastgewichtsvektor von $c:=(1,-1)^T$, wobei $c^T\beta_0=\mu_0$. 
+
+Wir berechnen die T-Teststatistik $T$ mit den Stichproben-Daten mit der Formel
+\tiny
+\begin{align*}
+T = \textcolor{orange}{\sqrt{\frac{n_1n_2}{n_1+n_2}}}\left(\frac{\textcolor{orange}{\bar{\upsilon}_1} -\textcolor{orange}{\bar{\upsilon}_2}- \mu_0}{\textcolor{orange}{s_{12}}}\right),
+\end{align*}
+
+\footnotesize
+wobei wir eine Theorie darüber haben, wie $T$ verteilt ist. Nämlich
+
+\tiny
+\color{darkgrey}
+\begin{align*}
+T \sim t(\delta, 2+3-1) \mbox{ mit } \delta = \sqrt{\frac{n_1n_2}{n_1+n_2}}\left(\frac{\mu_1-\mu_2 - \mu_0}{\sigma}\right)
+\end{align*}
+\footnotesize
+
+
+
+
+
+
+# \color{darkgrey} Veranschaulichung Zweistichproben T-Test mit $n=n_1+n_2=2+3=5$
+
+\footnotesize
+Wir ziehen zwei mögliche Szenarien davon, was der wahre, aber unbekannte Parameter sein könnte und die damit verbundenen jeweiligen (wahren, aber unbekannten) Verteilungen der T-Teststatistik in Betracht.
+
+**Nullhypothesen-Szenario:** \textcolor{darkgrey}{$c^T\beta = c^T\beta_0$} bzw. \textcolor{darkgrey}{$\mu_1 - \mu_2 = \mu_0$} $\Leftrightarrow$ \textcolor{darkgrey}{$\delta = 0$} $\Leftrightarrow$ $T$ ist in Wahrheit zentral-t-verteilt.  
+
+
+**Alternativhytpothesen-Szenario:** \textcolor{darkgrey}{$c^T\beta \neq c^T\beta_0$} bzw. \textcolor{darkgrey}{$\mu_1 - \mu_2 \neq 0$} $\Leftrightarrow$ \textcolor{darkgrey}{$\delta \neq 0$} $\Leftrightarrow$ $T$ ist in Wahrheit nicht-zentral-t-verteilt.  
+
+\vspace{2mm}
+\tiny
+\setstretch{1}
+
+
+```{r, eval=F, echo=F}
+# Libraries
+library(MASS)                                                  # multivariate Normalverteilung
+
+# Modellformulierung
+n_1 = 2 # Anzahl von Datenpunkten Gruppe 1
+n_2 = 3 # Anzahl von Datenpunkten Gruppe 2
+n = n_1 + n_2 # Gesamtanzahl Datenpunkte
+p          = 2                                                 # Anzahl von Betaparametern
+X = matrix(c(rep(1,n_1), rep(0,n_1),                           # Designmatrix
+rep(0,n_2), rep(1,n_2)),
+nrow = n)
+I_n        = diag(n)                                           # Einheitsmatrix
+beta       = matrix(c(2,2,2.2,2,3,2), nrow=2, byrow = F)       # wahre , aber unbekannte , Betaparameter
+nscn       = length(beta[1,])                                  # Anzahl wahrer, aber unbekannter, Hypothesenszenarien
+sigsqr     = 1                                                 # wahrer, aber unbekannter, Varianzparameter
+c          = matrix(c(1,-1),nrow=p)                            # Kontrastvektor von Interessse
+beta_0     = 0                                                 # Nullhypothesebetaparameter
+mu_0       = 0                  
+
+# Frequentistische Simulation
+nsim       = 1e4                                               # Anzahl Simulationen
+delta      = rep(NaN, nscn)                                    # Anzahl Nichtzentralitätsparameter
+Tee        = matrix(rep(NaN, nscn*nsim), ncol = nscn)          # T-Teststatistik Realisierungsarray
+for(s in 1:nscn){                                              # Hypothesenszenarien
+  delta[s]    = ((t(c) %*% beta[,s] - mu_0)/                   # Nichtzentralitätsparameter
+                sqrt(sigsqr*t(c)%*%solve(t(X)%*%X)%*%c))
+  for(i in 1:nsim){                                            # Simulationsiterationen
+    y          = mvrnorm(1, X %*% beta[,s], sigsqr*I_n)        # y
+    beta_hat   = solve(t(X) %*% X) %*% t(X) %*% y              # \hat{\beta}
+    eps_hat    = y - X %*% beta_hat                            # \hat{\eps}
+    sigsqr_hat = (t(eps_hat) %*% eps_hat)/(n-p)                # \hat{\sigma}^2
+    Tee[i,s]   = ((t(c) %*% beta_hat - mu_0)/                 # T
+                  sqrt(sigsqr_hat*t(c)%*%solve(t(X)%*%X)%*%c))
+  }
+}
+```
+
+```{r, eval = F, echo = F}
+library(latex2exp)
+# Visualisierung
+graphics.off()
+dev.new()
+par(
+family      = "sans",
+mfcol       = c(1,3),
+pty         = "s",
+bty         = "l",
+lwd         = 1,
+las         = 1,
+mgp         = c(2.5,1,0),
+xaxs        = "i",
+yaxs        = "i",
+xpd         = TRUE,
+font.main   = 1,
+cex         = 1,
+cex.main    = 1.2)
+
+# T-Teststatistik Ergebnisraum
+xlims  = c(-5,13)
+t_min  = xlims[1]
+t_max  = xlims[2]
+t_res  = 1e3
+t      = seq(t_min, t_max, len = t_res)
+lab    = c(TeX("$\\c^T beta = \\c^T beta_0$"), TeX("$\\c^T beta \\neq \\c^T beta_0$") )
+mu_text = c(TeX("$\\mu_1-\\mu_2 = \\mu_0$"), TeX("$\\mu_1-\\mu_2 \\neq \\mu_0=0.2$"), TeX("$\\mu_1-\\mu_2 \\neq \\mu_0=1$"))
+mu_text_xcoord = c(9,9,11)
+delta_text = c(TeX("$\\delta=0$"), TeX("$\\delta=0.89$"), TeX("$\\delta=4.72$"))
+
+# T-Teststatistiken
+for(s in 1:nscn){
+  p_t    = dt(t,n-p, delta[s])
+  plot(x=c(0.43, 3.29), y=c(0,0),
+  col    = "orange", type = "b", pch = 19,
+  prob   = TRUE,
+  xlab   = TeX("$T$"),
+  ylab   = "",
+  xlim   = xlims,
+  ylim   = c(0,.4),
+  main   = mu_text[s])
+  #text(mu_text_xcoord[s],0.3, cex=0.9, mu_text[s])
+  text(mu_text_xcoord[s],0.2, cex=0.9, delta_text[s])
+  lines(
+  t,
+  p_t,
+  type  = "l",
+  lwd   = 2,
+  col   = "darkgrey")
+}
+
+# Speichern
+dev.copy2pdf(
+file        = file.path(abb_dir, "alm_9_T_Teststatistik_zweistichproben.pdf"),
+width       = 8,
+height      = 4)
+```
+
+```{r, echo = FALSE, out.width = "80%"}
+knitr::include_graphics(file.path(abb_dir,"alm_9_T_Teststatistik_zweistichproben.pdf"))
+```
+
+\vspace{-3mm}
+
+\footnotesize
+Wenn wir basierend auf Daten Parameterwerte geschätzt haben (in diesem Fall also Stichprobenmittel berechnet) und mit den Schätzern die T-Teststatistik berechenen, könnten wir zum Beispiel einen Wert von \textcolor{orange}{$T=0.43$} oder einen Wert von \textcolor{orange}{$T=4.22$} erhalten.
+
+
+\footnotesize
+Anmerkung: Theoretische Aspekte sind \textcolor{darkgrey}{grau} und mit  Daten geschätzte Größen sind \textcolor{orange}{orange} 
+
+
+
+# Zweistichproben-T-Tests - Modellevaluation
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue}22. Geben Sie die Definition des zweiseitigen Zweistichproben-T-Tests (mit ungerichteter Hypothese) wieder.
+
+\vspace{3mm}
+\color{black}
+\setstretch{1.5}
+
+\footnotesize
+\begin{definition}[Zweiseitiger Zweistichproben-T-Test]
+\justifying
+Gegeben sei das Zweistichproben-T-Test-Modell. Für ein $\mu_0 \in \mathbb{R}$ seien
+die einfache Nullhypothese und die zusammgensetzte Alternativhypothese gegeben durch
+\begin{equation}
+H_0 : \mu_1 - \mu_2 = \mu_0
+\Leftrightarrow
+\Theta_0 := \{(\mu_1,\mu_2) \in \mathbb{R}^2|\mu_1 - \mu_2 = \mu_0\}
+\end{equation}
+und
+\begin{equation}
+H_1 : \mu_1 - \mu_2 \neq \mu_0
+\Leftrightarrow
+\Theta_1 := \{(\mu_1,\mu_2) \in \mathbb{R}^2|\mu_1 - \mu_2 \neq \mu_0\},
+\end{equation}
+respektive. Weiterhin sei die T-Teststatistik definiert durch
+\begin{equation}
+T := \sqrt{\frac{n_1n_2}{n_1+n_2}}\left(\frac{\bar{\upsilon}_1-\bar{\upsilon}_2-\upsilon_0}{s_{12}}\right)
+\end{equation}
+Dann ist der zweiseitige \textit{Zweistichproben-T-Teststatistik} definiert als
+der kritischen wertbasierte Test
+\begin{equation}
+\phi(\upsilon) := 1_{\{|T| \ge k\}}.
+\end{equation}
+\end{definition}
+
+# Zweistichproben-T-Tests - Modellevaluation
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue}23. Geben Sie das Theorem zur Testumfangkontrolle im zweiseitigen Level-$\alpha_0$-Zweistichproben-T-Test wieder.
+
+\vspace{3mm}
+\color{black}
+\footnotesize
+
+\begin{theorem}[Testumfangkontrolle]
+\justifying
+\normalfont
+$\phi$ sei der im obigen Testszenario definierte Test. Dann ist $\phi$ ein
+Level-$\alpha_0$-Test mit Testumfang $\alpha_0$, wenn der kritische Wert
+definiert ist durch
+\begin{equation}
+k_{\alpha_0} := \psi^{-1}\left(1 - \frac{\alpha_0}{2}; n_1 + n_2 - 2 \right),
+\end{equation}
+wobei $\psi^{-1}(\cdot; n_1+n_2-2)$ die inverse KVF der $t$-Verteilung mit
+$n_1+n_2-2$ Freiheitsgraden ist.
+\end{theorem}
+
+\color{darkgrey}
+Bemerkungen
+
+* \color{darkgrey}Das Resultat folgt in Analogie zum Einstichproben-T-Test.
+* Im Vergleich zum Einstichproben-T-Testfall gilt lediglich
+
+\begin{equation}
+n - 1 \hookrightarrow n_1 + n_2 - 2 \mbox{ und } \sqrt{n} \hookrightarrow \sqrt{\frac{n_1n_2}{n_1+n_2}} , \mu - \mu_0 \hookrightarrow \mu_1 - \mu_2 - \mu_0
+\end{equation}
+
+
+
+
+# Zweistichproben-T-Tests - Modellevaluation
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue}24. Erläutern Sie das praktische Vorgehen bei Durchführung eines zweiseitigen Level-$\alpha_0$-Zweistichproben-T-Tests.
+
+\vspace{3mm}
+\color{black}
+\footnotesize
+
+\begin{itemize}
+\itemsep1mm
+\justifying
+
+\item Man nimmt an, dass die Daten zweier Gruppen $\upsilon_{11},...,\upsilon_{1n_1}$
+und $\upsilon_{21},...,\upsilon_{2n_2}$ Realisationen von
+$\upsilon_{1j} \sim N(\mu_1,\sigma^2) \mbox{ u.i.v.  für } j = 1,...,n_1$ und
+$\upsilon_{2j} \sim N(\mu_2,\sigma^2) \mbox{ u.i.v.  für } j = 1,...,n_2$
+mit unbekannten Parametern $\mu_1,\mu_2,\sigma^2$ sind.
+
+\item Man möchte entscheiden, ob eher $H_0 : \mu_1 - \mu_2 = \mu_0$ oder
+$H_1: \mu_1 - \mu_2 \neq \mu_0$ zutrifft.
+
+\item Man wählt ein Signifikanzniveau $\alpha_0$ und bestimmt den zugehörigen
+Freiheitsgradparameter-abhängigen kritischen Wert $k_{\alpha_0}$. \textcolor{darkgrey}{Zum Beispiel
+gilt bei Wahl von $\alpha_0  := 0.05$ und $n_1=12, n_2 = 12$, also
+Freiheitsgradparameter 12+12-2 = 22, dass $k_{0.05}=\psi^{-1}(1-0.05/2; 22)
+\approx 2.07$ ist.}
+
+\item Anhand von $n_1,n_2,\bar{\upsilon}_1,\bar{\upsilon}_2, \mu_0$ und der gepoolten
+Stichprobenstandardabweichung $s_{12}$ berechnet man die Realisierung der
+Zweistichproben-T-Teststatistik
+\begin{equation}
+t := \sqrt{\frac{n_1n_2}{n_1+n_2}}\left(\frac{\bar{\upsilon}_1-\bar{\upsilon}_2-\mu_0}{s_{12}}\right)
+\end{equation}
+
+\item Wenn $t$ größer-gleich $k_{\alpha_0}$ ist oder wenn $t$ kleiner-
+gleich $-k_{\alpha_0}$ ist, lehnt man die Nullhypothese ab, andernfalls lehnt
+man sie nicht ab.
+
+\item Die oben entwickelte Theorie des Zweistichproben-T-Tests garantiert dann,
+dass man in höchstens $\alpha_0 \cdot 100$ von $100$ Fällen die Nullhypothese
+fälschlicherweise ablehnt.
+\end{itemize}
+
+# Zweistichproben-T-Tests - Modellevaluation
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue}25. Geben Sie die Definition des p-Wertes Werts für einen zweiseitigen Zweistichproben-T-Test wieder.
+
+\vspace{3mm}
+\color{black}
+
+\footnotesize
+* \itemsep2mm \justifying \small Per Definition ist der p-Wert das kleinste
+Signifikanzlevel $\alpha_0$, bei welchem man die Nullhypothese basierend auf
+einem vorliegendem Wert der Teststatistik ablehnen würde.
+
+* \color{darkgrey} Bei $T = t$ würde $H_0$ für jedes $\alpha_0$ mit $|t|\ge\psi^{-1}(1-\alpha_0/2; n_1 + n_2-2)$
+abgelehnt werden. Für diese $\alpha_0$ gilt, wie bereits mehrfach gezeigt,
+\begin{align*}
+\alpha_0 \ge 2 \mathbb{P}(T \ge |t|).
+\end{align*}
+
+* Das kleinste $\alpha_0 \in [0,1]$ mit $\alpha_0 \ge 2 \mathbb{P}(T \ge |t|)$ ist
+dann $\alpha_0 = 2 \mathbb{P}(T \ge |t|)$, also folgt
+\begin{align*}
+\color{black} \mbox{p-Wert} =  2 \mathbb{P}(T \ge |t|) = 2(1 - \psi(|t|;n_1 + n_2 - 2)).
+\end{align*}
+
+* Im Vergleich zum Einstichprobenfall gilt lediglich $n-1 \hookrightarrow n_1 + n_2 -2$.
