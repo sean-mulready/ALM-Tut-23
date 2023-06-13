@@ -163,6 +163,7 @@ Korrelation: $r_{xy} = 0.938$, $\mbox{R}^2 = 0.88$
 \vspace{4mm}
 
 ```{r, echo = F, eval = F}
+library(latex2exp)
 # Einlesen des Beispieldatensatzes
 fname       = file.path(data_dir, "1_Regression.csv")
 D           = read.table(fname, sep = ",", header = TRUE)
@@ -598,7 +599,7 @@ Dann gilt
 \item[] $\Rightarrow$ Für $\mbox{R}^2 = 0$ ist die erklärte Streuung der Daten durch die Ausgleichsgerade gleich null.
 \item[] $\Rightarrow$ $\mbox{R}^2 = 0$ beschreibt also den Fall einer denkbar schlechten Erklärung der Daten durch die Ausgleichsgerade.
 \item Es gilt $\mbox{R}^2 = 1$ genau dann, wenn $\mbox{SQE} = \mbox{SQT}$ ist.
-\item[] $\Rightarrow$ Für $\mbox{R}^2 = 0$ ist also die Gesamtstreuung gleich der durch die Ausgleichsgerade erklärten Streuung.
+\item[] $\Rightarrow$ Für $\mbox{R}^2 = 1$ ist also die Gesamtstreuung gleich der durch die Ausgleichsgerade erklärten Streuung.
 \item[] $\Rightarrow$ $\mbox{R}^2 = 1$ beschreibt also den Fall das sämtliche Datenvariabilität durch die Ausgleichsgerade erklärt wird.
 \item Man sagt, dass "$\mbox{R}^2$ die durch die Ausgleichsgerade erklärte Varianz an der Gesamtvarianz ist.
 \end{itemize}
