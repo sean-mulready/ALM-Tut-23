@@ -435,7 +435,7 @@ Die T-Statistik ist im ALM Szenario u.i.v. Zufallsvariablen gegeben durch
 T = \sqrt{n}\frac{\bar{\upsilon}-\mu_0}{s_\upsilon}
 \end{equation}
 
-Die T-Statistik nimmt hohe Werte für hohe Werte $\upsilon$ (Effekt), kleine Werte von $s^2_{\upsilon}$ (Datenvariabilität) und hohe Werte von $n$ (Stichprobenumfang) an.
+Die T-Statistik nimmt hohe Werte für hohe Werte $\bar{\upsilon}$ (Effekt), kleine Werte von $s^2_{\upsilon}$ (Datenvariabilität) und hohe Werte von $n$ (Stichprobenumfang) an.
 
 Cohen's $d$ als \textit{Effekstärkenmaß} ist gegeben als
 \begin{equation}
