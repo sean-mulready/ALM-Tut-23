@@ -1013,7 +1013,7 @@ fälschlicherweise ablehnt.
 \vspace{3mm}
 \setstretch{1}
 \large
-\color{darkblue}13. Geben Sie die Definition des p-Wertes Werts für einen zweiseitigen Einstichproben-T-Test wieder.
+\color{darkblue}13. Geben Sie die Definition des p-Wertes  für einen zweiseitigen Einstichproben-T-Test wieder.
 
 \vspace{3mm}
 \color{black}
@@ -1022,7 +1022,7 @@ fälschlicherweise ablehnt.
 \begin{itemize}
 
 \item Der p-Wert ist das kleinste Signifikanzlevel $\alpha_0$, bei
-welchem man die Nullhypothese basierend auf einem vorliegendem Wert der
+welchem man die Nullhypothese basierend auf einem vorliegenden Wert der
 Teststatistik ablehnen würde.
 
 \item \color{darkgrey} Bei $T = t$ würde $H_0$ für jedes $\alpha_0$ mit
@@ -1422,7 +1422,7 @@ X     := \begin{pmatrix} 1_{2} & 0_{2} \\ 0_{3} & 1_{3} \end{pmatrix} \in \mathb
 \vspace{-3mm}
 
 \begin{align*}
-y = X \beta + \varepsilon
+\upsilon = X \beta + \varepsilon
 \Leftrightarrow \begin{pmatrix}\upsilon_{11}\\ \upsilon_{12} \\ \upsilon_{21} \\ \upsilon_{22} \\\upsilon_{23}\end{pmatrix} 
 = \begin{pmatrix}1&0\\1&0\\0&1\\0&1\\0&1\end{pmatrix}
 \begin{pmatrix}\mu_1\\ \mu_2 \end{pmatrix} + \begin{pmatrix}\varepsilon_{11} \\ \varepsilon_{12} \\ \varepsilon_{21}\\ \varepsilon_{22}  \\ \varepsilon_{23} \end{pmatrix}
@@ -1468,7 +1468,7 @@ wobei wir eine Theorie darüber haben, wie $T$ verteilt ist. Nämlich
 \tiny
 \color{darkgrey}
 \begin{align*}
-T \sim t(\delta, 2+3-1) \mbox{ mit } \delta = \sqrt{\frac{n_1n_2}{n_1+n_2}}\left(\frac{\mu_1-\mu_2 - \mu_0}{\sigma}\right)
+T \sim t(\delta, 2+3-2) \mbox{ mit } \delta = \sqrt{\frac{n_1n_2}{n_1+n_2}}\left(\frac{\mu_1-\mu_2 - \mu_0}{\sigma}\right)
 \end{align*}
 \footnotesize
 
@@ -1485,7 +1485,7 @@ Wir ziehen zwei mögliche Szenarien davon, was der wahre, aber unbekannte Parame
 **Nullhypothesen-Szenario:** \textcolor{darkgrey}{$c^T\beta = c^T\beta_0$} bzw. \textcolor{darkgrey}{$\mu_1 - \mu_2 = \mu_0$} $\Leftrightarrow$ \textcolor{darkgrey}{$\delta = 0$} $\Leftrightarrow$ $T$ ist in Wahrheit zentral-t-verteilt.  
 
 
-**Alternativhytpothesen-Szenario:** \textcolor{darkgrey}{$c^T\beta \neq c^T\beta_0$} bzw. \textcolor{darkgrey}{$\mu_1 - \mu_2 \neq 0$} $\Leftrightarrow$ \textcolor{darkgrey}{$\delta \neq 0$} $\Leftrightarrow$ $T$ ist in Wahrheit nicht-zentral-t-verteilt.  
+**Alternativhytpothesen-Szenario:** \textcolor{darkgrey}{$c^T\beta \neq c^T\beta_0$} bzw. \textcolor{darkgrey}{$\mu_1 - \mu_2 \neq \mu_0$} $\Leftrightarrow$ \textcolor{darkgrey}{$\delta \neq 0$} $\Leftrightarrow$ $T$ ist in Wahrheit nicht-zentral-t-verteilt.  
 
 \vspace{2mm}
 \tiny
@@ -1634,8 +1634,8 @@ respektive. Weiterhin sei die T-Teststatistik definiert durch
 \begin{equation}
 T := \sqrt{\frac{n_1n_2}{n_1+n_2}}\left(\frac{\bar{\upsilon}_1-\bar{\upsilon}_2-\upsilon_0}{s_{12}}\right)
 \end{equation}
-Dann ist der zweiseitige \textit{Zweistichproben-T-Teststatistik} definiert als
-der kritischen wertbasierte Test
+Dann ist der zweiseitige \textit{Zweistichproben-T-Test} definiert als
+der kritische wertbasierte Test
 \begin{equation}
 \phi(\upsilon) := 1_{\{|T| \ge k\}}.
 \end{equation}
@@ -1734,7 +1734,7 @@ fälschlicherweise ablehnt.
 \footnotesize
 * \itemsep2mm \justifying \small Per Definition ist der p-Wert das kleinste
 Signifikanzlevel $\alpha_0$, bei welchem man die Nullhypothese basierend auf
-einem vorliegendem Wert der Teststatistik ablehnen würde.
+einem vorliegenden Wert der Teststatistik ablehnen würde.
 
 * \color{darkgrey} Bei $T = t$ würde $H_0$ für jedes $\alpha_0$ mit $|t|\ge\psi^{-1}(1-\alpha_0/2; n_1 + n_2-2)$
 abgelehnt werden. Für diese $\alpha_0$ gilt, wie bereits mehrfach gezeigt,
