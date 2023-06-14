@@ -431,7 +431,7 @@ c := 1 \mbox{ und } c^T\beta_0 =: \mu_0,
 \end{equation}
 dass
 \begin{equation}
-T = \sqrt{n}\left(\frac{\bar{y} - \mu_0}{s_y}\right)
+T = \sqrt{n}\left(\frac{\bar{\upsilon} - \mu_0}{s_{\upsilon}}\right)
 \end{equation}
 und es gilt
 \begin{equation}
@@ -1243,7 +1243,7 @@ knitr::include_graphics(file.path(abb_dir,"alm_9_t_test_ungerichtet_powerfunktio
 Im Anwendungsszenario eines Zweistichproben-T-Tests betrachten wir \textcolor{darkblue}{**zwei Gruppen**} (Stichproben) randomisierter experimenteller Einheiten. Wir nehmen an, dass die Datenpunkte in beiden Gruppen unabhängig und identisch normalverteilte Realisierungen von ZVen sind.
 
 Gruppe 1: $\upsilon_{1j} \sim N(\mu_1,\sigma^2)$, und 
-Gruppe 2: $\upsilon_{1j} \sim N(\mu_2,\sigma^2)$ für $j = 1, ..., n$,
+Gruppe 2: $\upsilon_{2j} \sim N(\mu_2,\sigma^2)$ für $j = 1, ..., n$,
 
 wobei $\mu_1,\mu_2$ und $\sigma^2$ w.a.u. sind. Wir nehmen weiterhin an, dass wir daran interessiert sind, Unsicherheit, die mit dem inferentiellen Vergleich von $\mu_1$ und $\mu_2$ verbunden ist, im Sinne eines Hypothesentests zu quantifizieren.
 
