@@ -1,0 +1,547 @@
+---
+fontsize: 8pt
+bibliography: ../Referenzen.bib
+citation_package: natbib
+output:
+  beamer_presentation:
+    keep_tex: true
+    includes:
+      in_header: ../Header.tex
+classoption: t
+---
+
+
+```{r, include = FALSE}
+source("../R_common.R")
+abb_dir = file.path(dirname(getwd()), "Abbildungen")
+data_dir = file.path(dirname(getwd()), "Daten")
+```
+
+# {.plain}
+\center
+```{r, echo = FALSE, out.width="20%"}
+knitr::include_graphics(file.path(abb_dir,"wtfi_otto.png"))
+```
+
+\vspace{2mm}
+
+\huge
+Tutorium
+
+\Large
+Allgemeines Lineares Modell
+\vspace{2mm}
+
+\normalsize
+BSc Psychologie SoSe 2023
+
+\vspace{2mm}
+\text{12. Termin: (11) Zweifaktorielle Varianzanalyse}    
+
+\vspace{15mm}
+\normalsize
+Sean Mulready
+
+\vspace{2mm}
+\scriptsize
+Inhalte basieren auf Kursmaterialien für [\textcolor{darkblue}{ALM}](https://www.ipsy.ovgu.de/Institut/Abteilungen+des+Institutes/Methodenlehre+I+_+Experimentelle+und+Neurowissenschaftliche+Psychologie/Lehre/Sommersemester+2023/Allgemeines+Lineares+Modell.html) von [Dirk Ostwald](https://www.ipsy.ovgu.de/Institut/Abteilungen+des+Institutes/Methodenlehre+I+_+Experimentelle+und+Neurowissenschaftliche+Psychologie/Team/Dirk+Ostwald.html), lizenziert unter [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/deed.de)
+
+
+
+# Selbstkontrollfragen
+
+\vspace{3mm}
+\footnotesize
+
+1. Erläutern Sie das Anwendungsszenario der zweifaktoriellen Varianzanalyse (ZVA).
+2. Aus wie vielen Datenpunkten besteht ein Datensatz eines 3 x 4 ZVA Designs mit 10 Datenpunkten pro Zelle?
+3. Erläutern Sie die intuitive Bedeutung eines Haupteffektes in einem ZVA Design.
+4. Erläutern Sie die intuitive Bedeutung einer Interkation ein einem ZVA Design.
+5. Geben Sie die Definition des additiven Modells der ZVA mit Referenzgruppe (RG) wieder.
+6. Erläutern Sie die Bedeutung der Parameter $\mu_0,\alpha_2$ und $\beta_2$ im additiven Modell der ZVA mit RG.
+7. Bestimmen Sie $\mu_{ij}$ für $\mu_0 := 2, \alpha_2 := -1$ und $\beta_2 := 3$ im additiven Modell der ZVA mit RG.
+8. Geben Sie die Designmatrixform des Modells einer additiven 2 x 2 ZVA mit RG für $n_{ij}:= 1$ an.
+9. Geben Sie die Designmatrixform des Modells einer additiven 2 x 2 ZVA mit RG für $n_{ij} := 3$ an.
+10. Geben Sie die Definition des Modells der ZVA mit Interaktion und RG wieder.
+11. Erläutern Sie die Bedeutung der Parameter $\mu_0,\alpha_2, \beta_2$ und $\gamma_{22}$ im Modell der ZVA mit Interaktion und RG.
+12. Geben Sie die Designmatrixform des Modells einer 2 x 2 ZVA mit Interaktion und RG für $n_{ij}:= 1$ an.
+13. Geben Sie die Designmatrixform des Modells einer 2 x 2 ZVA mit Interaktion und RG für $n_{ij}:= 3$ an.
+14. Geben Sie das Theorem zur Betaparameterschätzung im additiven 2 x 2 ZVA Modell mit RG wieder.
+15. Geben Sie das Theorem zur Betaparameterschätzung im 2 x 2 ZVA Modell mit Interaktion und RG wieder.
+
+
+
+# Anwendungsszenario 
+\vspace{3mm}
+\large
+\color{darkblue} 1. Erläutern Sie das Anwendungsszenario der zweifaktoriellen Varianzanalyse (ZVA).
+
+\vspace{3mm}
+\color{black}
+\footnotesize
+
+
+
+\flushleft
+\small
+* Eine univariate abhängige Variable bestimmt an randomisierten experimentellen Einheiten.
+* Zwei diskrete unabhängige Variablen, die mindestens zweistufig sind.
+* Die unabhängigen Variablen werden **Faktoren** genannt.
+* Die Stufen der Faktoren werden auch **Faktorlevel** genannt.
+* Jedes Level eines Faktors wird mit allen Level des anderen Faktors kombiniert.
+* Die Kombination zweier spezifischer Faktorlevel wird **Zelle** des Designs genannt.
+
+Zweifaktorielle Studiendesigns werden üblicherweise anhand ihrer Faktorlevel bezeichnet
+
+\small
+\color{darkgrey}
+\center
+\begin{tabular}{lll}
+2 x 2 ANOVA : Faktor A mit Level 1,2     & Faktor B mit Level 1,2       \\
+2 x 3 ANOVA : Faktor A mit Level 1,2     & Faktor B mit Level 1,2,3     \\
+4 x 2 ANOVA : Faktor A mit Level 1,2,3,4 & Faktor B mit Level 1,2       \\
+3 x 1 ANOVA : Faktor A mit Level 1,2,3   & Faktor B mit Level 1
+\end{tabular}
+
+\flushleft
+Die Zellen eines 2 x 2 Designs werden auch als Gruppen bezeichnet.
+
+
+# Anwendungsszenario - Datenstruktur
+\vspace{3mm}
+\large
+\color{darkblue} 2. Aus wie vielen Datenpunkten besteht ein Datensatz eines 3 x 4 ZVA Designs mit 10 Datenpunkten pro Zelle? 
+
+\vspace{3mm}
+\color{black}
+\footnotesize
+
+3 x 4 = 12 Gruppen
+
+10 Datenpunkte pro Zelle x 12 Gruppen = 120 Datenpunkte
+
+
+
+# Anwendungsszenario - Haupteffekt 
+\vspace{1mm}
+\large
+\color{darkblue} 3. Erläutern Sie die intuitive Bedeutung eines Haupteffektes in einem ZVA Design.
+
+\vspace{2mm}
+\color{black}
+\footnotesize
+
+\footnotesize
+
+* \justifying Intuitiv spricht man vom Vorliegen eines *Haupteffekts von Faktor A*,
+wenn sich die Gruppenmittelwerte zwischen Level 1 und Level 2 von Faktor A,
+jeweils gemittelt über die zwei Level von Faktor B, unterscheiden.
+* Intuitiv spricht man vom Vorliegen eines *Haupteffekts von Faktor B*,
+wenn sich die Gruppenmittelwerte zwischen Level 1 und Level 2 von Faktor B,
+jeweils gemittelt über die zwei Level von Faktor A, unterscheiden.
+* Intuitiv beziehen sich Haupteffekte also auf (marginale) Unterschiede (Differenzen)
+
+
+# Anwendungsszenario - Interaktion 
+\vspace{1mm}
+\large
+\color{darkblue} 4. Erläutern Sie die intuitive Bedeutung einer Interaktion in einem ZVA Design.
+
+\vspace{1mm}
+\color{black}
+
+\footnotesize
+
+* Intuitiv spricht man vom Vorliegen einer *Interaktion der Faktoren A und B*, wenn der Unterschied der Gruppenmittelwerte von Faktor A zwischen Level 1 und 2 unterschiedlich für Level 1 und Level 2 von Faktor B ausgeprägt ist bzw. wenn der Unterschied der Gruppenmittelwerte von Faktor B zwischen Level 1 und 2 unterschiedlich für Level 1 und Level 2 von Faktor A ausgeprägt ist.
+* Das Vorhandensein einer Interaktion besagt lediglich, dass sich die Unterschiede der Gruppenmittelwerte zwischen den Leveln eines experimentellen Faktors in Abhängigkeit von den Leveln des anderen experimentellen Faktors ändern, es macht aber keine Aussage darüber, warum dies so ist.
+* Inuitiv beziehen sich Interaktionen auf Unterschiede von Unterschieden (Differenzen von Differenzen)
+
+# Modellformulierung - Additives Modell ZVA 
+\vspace{3mm}
+\large
+\color{darkblue} 5. Geben Sie die Definition des additiven Modells der ZVA mit Referenzgruppe (RG) wieder.
+
+\vspace{3mm}
+\color{black}
+\footnotesize
+
+\begin{definition}[Modell der additiven ZVA mit Referenzgruppe]
+\justifying
+$\upsilon_{ijk}$ mit $i = 1,...,I, j = 1,...,J, k = 1,...,n_{ij}$ sei die Zufallsvariable,
+die den $k$ten Datenpunkt zum $i$ten Level von Faktor A und dem $j$ten Level von
+Faktor B in einem ZVA Anwendungsszenario modelliert. Dann hat das
+\textit{Modell der additiven ZVA mit Referenzgruppe} die strukturelle Form
+\begin{equation}
+\upsilon_{ijk} = \mu_{ij} + \varepsilon_{ijk} \sim N(0,\sigma^2)
+\mbox{ u.i.v. für } i = 1,...,I, j = 1,...,J, k = 1,...,n_{ij}
+\end{equation}
+und die Datenverteilungsform
+\begin{equation}
+\upsilon_{ijk} \sim N(\mu_{ij}, \sigma^2) \mbox{ u.i.v. für } i = 1,...,I, j = 1,...,J, k = 1,...,n_{ij}
+\end{equation}
+mit
+\begin{equation}
+\mu_{ij} := \mu_0 + \alpha_i + \beta_j \mbox{ für } i = 1,...,I, j = 1,...,J \mbox{ mit } \alpha_1 := \beta_1 := 0.
+\end{equation}
+und $\sigma^2 > 0$.
+\end{definition}
+
+\color{darkgrey}
+Bemerkungen
+
+* \color{darkgrey}Das Modell der additiven ZVA modelliert ausschließlich Haupteffekte, keine Interaktionen.
+
+# Modellformulierung - Bedeutung $\mu_0,\alpha_2$ und $\beta_2$ 
+\vspace{3mm}
+\large
+\color{darkblue} 6. Erläutern Sie die Bedeutung der Parameter $\mu_0,\alpha_2$ und $\beta_2$ im additiven Modell der ZVA mit RG.
+
+\vspace{3mm}
+\color{black}
+\footnotesize
+
+$\mu_0$ entspricht dem Erwartungswert der Faktorlevelkombination A1B1, $\alpha_2$ der Differenz beim Übergang von Level 1 zu Level 2 von Faktor A und  $\beta_2$ der Differenz beim Übergang von Level 1 zu Level 2 von Faktor B
+
+
+
+# Modellformulierung
+\vspace{3mm}
+\large
+\color{darkblue} 7. Bestimmen Sie $\mu_{ij}$ für $\mu_0 := 2,\alpha_2 = -1$ und $\beta_2 := 3$ im additiven Modell der ZVA mit RG.
+
+\vspace{3mm}
+\color{black}
+\footnotesize
+
+
+\begin{center}
+\begin{tabular}{ll}
+$\mu_{11} = \mu_0 + \alpha_1 + \beta_1 = 2 + 0 + 0 = 2$
+&
+$\mu_{12} = \mu_0 + \alpha_1 + \beta_2 = 2 + 0 + 3 = 5$
+\\
+$\mu_{21} = \mu_0 + \alpha_2 + \beta_1 = 2 + (-1) + 0 = 1$
+&
+$\mu_{22} = \mu_0 + \alpha_2 + \beta_2 = 2 + (-1) + 3 = 4$ \\
+\end{tabular}
+\end{center}
+$\Rightarrow$ Haupteffekt von Faktor A, Haupteffekt von Faktor B
+
+# Modellformulierung - Designmatrixform 
+\vspace{3mm}
+\large
+\color{darkblue} 8. Geben Sie die Designmatrixform des Modells einer additiven 2 x 2 ZVA mit RG für $n_{ij} := 1$ an.
+
+\vspace{1mm}
+\color{black}
+\footnotesize
+
+\begin{align*}
+\upsilon \sim N(X\beta,\sigma^2I_4),
+\end{align*}
+wobei
+\begin{align*}
+\upsilon:=
+\begin{pmatrix}
+\upsilon_{111}\\
+\upsilon_{121}\\
+\upsilon_{211}\\
+\upsilon_{221}\\
+\end{pmatrix}, \,
+X =
+\begin{pmatrix}
+1 		& 	0 		& 	0 		 	\\
+1 		& 	0 		& 	1 		 	\\
+1 		& 	1 		& 	0 		 	\\
+1 		& 	1 		& 	1 		 	\\
+	 	\\
+\end{pmatrix} 
+\in \mathbb{R}^{4 \times 3}, \,
+\beta :=
+\begin{pmatrix}
+\mu_0				\\
+\alpha_{2}			\\
+\beta_{2}			\\
+\end{pmatrix}
+\in \mathbb{R}^{3}
+\mbox{ und }
+\sigma^2 > 0.
+\end{align*}
+
+
+# Modellformulierung - Designmatrixform
+\vspace{3mm}
+\large
+\color{darkblue} 9. Geben Sie die Designmatrixform des Modells einer additiven 2 x 2 ZVA mit RG für $n_{ij} := 3$ an.
+
+\vspace{1mm}
+\color{black}
+\footnotesize
+
+\begin{align*}
+\upsilon \sim N(X\beta,\sigma^2I_{12}),
+\end{align*}
+wobei
+\begin{align*}
+\upsilon:=
+\begin{pmatrix}
+\upsilon_{111}\\
+\upsilon_{112}\\
+\upsilon_{113}\\
+\upsilon_{121}\\
+\upsilon_{122}\\
+\upsilon_{123}\\
+\upsilon_{211}\\
+\upsilon_{212}\\
+\upsilon_{213}\\
+\upsilon_{221}\\
+\upsilon_{222}\\
+\upsilon_{223}\\
+\end{pmatrix}, \,
+X =
+\begin{pmatrix}
+1 		& 	0 		& 	0 		 	\\
+1 		& 	0 		& 	0 		 	\\
+1 		& 	0 		& 	0 		 	\\
+1 		& 	0 		& 	1 		 	\\
+1 		& 	0 		& 	1 		 	\\
+1 		& 	0 		& 	1 		 	\\
+1 		& 	1 		& 	0 		 	\\
+1 		& 	1 		& 	0 		 	\\
+1 		& 	1 		& 	0 		 	\\
+1 		& 	1 		& 	1 		 	\\
+1 		& 	1 		& 	1 		 	\\
+1 		& 	1 		& 	1 		 	\\
+	 	\\
+\end{pmatrix} 
+\in \mathbb{R}^{12 \times 3}, \,
+\beta :=
+\begin{pmatrix}
+\mu_0				\\
+\alpha_{2}			\\
+\beta_{2}			\\
+\end{pmatrix}
+\in \mathbb{R}^{3}
+\mbox{ und }
+\sigma^2 > 0.
+\end{align*}
+
+# Modellformulierung - ZVA mit Interaktion und RG - \textcolor{darkblue}{SKF 10}
+\vspace{3mm}
+\large
+\color{darkblue} 10. Geben Sie die Definition des Modells der ZVA mit Interaktion und RG wieder.
+
+\vspace{3mm}
+\color{black}
+\footnotesize
+
+\begin{definition}[Modell der ZVA mit Interaktion und Referenzgruppe]
+\justifying
+$\upsilon_{ijk}$ mit $i = 1,...,I, j = 1,...,J, k = 1,...,n_{ij}$ sei die Zufallsvariable,
+die den $k$ten Datenpunkt zum $i$ten Level von Faktor A und dem $j$ten Level von
+Faktor B in einem ZVA Anwendungsszenario modelliert. Dann hat das
+\textit{Modell der ZVA mit Interaktion und Referenzgruppe} die strukturelle Form
+\begin{equation}
+\upsilon_{ijk} = \mu_{ij} + \varepsilon_{ijk} \sim N(0,\sigma^2)
+\mbox{ u.i.v. für } i = 1,...,I, j = 1,...,J, k = 1,...,n_{ij}
+\end{equation}
+und die Datenverteilungsform
+\begin{equation}
+\upsilon_{ijk} \sim N(\mu_{ij}, \sigma^2) \mbox{ u.i.v. für } i = 1,...,I, j = 1,...,J, k = 1,...,n_{ij}
+\end{equation}
+mit
+\begin{equation}
+\mu_{ij} := \mu_0 + \alpha_i + \beta_j + \gamma_{ij}
+\end{equation}
+sowie
+\begin{equation}
+\alpha_1 := \beta_1 := \gamma_{i1} := \gamma_{1j} :=0 \mbox{ für } i = 1,...,I, j = 1,...,J
+\end{equation}
+und $\sigma^2 > 0$.
+\end{definition}
+
+# Modellformulierung - Bedeutung $\mu_0,\alpha_2, \beta_2$ und $\gamma_{22}$
+\vspace{3mm}
+\large
+\color{darkblue} 11. Erläutern Sie die Bedeutung der Parameter $\mu_0,\alpha_2, \beta_2$ und $\gamma_{22}$ im Modell der ZVA mit Interaktion und RG.
+
+\vspace{3mm}
+\color{black}
+\footnotesize
+
+$\mu_0$ entspricht dem Erwartungswert
+der Faktorlevelkombination A1B1, $\alpha_2$ der Differenz beim Übergang von Level 1
+zu Level 2 von Faktor A, $\beta_2$ der Differenz beim Übergang von Level 1 zu Level 2
+von Faktor B und $\gamma_{22}$ der Differenz beim Übergang von Level 1 zu Level 2 von
+Faktor B im Unterschied zum Übergang von Level 1 zu Level 2 von Faktor A.
+
+# Modellformulierung - Designmatrixform
+\vspace{3mm}
+\large
+\color{darkblue} 12. Geben Sie die Designmatrixform des Modells einer 2 x 2 ZVA mit Interaktion und RG für $n_{ij} := 1$ an.
+
+\vspace{3mm}
+\color{black}
+\footnotesize
+
+\begin{align*}
+\upsilon \sim N(X\beta,\sigma^2I_4), \mbox{ mit }
+\end{align*}
+\begin{align*}
+\upsilon:=
+\begin{pmatrix}
+\upsilon_{111}\\
+\upsilon_{121}\\
+\upsilon_{211}\\
+\upsilon_{221}\\
+\end{pmatrix}, \,
+X =
+\begin{pmatrix}
+1 		& 	0 		& 	0 		 & 	0	   \\
+1 		& 	0 		& 	1 	 	 & 	0    \\
+1 		& 	1		  & 	0 		 & 	0	   \\
+1 		& 	1 		& 	1 		 & 	1	   \\
+\end{pmatrix} 
+\in \mathbb{R}^{4 \times 4}, \,
+\beta :=
+\begin{pmatrix}
+\mu_0				\\
+\alpha_{2}			\\
+\beta_{2}			\\
+\gamma_{22}
+\end{pmatrix}
+\in \mathbb{R}^{4}
+\mbox{ und }
+\sigma^2 > 0.
+\end{align*}
+
+# Modellformulierung - Designmatrixform - \textcolor{darkblue}{SKF 13}
+\vspace{3mm}
+\large
+\color{darkblue} 13. Geben Sie die Designmatrixform des Modells einer 2 x 2 ZVA mit Interaktion und RG für $n_{ij} := 3$ an.
+
+\vspace{3mm}
+\color{black}
+\footnotesize
+
+\begin{align*}
+\upsilon \sim N(X\beta,\sigma^2I_{12}), \mbox{ mit }
+\end{align*}
+\begin{align*}
+\upsilon:=
+\begin{pmatrix}
+\upsilon_{111}\\
+\upsilon_{112}\\
+\upsilon_{113}\\
+\upsilon_{121}\\
+\upsilon_{122}\\
+\upsilon_{123}\\
+\upsilon_{211}\\
+\upsilon_{212}\\
+\upsilon_{213}\\
+\upsilon_{221}\\
+\upsilon_{222}\\
+\upsilon_{223}\\
+\end{pmatrix}, \,
+X =
+\begin{pmatrix}
+1 		& 	0 		& 	0 		 & 	0	   \\
+1 		& 	0 		& 	0 		 & 	0	   \\
+1 		& 	0 		& 	0 		 & 	0	   \\
+1 		& 	0 		& 	1 	 	 & 	0    \\
+1 		& 	0 		& 	1 	 	 & 	0    \\
+1 		& 	0 		& 	1 	 	 & 	0    \\
+1 		& 	1		  & 	0 		 & 	0	   \\
+1 		& 	1		  & 	0 		 & 	0	   \\
+1 		& 	1		  & 	0 		 & 	0	   \\
+1 		& 	1 		& 	1 		 & 	1	   \\
+1 		& 	1 		& 	1 		 & 	1	   \\
+1 		& 	1 		& 	1 		 & 	1	   \\
+\end{pmatrix} 
+\in \mathbb{R}^{12 \times 4}, \,
+\beta :=
+\begin{pmatrix}
+\mu_0				\\
+\alpha_{2}			\\
+\beta_{2}			\\
+\gamma_{22}
+\end{pmatrix}
+\in \mathbb{R}^{4}
+\mbox{ und }
+\sigma^2 > 0.
+\end{align*}
+
+# Modellschätzung - additives 2 x 2 ZVA Modell
+\vspace{3mm}
+\large
+\color{darkblue} 14. Geben Sie das Theorem zur Betaparameterschätzung im additiven 2 x 2 ZVA Modell mit RG wieder.
+
+\vspace{3mm}
+\color{black}
+\footnotesize
+
+\begin{theorem}[\begin{small} Betaparameterschätzung im additiven 2 x 2 ZVA Modell mit Referenzgruppe \end{small}]
+\justifying
+\normalfont
+Gegeben sei die Designmatrixform eines balancierten additiven 2 x 2 ZVA Modells mit
+Referenzgruppe. Dann ergibt sich für den Betaparameterschätzer
+\begin{equation}
+\hat{\beta} :=
+\begin{pmatrix}
+\hat{\mu}_0       \\
+\hat{\alpha}_2    \\
+\hat{\beta}_2     \\
+\end{pmatrix}
+=
+\begin{pmatrix}
+\frac{3}{4}\bar{\upsilon}_{11} + \frac{1}{4}(\bar{\upsilon}_{12} + \bar{\upsilon}_{21}) - \frac{1}{4}\bar{\upsilon}_{22} \\
+\frac{1}{2}(\bar{\upsilon}_{21} + \bar{\upsilon}_{22}) - \frac{1}{2}(\bar{\upsilon}_{11} + \bar{\upsilon}_{12})           \\
+\frac{1}{2}(\bar{\upsilon}_{12} + \bar{\upsilon}_{22}) - \frac{1}{2}(\bar{\upsilon}_{11} + \bar{\upsilon}_{21})           \\
+\end{pmatrix},
+\end{equation}
+wobei
+\begin{equation}
+\bar{\upsilon}_{ij} := \frac{1}{n_{ij}}\sum_{k = 1}^{n_{ij}} \upsilon_{ijk} \mbox{ für } 1 \le i,j \le 2
+\end{equation}
+das Stichprobenmittel der $i,j$ten Gruppe des 2 x 2 ZVA Designs bezeichnet.
+\end{theorem}
+
+
+
+
+# Modellschätzung - 2 x 2 ZVA Modell mit Interaktion und RG
+\vspace{3mm}
+\large
+\color{darkblue} 15. Geben Sie das Theorem zur Betaparameterschätzung im 2 x 2 ZVA Modell mit Interaktion und RG wieder.
+
+\vspace{3mm}
+\color{black}
+\footnotesize
+
+\begin{theorem}[\begin{small}Betaparameterschätzung im 2 x 2 ZVA Modell mit Interaktion und Referenzgruppe\end{small}]
+\justifying
+\normalfont
+Gegeben sei die Designmatrixform eines balancierten 2 x 2 ZVA Modells mit
+Interaktion und Referenzgruppe. Dann ergibt sich für den Betaparameterschätzer
+\begin{equation}
+\hat{\beta} :=
+\begin{pmatrix}
+\hat{\mu}_0       \\
+\hat{\alpha}_2    \\
+\hat{\beta}_2     \\
+\hat{\gamma}_{22} \\
+\end{pmatrix}
+=
+\begin{pmatrix}
+\bar{\upsilon}_{11} \\
+\bar{\upsilon}_{21} - \bar{\upsilon}_{11} \\
+\bar{\upsilon}_{12} - \bar{\upsilon}_{11} \\
+\bar{\upsilon}_{11} + \bar{\upsilon}_{22} - \bar{\upsilon}_{12} - \bar{\upsilon}_{21}  \\
+\end{pmatrix},
+\end{equation}
+wobei
+\begin{equation}
+\bar{\upsilon}_{ij} := \frac{1}{n_{ij}}\sum_{k = 1}^{n_{ij}} \upsilon_{ijk} \mbox{ für } 1 \le i,j \le 2
+\end{equation}
+das Stichprobenmittel der $i,j$ten Gruppe des 2 x 2 ZVA Designs bezeichnet.
+\end{theorem}
