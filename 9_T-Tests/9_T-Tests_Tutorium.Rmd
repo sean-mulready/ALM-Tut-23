@@ -1632,7 +1632,7 @@ H_1 : \mu_1 - \mu_2 \neq \mu_0
 \end{equation}
 respektive. Weiterhin sei die T-Teststatistik definiert durch
 \begin{equation}
-T := \sqrt{\frac{n_1n_2}{n_1+n_2}}\left(\frac{\bar{\upsilon}_1-\bar{\upsilon}_2-\upsilon_0}{s_{12}}\right)
+T := \sqrt{\frac{n_1n_2}{n_1+n_2}}\left(\frac{\bar{\upsilon}_1-\bar{\upsilon}_2-\mu_0}{s_{12}}\right)
 \end{equation}
 Dann ist der zweiseitige \textit{Zweistichproben-T-Test} definiert als
 der kritische wertbasierte Test
