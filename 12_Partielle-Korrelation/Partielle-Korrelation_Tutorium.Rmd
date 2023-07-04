@@ -1,0 +1,480 @@
+---
+fontsize: 8pt
+bibliography: ../Referenzen.bib
+citation_package: natbib
+output:
+  beamer_presentation:
+    keep_tex: true
+    includes:
+      in_header: ../Header.tex
+classoption: t
+---
+
+
+```{r, include = FALSE}
+source("../R_common.R")
+abb_dir = file.path(dirname(getwd()), "Abbildungen")
+data_dir = file.path(dirname(getwd()), "Daten")
+```
+
+# {.plain}
+\center
+```{r, echo = FALSE, out.width="20%"}
+knitr::include_graphics(file.path(abb_dir,"wtfi_otto.png"))
+```
+
+\vspace{2mm}
+
+\huge
+Tutorium
+
+\Large
+Allgemeines Lineares Modell
+\vspace{2mm}
+
+\normalsize
+BSc Psychologie SoSe 2023
+
+\vspace{2mm}
+\text{13. Termin: (12) Partielle Korrelation}    
+
+\vspace{15mm}
+\normalsize
+Sean Mulready
+
+\vspace{2mm}
+\scriptsize
+Inhalte basieren auf Kursmaterialien für [\textcolor{darkblue}{ALM}](https://www.ipsy.ovgu.de/Institut/Abteilungen+des+Institutes/Methodenlehre+I+_+Experimentelle+und+Neurowissenschaftliche+Psychologie/Lehre/Sommersemester+2023/Allgemeines+Lineares+Modell.html) von [Dirk Ostwald](https://www.ipsy.ovgu.de/Institut/Abteilungen+des+Institutes/Methodenlehre+I+_+Experimentelle+und+Neurowissenschaftliche+Psychologie/Team/Dirk+Ostwald.html), lizenziert unter [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/deed.de)
+
+
+# Organisatorisches
+\vspace{5mm}
+\large
+Ersatztermine für den 12.07.:
+\begin{itemize}
+\item Mo, 10.07., 11-13 Uhr: \textbf{G22A, R105}
+\item Di, 11.07., 09-11 Uhr: \textbf{G22A, R110}
+\end{itemize}
+
+# Selbstkontrollfragen
+
+\vspace{3mm}
+\footnotesize
+
+1. Erläutern Sie die Motivation zur Bestimmung bedingter und partieller Korrelationen.
+2. Definieren Sie die Begriffe der bedingten Kovarianz und der bedingten Korrelation.
+3. Geben Sie das Theorem zu bedingter Korrelation und Korrelationen bei Normalverteilung an.
+4. Definieren Sie den Begriff der partiellen Korrelation.
+5. Definieren Sie den Begriff der partiellen Stichprobenkorrelation.
+6. Geben Sie das Theorem zu bedingter und partieller Korrelation bei Normalverteilung wieder.
+7. Erläutern Sie die Auswertung einer partiellen Korrelation anhand eines Anwendungsbeispiels.
+
+
+
+# Motivation
+
+\vspace{3mm}
+\large
+\color{darkblue} 1. Erläutern Sie die Motivation zur Bestimmung bedingter und partieller Korrelationen.
+
+\vspace{3mm}
+\footnotesize
+\color{black}
+
+* Korrelation impliziert keine Kausalität: Nur weil die Veränderung der Werte zweier ZV $x$ und $y$ scheinbar in Verbindung steht (korreliert), muss nicht das eine die Ursache für das andere sein
+
+* Kausalität: Koinzidenz (Korrelation) mit zeitlicher Rangfolge (Ursache immer vor der Wirkung)
+
+* Es könnte auch noch eine oder mehrere Zufallsvariablen geben, die die Korreltation der Werte verursachen
+
+* bedingte und partielle Korrelation um zu schauen: Gibt es wirklich einen direkten Zusammenhang zwischen $x$ und $y$?
+
+* wir betrachten im folgenden ein Modell mit drei ZV ($x,y,z$) und der Frage: besteht ein direkter Zusammenhang zwischen $x$ und $y$, wie es die Daten vermuten lassen? Oder liegt die Korrelation doch an $z$?
+
+* Wie können wir den Einfluss von $z$ auf die Korrelation von $x$ und $y$ "herausrechnen" ? 
+
+* \color{red} Zufallsvariablen hier mit lateinischen Buchstaben bezeichnet!
+
+
+# Bedingte Korrelation
+
+\vspace{3mm}
+\large
+\color{darkblue}2. Definieren Sie die Begriffe der bedingten Kovarianz und der bedingten Korrelation.
+
+\vspace{3mm}
+\footnotesize
+\color{black}
+\begin{definition}[Bedingte Kovarianz und bedingte Korrelation]
+Gegeben seien drei Zufallsvariablen $x,y,z$ einer gemeinsamen Verteilung $\mathbb{P}_{x,y,z}(x,y,z)$. Weiterhin sei $\mathbb{P}_{x,y|z}(x,y)$ die bedingte Verteilung von $x$ und $y$ gegeben $z$. Dann heißt die Kovarianz von $x$ und $y$ in der Verteilung $\mathbb{P}_{x,y|z}(x,y)$ die \textit{bedingte Kovarianz} von $x$ und $y$ gegeben $z$ und wird mit $\mathbb{C}(x,y|z)$ bezeichnet. Weiterhin seien $\mathbb{P}_{x,y|z}(x)$ und $\mathbb{P}_{x,y|z}(y)$ die marginalen Verteilungen von $x$ und $y$ gegeben $z$, respektive, und $\mathbb{S}(x|z)$ und $\mathbb{S}(y|z)$ seien die Standardabweichungen von x und y hinsichtlich $\mathbb{P}_{x,y|z}(x)$ und $\mathbb{P}_{x,y|z}(y)$ respektive. Dann heißt die Korrelation von $x$ und $y$ in der Verteilung $\mathbb{P}_{x,y|z}(x,y)$,
+\begin{equation}
+\rho(x,y|z) := \frac{\mathbb{C}(x,y|z)}{\mathbb{S}(x|z)\mathbb{S}(y|z)}
+\end{equation}
+die \textit{bedingte Korrelation} von $x$ und $y$ gegeben $z$
+\end{definition}
+
+\color{darkgrey}Bemerkungen
+\begin{itemize}
+\item \color{darkgrey}Die bedingte Kovarianz zweier ZVen ist die Kovarianz zweier ZVen in einer bedingten Verteilung
+\item Die bedingte Korrelation zweier ZVen ist die Korrelation zweier ZVen in einer bedingten Verteilung
+\item Durch Vertauschen der Variablennamen kann man analog $\rho(y,z|x)$ und $\rho(x,z|y)$ definieren.
+\end{itemize}
+
+
+# Bedingte Korrelation
+
+\vspace{3mm}
+\large
+\color{darkblue}3. Geben Sie das Theorem zu bedingter Korrelation und Korrelationen bei Normalverteilung an.
+
+\vspace{3mm}
+\footnotesize
+\color{black}
+\begin{theorem}[Bedingte Korrelation und Korrelationen bei Normalverteilung]
+$x,y,z$ seien drei gemeinsam mutlivariat normalverteilte Zufallsvariablen. Dann gilt
+\begin{equation}
+\rho(x,y|z) = \frac{\rho(x,y)-\rho(x,z)\rho(y,z)}{\sqrt{(1-\rho(x,z)^2)}\sqrt{(1-\rho(y,z)^2)}}
+\end{equation}
+\end{theorem}
+
+\vspace{2mm}
+\color{darkgrey}Bemerkungen
+\begin{itemize}
+\item \color{darkgrey} Mit den Stichprobenkorrelationen $r_{x,y},r_{x,z},r_{y,z}$ ergibt sich ein entsprechender Schätzer für $\rho(x,y|z)$ als 
+\begin{equation}
+r_{x,y|z} = \frac{r_{x,y}-r_{x,z}r_{y,z}}{\sqrt{(1-r_{x,z}^2)\sqrt{(1-r^2_{y,z})}}}
+\end{equation}
+\end{itemize}
+
+
+# Partielle Korrelation
+
+\vspace{3mm}
+\large
+\color{darkblue}4. Definieren Sie den Begriff der partiellen Korrelation.
+
+\vspace{3mm}
+\footnotesize
+\color{black}
+\begin{definition}[Partielle Korrelation]
+$x,y,z$ seien Zufallsvariablen mit linear-affinen Abhängigkeiten zwischen
+$x$ und $z$ sowie zwischen $y$ und $z$,
+\begin{align}
+\begin{split}
+x & = \beta_0^{x,z}    + \beta_1^{x,z}z \\
+y & = \beta_0^{y,z}  + \beta_1^{y  ,z}z \\
+\end{split}
+\end{align}
+mit Residualvariablen
+\begin{align}
+\begin{split}
+e^{x,z} & = x - \beta_0^{x,z}  - \beta_1^{x,z}z \\
+e^{y,z} & = y - \beta_0^{y,z}  - \beta_1^{y  ,z}z \\
+\end{split}
+\end{align}
+Dann ist die \textit{partielle Korrelation von $x$ und $y$ mit auspartialisiertem $z$} definiert als
+\begin{equation}
+\rho(x,y \setminus z) := \rho(e^{x,z},e^{y,z}).
+\end{equation}
+\end{definition}
+\color{darkgrey}Bemerkungen
+
+* \color{darkgrey}$e^{x,z}$ ist die Zufallsvariable $x$, aus der der Einfluss von $z$ "herausgerechnet" wurde.
+* $e^{y,z}$ ist die Zufallsvariable $y$, aus der der Einfluss von $z$ "herausgerechnet" wurde.
+* $\rho(x,y \setminus z)$ ist also die Korrelation von $x$ und $y$, aus denen jeweils der Einfluss von $z$ "herausgerechnet" wurde
+
+
+# Partielle Korrelation
+
+\vspace{3mm}
+\large
+\color{darkblue}5. Definieren Sie den Begriff der partiellen Stichprobenkorrelation.
+
+\vspace{3mm}
+\footnotesize
+\color{black}
+\begin{definition}[Partielle Stichprobenkorrelation]
+\justifying
+$x,y,z$ seien Zufallsvariablen mit linear-affinen Abhängigkeiten zwischen
+$y$ und $z$ sowie zwischen $x$ und $z$ wie in der Definition der partiellen
+Korrelation. Weiterhin seien
+\begin{itemize}
+\item $\{(x_i,y_i,z_i)\}_{i = 1,...,n}$  eine Menge von Realisierungen des Zufallsvektors $(x,y,z)^T$,
+\item $\hat{\beta}_0^{x,z}, \hat{\beta}_1^{x,z}$ die Ausgleichsgeradenparameter für $\{(x_i,z_i)\}_{i = 1,...,n}$,
+\item $\hat{\beta}_0^{y,z}, \hat{\beta}_1^{y,z}$ die Ausgleichsgeradenparameter für $\{(y_i,z_i)\}_{i = 1,...,n}$.
+\end{itemize}
+Schließlich seien für $i = 1,...,n$
+\begin{itemize}
+\item $e^{x,z}_i := x_i - \hat{\beta}_0^{x,z} - \hat{\beta}_1^{x,z}z_i$
+\item $e^{y,z}_i := y_i - \hat{\beta}_0^{y,z} - \hat{\beta}_1^{y,z}z_i$
+\end{itemize}
+die Residualwerte der jeweiligen Ausgleichsgeraden. Dann heißt die Stichprobenkorrelation
+der Wertemenge $\{(e^{y,z}_i,e^{x,z}_i)\}_{i = 1,...,n}$
+\textit{partielle Stichprobenkorrelation der $x_i$ und $y_i$ mit auspartialisierten $z_i$}.
+\end{definition}
+\color{darkgrey}Bemerkungen
+
+* \color{darkgrey}Die partielle Stichprobenkorrelation wird als Schätzer der partiellen Korrelation genutzt.
+
+
+
+# Partielle Korrelation
+
+\vspace{3mm}
+\large
+\color{darkblue}6. Geben Sie das Theorem zu bedingter und partieller Korrelation bei Normalverteilung wieder.
+\vspace{3mm}
+\color{black}
+\footnotesize
+\begin{theorem}[Bedingte und Partielle Korrelation bei Normalverteilung]
+\justifying
+\normalfont
+$x,y,z$ seien drei gemeinsam multivariat normalverteilte Zufallsvariablen. Dann gilt
+\begin{equation}
+\rho(x,y|z) = \rho(x,y \setminus z)
+\end{equation}
+\end{theorem}
+
+
+# Anwendungsbeispiel
+\vspace{1mm}
+\large
+\color{darkblue}7. Erläutern Sie die Auswertung einer partiellen Korrelation anhand eines Anwendungsbeispiels.
+
+\vspace{-2mm}
+\setstretch{0.8}
+\normalsize
+\color{black}
+Im \textit{Magdeburger Tageblatt für total seriöse Recherche und Wissenschaft} steht folgende Schlagzeile:
+\huge
+\center{Gar nicht cool: Verursacht Eiscreme Hautkrebs?}
+\large
+\vspace{-2mm}
+\center{Daten zeigen \textit{eindeutigen} Zusammenhang!}
+
+```{r, eval = F, echo = F}
+library(MASS)                                 # Multivariate Normalverteilung
+set.seed(1)                                   # reproduzierbare Daten
+S     = matrix(c( 1,.5,.9,                    # Kovarianzmatrixparameter \Sigma
+                 .5, 1,.5,
+                 .9,.5, 1),nrow=3,byrow=TRUE)
+n     = 1e2                                   # Anzahl Realisierungen  von v := (x,y,z)^T
+xyz   = mvrnorm(n,rep(0,3),S)                 # Realisierungen         von v := (x,y,z)^T
+
+graphics.off()
+dev.new()
+par(
+family      = "sans",
+mfcol       = c(1,1),
+pty         = "s",
+bty         = "l",
+lwd         = 1,
+las         = 1,
+mgp         = c(2.5,1,0),
+xaxs        = "i",
+yaxs        = "i",
+font.main   = 1,
+cex         = 1,
+cex.main    = 1.2)
+
+
+# r(x,y)
+plot(
+xyz[,1:2],
+pch         = 21,
+col         = "white",
+bg          = "gray50",
+xlab        = TeX("$Eiskonsum$"),
+ylab        = TeX("$Sonnenbrandinzidenz$"),
+xlim        = c(-3,3),
+ylim        = c(-3,3),
+main        = TeX(sprintf("$r$ = %.2f", cor(xyz[,1],xyz[,2]))))
+
+dev.copy2pdf(
+file        = file.path(abb_dir, "alm_2_bpr_beispiel.pdf"),
+width       = 4.5,
+height      = 4.5)
+```
+```{r, echo = FALSE, out.width = "45%"}
+knitr::include_graphics(file.path(abb_dir,"alm_2_bpr_beispiel.pdf"))
+```
+
+# Anwendungsbeispiel
+
+\vspace{3mm}
+\footnotesize
+\begin{itemize}
+\item Die erhobenen Daten zum jährlichen Eiskonsum und der jährlichen Sonnenbrandinzidenz stehen scheinbar in direkter Beziehung. Je höher der Eiskonsum in einem Land in einem Jahr, desto höher auch die Sonnenbrandinzidenz. 
+\item Ist also der Eiskonsum die \textit{Ursache} für den Sonnenbrand oder umgekehrt?
+\item Oder gibt es einen anderen Einfluss, dessen Höhe sowohl den Eiskonsum, als auch den Sonnenbrand beeinflusst?
+\item Idee: Könnte die Anzahl der Sommertage* sowohl auf den Eiskonsum, als auch die Sonnenbrandinzidenz wirken?
+
+
+```{r, echo=FALSE, out.width ="80%"}
+knitr::include_graphics(file.path(abb_dir,"alm_12_darstellung_xyz.png"))
+```
+
+\item Wie können wir jetzt den tatsächlichen Zusammenhang von Eiskonsum $x$ und Sonnenbrandinzidenz $y$, also ohne den Einfluss von Sommertagen $z$ untersuchen?
+\item \color{darkgrey} *Sommertage: Tage deren maximale Temperatur über 25°C liegt
+\end{itemize}
+
+# Anwendungsbeispiel
+\vspace{3mm}
+\footnotesize
+Vorgehen: Wir berechnen die partielle Korrelation. Das können wir auf verschiedene Arten machen. Aus den Folien der Vorlesung und dem Script liegen uns genug Daten vor um die bedingte und damit in diesem Falle auch die partielle Korrelation zu berechnen.\color{darkgrey} (Aus dem Theorem zu bedingter und partieller Korrelation bei Normalverteilung wissen wir, dass $\rho(x,y|z) = \rho(x,y\setminus z)$, wenn unsere ZV multivariat normalverteilt sind)
+
+\begin{itemize}
+\item Wir wollen die bedingte Korrelation berechnen, gegeben als
+\begin{equation}
+\rho(x,y|z)= \frac{\mathbb{C}(x,y|z)}{\mathbb{S}(y|z)\mathbb{S}(x|z)}
+\end{equation}
+\item $\mathbb{S}(y|z)$ und $\mathbb{S}(x|z)$ können wir auch schreiben als $\sqrt{\mathbb{C}(y|z)}$ und $\sqrt{\mathbb{C}(x|z)}$
+\item Nun brauchen wir nur noch die Kovarianzmatrix $\Sigma_{x,y|z}$, welche sich berechnen lässt durch
+\begin{equation}
+\Sigma_{x,y|z} = \Sigma_{x,y} - \Sigma_{(x,y),z}\Sigma_z^{-1}\Sigma_{z,(x,y)}
+\end{equation}
+\end{itemize}
+
+# Anwendungsbeispiel
+\vspace{3mm}
+\footnotesize
+\begin{itemize}
+\item Wir nehmen den Kovarianzmatrixparamter von $(x,y,z)$ wie im Script angegeben
+\begin{equation}
+\Sigma :=
+\begin{pmatrix}
+1.0 & 0.5 & 0.9 \\
+0.5 & 1.0 & 0.5 \\
+0.9 & 0.5 & 1.0 \\
+\end{pmatrix}
+\end{equation}
+
+\item Damit können wir jetzt die Kovarianzmatrix $\Sigma_{x,y|z}$ berechnen:
+\tiny
+\begin{equation}
+\begin{aligned}
+\Sigma_{x,y|z} &:= 
+\begin{pmatrix}
+1.0 & 0.5 \\
+0.5 & 1.0 \\
+\end{pmatrix}
+-
+\begin{pmatrix}
+0.9 \\
+0.5 \\
+\end{pmatrix}
+(1.0)^{-1}
+\begin{pmatrix}
+0.9 & 0.5 \\
+\end{pmatrix} \\
+&:=
+\begin{pmatrix}
+1.0 & 0.5 \\
+0.5 & 1.0 \\
+\end{pmatrix}
+-
+\begin{pmatrix}
+0,81 & 0,45 \\
+0,45 & 0,25 \\
+\end{pmatrix} \\
+&:=
+\begin{pmatrix}
+0.19 & 0.05 \\
+0.05 & 0.75 \\
+\end{pmatrix}
+\end{aligned}
+\end{equation}
+\footnotesize
+\item Mit der Kovarianzmatrix $\Sigma_{x,y|z}$ können wir die bedingte und in diesem Falle auch die partielle Korrelation berechnen
+
+\begin{equation}
+\rho(x,y|z):=\frac{\mathbb{C}(x,y|z)}{\sqrt{\mathbb{C}(x,x|z)}\sqrt{\mathbb{C}(y,y|z)}} := \frac{0.05}{\sqrt{0.19}\sqrt{0.75}} \approx 0.13
+\end{equation}
+
+\item Betrachten wir aus der obigen Matrix $\Sigma$ nur die (Ko)Varianzen von $x$ und $y$, so ergibt sich $\rho(x,y) = 0.5$
+\end{itemize}
+
+# Anwendungsbeispiel
+
+\vspace{3mm}
+\footnotesize
+Was schließen wir daraus: Betrachten wir den tatsächlichen Zusammenhang von Eiskonsum $x$ und Sonnenbrandinzidenz $y$ \textit{ohne} den Einfluss der Sommertage $z$, so ergibt sich, dass wir höchstens von einem schwachen Zusammenhang von Eiskonsum und Sonnenbrandinzidenz ausgehen können. Der tatsächliche Einfluss auf Eiskonsum $x$ und Sonnenbrandinzidenz $y$ kommt nicht von gegenseitig, sondern durch die Anzahl der Sommertage $z$. 
+\color{black}
+
+```{r, eval = F, echo = F}
+library(latex2exp)
+# Modellformulierung und Sampling
+library(MASS)                                 # Multivariate Normalverteilung
+set.seed(1)                                   # reproduzierbare Daten
+S     = matrix(c( 1,.5,.9,                    # Kovarianzmatrixparameter \Sigma
+                 .5, 1,.5,
+                 .9,.5, 1),nrow=3,byrow=TRUE)
+n     = 1e2                                   # Anzahl Realisierungen  von v := (x,y,z)^T
+xyz   = mvrnorm(n,rep(0,3),S)                 # Realisierungen         von v := (x,y,z)^T
+
+
+
+# Partielle Stichprobenkorrelation als Residualstichprobenkorrelation
+bars  = apply(xyz, 2, mean)                   # Stichprobenmittel
+s     = apply(xyz, 2, sd)                     # Stichprobenstandardabweichungen
+c     = cov(xyz)                              # Stichprobenkovarianzen
+b_xz1 = c[1,3]/c[3,3]                         # beta_1 (x,z)
+b_xz0 = bars[1] - b_xz1*bars[3]               # beta_0 (x,z)
+b_yz1 = c[2,3]/c[3,3]                         # beta_1 (y,z)
+b_yz0 = bars[2] - b_yz1*bars[3]               # beta_0 (y,z)
+e_xz  = xyz[,1] - b_xz1*xyz[,3] - b_xz0       # Residualwerte e^{x,z}
+e_yz  = xyz[,2] - b_yz1*xyz[,3] - b_yz0       # Residualwerte e^{y,z}
+pr_e  = cor(e_xz,e_yz)   
+# Visualisierung
+graphics.off()
+dev.new()
+par(
+family      = "sans",
+mfcol       = c(1,2),
+pty         = "s",
+bty         = "l",
+lwd         = 1,
+las         = 1,
+mgp         = c(2.5,1,0),
+xaxs        = "i",
+yaxs        = "i",
+font.main   = 1,
+cex         = 1,
+cex.main    = 1.2)
+
+
+# r(x,y)
+plot(
+xyz[,1:2],
+pch         = 21,
+col         = "white",
+bg          = "gray50",
+xlab        = TeX("$Eiskonsum$"),
+ylab        = TeX("$Sonnenbrandinzidenz$"),
+xlim        = c(-3,3),
+ylim        = c(-3,3),
+main        = TeX(sprintf("$r$ = %.2f", cor(xyz[,1],xyz[,2]))))
+
+# r(e_y2,e_12)
+plot(
+matrix(c(e_xz,e_yz), nrow = n),
+pch         = 21,
+col         = "white",
+bg          = "gray50",
+xlab        = TeX("$Eiskonsum | Sommertage$"),
+ylab        = TeX("$Sonnenbrandinzidenz | Sommertage$"),
+main        = TeX(sprintf("$r$ = %.2f", pr_e)),
+xlim        = c(-3,3),
+ylim        = c(-3,3))
+
+dev.copy2pdf(
+file        = file.path(abb_dir, "alm_2_partielle_korrelation_anwendung.pdf"),
+width       = 9,
+height      = 4.5)
+```
+
+```{r, echo = FALSE, out.width = "100%"}
+knitr::include_graphics(file.path(abb_dir,"alm_2_partielle_korrelation_anwendung.pdf"))
+```
+
+
