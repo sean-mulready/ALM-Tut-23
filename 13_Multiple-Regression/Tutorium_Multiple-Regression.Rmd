@@ -1,0 +1,252 @@
+---
+fontsize: 8pt
+bibliography: ../Referenzen.bib
+citation_package: natbib
+output:
+  beamer_presentation:
+    keep_tex: true
+    includes:
+      in_header: ../Header.tex
+classoption: t
+---
+
+
+```{r, include = FALSE}
+source("../R_common.R")
+abb_dir = file.path(dirname(getwd()), "Abbildungen")
+data_dir = file.path(dirname(getwd()), "Daten")
+```
+
+# {.plain}
+\center
+```{r, echo = FALSE, out.width="20%"}
+knitr::include_graphics(file.path(abb_dir,"wtfi_otto.png"))
+```
+
+\vspace{2mm}
+
+\huge
+Tutorium
+
+\Large
+Allgemeines Lineares Modell
+\vspace{2mm}
+
+\normalsize
+BSc Psychologie SoSe 2023
+
+\vspace{2mm}
+\text{14. Termin: (12) Multiple Regression}    
+
+\vspace{15mm}
+\normalsize
+Sean Mulready
+
+\vspace{2mm}
+\scriptsize
+Inhalte basieren auf Kursmaterialien für [\textcolor{darkblue}{ALM}](https://www.ipsy.ovgu.de/Institut/Abteilungen+des+Institutes/Methodenlehre+I+_+Experimentelle+und+Neurowissenschaftliche+Psychologie/Lehre/Sommersemester+2023/Allgemeines+Lineares+Modell.html) von [Dirk Ostwald](https://www.ipsy.ovgu.de/Institut/Abteilungen+des+Institutes/Methodenlehre+I+_+Experimentelle+und+Neurowissenschaftliche+Psychologie/Team/Dirk+Ostwald.html), lizenziert unter [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/deed.de)
+
+
+# Selbstkontrollfragen
+
+\vspace{3mm}
+
+\footnotesize
+\begin{enumerate}
+\justifying
+\item Erläutern Sie das Anwendungsszenario und die Ziele der multiplen Regression.
+\item Definieren Sie das Modell der multiplen Regression.
+\item Erläutern Sie die Begriffe Regressor, Prädiktor, Kovariate und Feature im Rahmen der multiplen Regression.
+\item Erläutern Sie, warum $\hat{\beta} \approx \mbox{Regressorkovariabilität}^{-1} \mbox{Regressordatenkovariabilität}$ gilt.
+\item Erläutern Sie den Zusammenhang zwischen Betaparameterschätzern und Korrelationen in einem multiplen Regressionsmodell mit Interzeptprädiktor und zwei kontinuierlichen Prädiktoren anhand der Formel
+\begin{equation}
+\hat{\beta}_1 = \frac{r_{\upsilon,x_1}-r_{\upsilon,x_2}r_{x_1,x_2}}{1-r_{x_1,x_2}^2} \frac{s_{\upsilon}}{s_{x_1}}.
+\end{equation}
+\item Erläutern Sie den Zusammenhang zwischen Betaparameterschätzern und partieller Korrelation in einem multiplen
+Regressionmodell mit Interzeptprädiktor und zwei kontinuierlichen Prädiktoren anhand der Formel
+\begin{equation}
+\hat{\beta}_1 = r_{\upsilon,x_1 \setminus x_2}\sqrt{\frac{1 -r_{\upsilon,x_2}^2}{1 -r_{x_1,x_2}^2}}\frac{s_\upsilon}{s_{x_1}}.
+\end{equation}
+\item $X \in \mathbb{R}^{n \times 2}$ sei die Designmatrix eines multiplen Regressionsmodells mit zwei Prädiktoren
+und Betaparametervektor $\beta := (\beta_1,\beta_2)^2$. Geben Sie den Kontrastgewichtsvektor an, 
+um die Nullhypothese $H_0 : \beta_1 = \beta_2$ mithilfe der T-Statistik zu testen.
+\end{enumerate}
+
+
+
+# Anwendungsszenario
+
+\vspace{3mm}
+\large
+\color{darkblue}1.Erläutern Sie das Anwendungsszenario und die Ziele der multiplen Regression.
+
+\vspace{3mm}
+\color{black}
+\footnotesize
+
+**Anwendungsszenario**
+
+* Generalisierung der einfachen linearen Regression zu mehr als einer unabhängigen Variable.
+* Eine univariate abhängige Variable bestimmt an randomisierten experimentellen Einheiten.
+* Zwei oder mehr "kontinuierliche" unabhängige Variablen.
+* Die unabhängigen Variablen heißen Regressoren, Prädiktoren, Kovariaten oder Features.
+\vspace{2mm}
+
+**Ziele**
+
+* Quantifizierung des Erklärungspotentials der Variation der AV durch die Variation der UVs.
+* Quantifizierung des Einflusses einzelner UVs auf die AV im Kontext anderer UVs.
+* Prädiktion von AV Werten aus UV Werten nach Parameterschätzung.
+\vspace{2mm}
+
+**Anwendungsbeispiel**
+
+* BDI Differenzwerte in Abhängigkeit von Therapiedauer und Alter
+
+# Modellformulierung
+
+\vspace{3mm}
+\large
+\color{darkblue}2.Definieren Sie das Modell der multiplen Regression.
+
+\vspace{3mm}
+\color{black}
+\footnotesize
+\setstretch{1.2}
+
+
+\begin{definition}[Modell der multiplen Regression]
+\justifying
+$\upsilon_i$ mit $i = 1,...,n$ sei die Zufallsvariable, die den $i$ten Wert einer abhängigen
+Variable modelliert. Dann hat das \textit{Modell der multiplen Regression}
+die strukturelle Form \begin{equation}
+\upsilon_i = x_{i1}\beta_1 + \cdots + x_{ip}\beta_p + \varepsilon_i \mbox{ mit }
+\varepsilon_i \sim N(0,\sigma^2) \mbox{ u.i.v. für } i = 1,...,n \mbox{ und } \sigma^2 > 0,
+\end{equation}
+wobei $x_{ij} \in \mathbb{R}$ mit $1 \le i \le n$ und $1 \le j \le p$ den $i$ten Wert der $j$te
+unabhängigen Variable bezeichnet. Die unabhängigen Variablen werden auch
+\textit{Regressoren, Prädiktoren, Kovariaten} oder \textit{Features} genannt. Mit
+\begin{equation}
+x_i := (x_{i1}, ..., x_{ip})^T \in \mathbb{R}^p
+\mbox{ und }
+\beta := (\beta_1,..., \beta_p)^T \in \mathbb{R}^p
+\end{equation}
+hat das Modell der multiplen Regression die Datenverteilungsform
+\begin{equation}
+\upsilon_i \sim N(\mu_i,\sigma^2) \mbox{ u.i.v. für } i = 1,...,n, \mbox{ wobei } \mu_i := x^T_i\beta.
+\end{equation}
+In diesem Zusammenhang wird $x_i \in \mathbb{R}^p$ auch als $i$ter \textit{ Featurevektor } bezeichnet.
+Die Designmatrixform des Modells der multiplen Regression schließlich ist gegeben durch
+\begin{equation}
+\upsilon = X\beta + \varepsilon \mbox{ mit } \varepsilon \sim N(0_n,\sigma^2I_n)
+\end{equation}
+mit
+\begin{equation}
+\upsilon     := (\upsilon_1,...,\upsilon_n)^T,
+X     := (x_{ij})_{1 \le i \le n, 1 \le j \le p} \in \mathbb{R}^{n \times p},
+\beta := (\beta_1,...,\beta_p)^T \in \mathbb{R}^p \mbox{ und }
+\sigma^2 > 0.
+\end{equation}
+\end{definition}
+
+
+# Modellformulierung
+
+\vspace{3mm}
+\large
+\color{darkblue}3.Erläutern Sie die Begriffe Regressor, Prädiktor, Kovariate und Feature im Rahmen der multiplen Regression.
+
+\vspace{3mm}
+\color{black}
+\footnotesize
+
+**Regressor**, **Prädiktor**, **Kovariate** und **Feature** sind synonyme Bezeichnungen für die unabhängige Variable im Modell der multiplen Regression.
+
+# Modellschätzung
+\vspace{3mm}
+\large
+\color{darkblue}4.Erläutern Sie, warum $\hat{\beta} \approx \mbox{Regressorkovariabilität}^{-1} \mbox{Regressordatenkovariabilität}$ gilt.
+
+\vspace{3mm}
+\color{black}
+\footnotesize
+Der Betaparameterschätzer hat bekanntlich die Form
+\begin{align*}
+\hat{\beta} := (X^TX)^{-1}X^T\upsilon
+\end{align*}
+
+Dabei quantifizieren in sehr grober Auflösung
+
+* $X^T\upsilon \in \mathbb{R}^p$ die Kovariabilität der Regressoren \textcolor{darkgrey}{(Spalten der Designmatrix)} mit den Daten \textcolor{darkgrey}{$\upsilon$} und
+* $X^TX \in \mathbb{R}^{p \times p}$ die Kovariabilität der Regressoren untereinander.
+
+Damit ergibt sich für die Betaparameterschätzer also eine Interpretation als
+"regressorkovariabilitätsnormalisierte Regressordatenkovariabilität". 
+
+
+# Modellschätzung 
+ \vspace{3mm}
+ \large
+ \color{darkblue}5.Erläutern Sie den Zusammenhang zwischen Betaparameterschätzern und Korrelationen in einem multiplen Regressionsmodell mit Interzeptprädiktor und zwei kontinuierlichen Prädiktoren anhand der Formel
+\begin{equation}
+\hat{\beta}_1 = \frac{r_{\upsilon,x_1}-r_{\upsilon,x_2}r_{x_1,x_2}}{1-r_{x_1,x_2}^2} \frac{s_{\upsilon}}{s_{x_1}}.
+\end{equation}
+
+\vspace{-2mm}
+\footnotesize
+\color{black}
+\begin{itemize}
+\item Nur im Fall $r_{x_1,x_2} = 0$ und $s_{\upsilon}=s_{x_1}$ gilt $\hat{\beta}_1=r_{\upsilon,x_1}$.
+\item Im Fall $r_{x_1,x_2}= \pm 1$ ist $\hat{\beta}_1$ nicht definiert
+\item Je größer $|r_{x_1,x_2}|$, desto größer der von $r_{\upsilon,x_1}$ subtrahierte Term $r_{\upsilon,x_2}r_{x_1,x_2}$
+\item Je größer $|r_{\upsilon,x_2}|$, desto größer der von $r_{\upsilon,x_1}$ subtrahierte Term $r_{\upsilon,x_2}r_{x_1,x_2}$
+\item Bei identischen Korrelationen und gleich bleibender Regressorstandardabweichung steigt $\hat{\beta}_1$ mit $s_{\upsilon}$
+\end{itemize}
+
+
+
+# Modellschätzung
+
+\vspace{3mm}
+\large
+\color{darkblue}6.Erläutern Sie den Zusammenhang zwischen Betaparameterschätzern und partieller Korrelation in einem multiplen
+Regressionmodell mit Interzeptprädiktor und zwei kontinuierlichen Prädiktoren anhand der Formel
+\begin{align*}
+\hat{\beta}_1 = r_{\upsilon,x_1 \setminus x_2}\sqrt{\frac{1-r_{\upsilon,x_2}^2}{1 -r_{x_1,x_2}^2}}\frac{s_\upsilon}{s_{x_1}}.
+\end{align*}
+
+\vspace{-2mm}
+\color{black}
+\footnotesize
+
+\begin{itemize}
+\item Im Allgemeinen gilt für $1 \le i,l \le k$, dass $\hat{\beta}_k \neq r_{\upsilon,x_k\setminus x_l}$.
+\item Betaparameterschätzer sind also im Allgemeinen keine partiellen Stichprobenkorrelationen.
+\item $\hat{\beta}_k = r_{\upsilon,x_k \setminus x_l}$ für $1 \le i,l \le k$ gilt genau dann, wenn $s_\upsilon = s_{x_1} = s_{x_2}$ und zudem
+\begin{itemize}
+\justifying
+\begin{small}
+\item \footnotesize $r_{\upsilon,x_l} = r_{x_k,x_l} = 0$, wenn also die Stichprobenkorrelationen der Daten
+      und der Werte des zweiten Regressors, sowie die Stichprobenkorrelation der Werte
+      der beiden Regressoren gleich Null sind. Dies kann der Fall sein, wenn einer der
+      Regressoren die Daten ``sehr gut erklärt'' und der andere Regressor von dem
+      ersten ``sehr verschieden'' ist.
+\item $|r_{\upsilon,x_l}| = |r_{x_k,x_l}|$, wenn also die obige Stichprobenkorrelationen
+      dem Betrage nach gleich sind. Dies ist vermutlich selten der Fall.
+\end{small}
+\end{itemize}
+\end{itemize}
+
+# Anwendungsszenario
+
+\vspace{3mm}
+\large
+\color{darkblue}7.$X \in \mathbb{R}^{n \times 2}$ sei die Designmatrix eines multiplen Regressionsmodells mit zwei Prädiktoren
+und Betaparametervektor $\beta := (\beta_1,\beta_2)^2$. Geben Sie den Kontrastgewichtsvektor an, 
+um die Nullhypothese $H_0 : \beta_1 = \beta_2$ mithilfe der T-Statistik zu testen.
+
+\vspace{3mm}
+\color{black}
+\footnotesize
+
+$c = (1,-1)^T$ 
